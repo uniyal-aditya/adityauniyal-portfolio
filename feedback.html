@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Feedback — Aditya Uniyal</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">Aditya <strong>Uniyal</strong></div>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="skills.html">Skills</a>
+                <a href="feedback.html">Feedback</a>
+                <a href="connect.html" class="cta">Connect</a>
+                <button id="nav-toggle" aria-label="Open menu">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container section">
+        <h1>Feedback</h1>
+        <p class="muted">Your feedback helps me improve my projects and site. Optionally provide your email if you want
+            a reply.</p>
+
+        <form id="feedback-form" class="form glass" aria-label="Feedback form">
+            <label>
+                Name
+                <input type="text" name="name" id="name" placeholder="Your name ">
+            </label>
+
+            <label>
+                Email
+                <input type="email" name="email" id="email" placeholder="you@example.com ">
+            </label>
+
+            <label>
+                Rating (1 - 5)
+                <input type="number" name="rating" id="rating" min="1" max="5" required>
+            </label>
+
+            <label>
+                Message
+                <textarea name="message" id="message" rows="6" required placeholder="Write your feedback..."></textarea>
+            </label>
+
+            <label>
+                Related Project (optional)
+                <select name="project" id="project">
+                    <option value="">— none —</option>
+                    <option value="numexa">Numexa</option>
+                    <option value="multiplayer-quiz">Multiplayer Quiz</option>
+                    <option value="raftarfun">RaftarFun</option>
+                    <option value="aichat">AI Chatbot</option>
+                    <option value="Zero">Zero music bot</option>
+                </select>
+            </label>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Send Feedback</button>
+                <div id="form-msg" role="status" aria-live="polite"></div>
+            </div>
+        </form>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div>© <span id="year"></span> Aditya Uniyal</div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

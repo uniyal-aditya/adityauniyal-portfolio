@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Aditya Uniyal — Software Developer</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description"
+        content="Aditya Uniyal — developer building web apps, reliable bots and interactive prototypes. Explore projects, demos and contact.">
+    <meta property="og:title" content="Aditya Uniyal — Software Developer" />
+    <meta property="og:description" content="Developer portfolio — web apps, bots, and interactive systems." />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">Aditya <strong>Uniyal</strong></div>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="skills.html">Skills</a>
+                <a href="feedback.html">Feedback</a>
+                <a href="connect.html" class="cta">Connect</a>
+                <button id="nav-toggle" aria-label="Open menu">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <div class="hero-left">
+                <h1>Hi — I'm <span class="accent">Aditya Uniyal</span></h1>
+                <p class="lead">I build scalable web apps, intelligent bots, and playful interactive systems that solve
+                    real problems.</p>
+                <div class="hero-ctas">
+                    <a href="projects.html" class="btn">View Projects</a>
+                    <a href="connect.html" class="btn btn-outline">Connect With Me</a>
+                </div>
+                <ul class="meta-list">
+                    <li>Location: India</li>
+                    <li>Open to: Collaborations, Freelance & Mentoring</li>
+                </ul>
+            </div>
+
+            <div class="hero-right" aria-hidden="true">
+                <div class="card glass">
+                    <div class="card-head">Featured</div>
+                    <ul class="featured-list">
+                        <li><strong>Numexa</strong> — Discord scientific calculator bot</li>
+                        <li><strong>Multiplayer Quiz</strong> — real-time quizzes with leaderboards</li>
+                        <li><strong>RaftarFun</strong> — interactive web experiments</li>
+                    </ul>
+                    <div class="social-row">
+                        <!-- replace handles below -->
+                        <a href="https://github.com/replace-with-your-username" aria-label="GitHub">GitHub</a>
+                        <a href="https://linkedin.com/in/replace-with-your-username" aria-label="LinkedIn">LinkedIn</a>
+                        <a href="https://twitter.com/replace-with-your-username" aria-label="X / Twitter">X</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container peek">
+            <h2>Explore</h2>
+            <div class="cards-grid">
+                <article class="card project-card" data-slug="numexa">
+                    <h3>Numexa</h3>
+                    <p>Scientific calculator bot for Discord — advanced math parsing and commands.</p>
+                    <div class="card-actions">
+                        <a href="projects.html#numexa">Case study</a>
+                        <a href="#" class="try-demo" data-demo="numexa">Try demo</a>
+                    </div>
+                </article>
+
+                <article class="card project-card" data-slug="quiz">
+                    <h3>Multiplayer Quiz</h3>
+                    <p>Real-time multiplayer quiz with authentication and leaderboards.</p>
+                    <div class="card-actions">
+                        <a href="projects.html#quiz">Case study</a>
+                        <a href="#" class="try-demo" data-demo="quiz">Try demo</a>
+                    </div>
+                </article>
+
+                <article class="card project-card" data-slug="raftarfun">
+                    <h3>RaftarFun</h3>
+                    <p>Interactive web experiments and games — inspired by Neal.fun.</p>
+                    <div class="card-actions">
+                        <a href="projects.html#raftarfun">Case study</a>
+                        <a href="#" class="try-demo" data-demo="raftarfun">Try demo</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="container mini-contact">
+            <div class="glass">
+                <h3>Quick contact</h3>
+                <p>Short on time? Send a quick note and I’ll reply within 48 hours.</p>
+                <a class="btn" href="connect.html">Contact</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© <span id="year"></span> Aditya Uniyal</div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="connect.html">Connect</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project modal (hidden by default) -->
+    <div id="modal" class="modal" aria-hidden="true">
+        <div class="modal-body">
+            <button id="modal-close" aria-label="Close">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

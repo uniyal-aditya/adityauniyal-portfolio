@@ -1,12 +1,13 @@
 :root {
-    --bg: #0b1220;
-    --card: #0f1726;
-    --muted: #94a3b8;
-    --accent: #38bdf8;
-    --glass: rgba(255, 255, 255, 0.04);
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --muted: #64748b;
+    --accent: #0ea5e9;
+    --glass: rgba(15, 23, 42, 0.04);
     --radius: 12px;
     --container: 1100px;
 }
+
 
 * {
     box-sizing: border-box
@@ -17,10 +18,11 @@ body {
     height: 100%;
     margin: 0;
     font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    background: linear-gradient(180deg, var(--bg), #071024 70%);
-    color: #e6eef8;
-    line-height: 1.5
+    background: linear-gradient(180deg, #f6f8fb, #eef2f7 70%);
+    color: #0f172a;
+    line-height: 1.5;
 }
+
 
 .container {
     max-width: var(--container);
@@ -32,10 +34,11 @@ body {
     position: sticky;
     top: 0;
     backdrop-filter: blur(6px);
-    background: linear-gradient(180deg, rgba(6, 10, 18, 0.6), rgba(6, 10, 18, 0.2));
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    z-index: 20
+    background: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+    z-index: 20;
 }
+
 
 .header-inner {
     display: flex;
@@ -67,9 +70,10 @@ body {
 }
 
 .main-nav a:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.02)
+    color: #0f172a;
+    background: rgba(14, 165, 233, 0.08);
 }
+
 
 .main-nav .cta {
     background: var(--accent);
@@ -133,9 +137,10 @@ body {
     background: var(--card);
     padding: 18px;
     border-radius: var(--radius);
-    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.03)
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(15, 23, 42, 0.04);
 }
+
 
 .card .card-actions {
     margin-top: 12px;
@@ -145,11 +150,12 @@ body {
 }
 
 .glass {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    background: rgba(255, 255, 255, 0.6);
     border-radius: var(--radius);
     padding: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.03)
+    border: 1px solid rgba(15, 23, 42, 0.05);
 }
+
 
 .peek {
     margin-top: 10px
@@ -213,9 +219,9 @@ textarea {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    background: #071026;
-    color: #eaf6ff
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    background: #ffffff;
+    color: #0f172a;
 }
 
 .form-actions {
@@ -231,11 +237,12 @@ textarea {
 
 /* footer */
 .site-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(15, 23, 42, 0.05);
     margin-top: 40px;
     padding: 18px 0;
-    color: var(--muted)
+    color: var(--muted);
 }
+
 
 /* modal */
 .modal {

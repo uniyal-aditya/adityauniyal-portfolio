@@ -29,7 +29,8 @@
         <p class="muted">Your feedback helps me improve my projects and site. Optionally provide your email if you want
             a reply.</p>
 
-        <form id="feedback-form" class="form glass" aria-label="Feedback form">
+        <form id="feedback-form" class="form">
+
             <label>
                 Name
                 <input type="text" name="name" id="name" placeholder="Your name ">
@@ -76,6 +77,42 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+    <script>
+        (function () {
+            emailjs.init("412Cq0ZSc06mwpEAY");
+        })();
+
+        document.getElementById("feedback-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const btn = this.querySelector("button");
+            const msg = document.getElementById("form-msg");
+
+            btn.disabled = true;
+            btn.innerText = "Sending...";
+
+            emailjs.sendForm(
+                "aditya-uniyal-portfolio",
+                "portfolio-aditya-uniyal",
+                this
+            ).then(function () {
+                msg.innerText = "Feedback sent successfully!";
+                msg.style.color = "green";
+            }, function (error) {
+                msg.innerText = "Failed to send. Try again.";
+                msg.style.color = "red";
+                console.log(error);
+            }).finally(() => {
+                btn.disabled = false;
+                btn.innerText = "Send Feedback";
+            });
+
+            this.reset();
+        });
+    </script>
+
 </body>
 
 </html>

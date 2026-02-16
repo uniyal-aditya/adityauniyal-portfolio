@@ -679,4 +679,78 @@ img {
     display: block;
 }
 
+/* ================= THEME TOGGLE ================= */
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+}
+
+.t-icon {
+    font-size: 16px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.t-switch {
+    width: 52px;
+    height: 28px;
+    background: rgba(15, 23, 42, 0.08);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    transition: background 0.25s ease;
+}
+
+.t-knob {
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s ease, background 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Light mode active */
+:root:not([data-theme="dark"]) .t-sun {
+    opacity: 1;
+}
+
+/* Dark mode styles */
+:root[data-theme="dark"] {
+    --bg: #0b1220;
+    --card: #0f1726;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+}
+
+:root[data-theme="dark"] body {
+    background: linear-gradient(180deg, #0b1220 0%, #071024 100%);
+    color: #e6eef8;
+}
+
+:root[data-theme="dark"] .card {
+    background: var(--card);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="dark"] .t-switch {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="dark"] .t-knob {
+    transform: translateX(24px);
+    background: #0b1220;
+}
+
+:root[data-theme="dark"] .t-moon {
+    opacity: 1;
+}
+
 /* End of stylesheet */

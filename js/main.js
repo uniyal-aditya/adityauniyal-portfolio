@@ -107,3 +107,38 @@ reveals.forEach(el => {
     el.classList.add('reveal');
     observer.observe(el);
 });
+(function () {
+
+    const toggle = document.getElementById("theme-toggle");
+    const THEME_KEY = "site-theme";
+
+    if (!toggle) return;
+
+    function applyTheme(theme) {
+        if (theme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+            toggle.setAttribute("aria-pressed", "true");
+        } else {
+            document.documentElement.removeAttribute("data-theme");
+            toggle.setAttribute("aria-pressed", "false");
+        }
+    }
+
+    function getSystemTheme() {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    applyTheme(savedTheme || getSystemTheme());
+
+    toggle.addEventListener("click", () => {
+        const isDark = document.documentElement.hasAttribute("data-theme");
+        const newTheme = isDark ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, newTheme);
+        applyTheme(newTheme);
+    });
+
+})();
+

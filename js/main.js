@@ -142,3 +142,69 @@ reveals.forEach(el => {
 
 })();
 
+// THEME TOGGLE (place at end of js/main.js)
+(function () {
+    const KEY = 'site-theme'; // 'light' or 'dark'
+    const html = document.documentElement;
+    const btn = document.getElementById('theme-toggle');
+
+    if (!btn) return; // no toggle present
+
+    // Helpers
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            html.classList.add('dark');
+            btn.setAttribute('aria-pressed', 'true');
+            btn.title = 'Switch to light theme';
+        } else {
+            html.classList.remove('dark');
+            btn.setAttribute('aria-pressed', 'false');
+            btn.title = 'Switch to dark theme';
+        }
+    }
+
+    function getSaved() {
+        try {
+            return localStorage.getItem(KEY);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function save(theme) {
+        try { localStorage.setItem(KEY, theme); } catch (e) { }
+    }
+
+    // Initialize: saved preference > OS preference > default 'light'
+    const saved = getSaved();
+    if (saved) {
+        applyTheme(saved);
+    } else {
+        const osPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(osPrefersDark ? 'dark' : 'light');
+    }
+
+    // Toggle handler
+    btn.addEventListener('click', () => {
+        const nowIsDark = html.classList.contains('dark');
+        const newTheme = nowIsDark ? 'light' : 'dark';
+        applyTheme(newTheme);
+        save(newTheme);
+    });
+
+    // Sync across tabs/windows
+    window.addEventListener('storage', (ev) => {
+        if (ev.key === KEY) {
+            applyTheme(ev.newValue || 'light');
+        }
+    });
+
+    // Optional: keep toggle state if nav is re-rendered
+    // (ensures aria-pressed matches current theme)
+    // run once more to sync aria label
+    (function syncButtonAria() {
+        const isDark = html.classList.contains('dark');
+        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+    })();
+
+})();

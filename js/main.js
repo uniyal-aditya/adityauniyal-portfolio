@@ -232,3 +232,35 @@ function handleUPIPayment() {
 function closeUPIModal() {
     document.getElementById("upiModal").style.display = "none";
 }
+function payUPI() {
+    window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
+}
+
+function openUPIModal() {
+    document.getElementById("upiModal").classList.add("active");
+}
+
+function closeUPIModal() {
+    document.getElementById("upiModal").classList.remove("active");
+}
+// Device detection
+document.addEventListener("DOMContentLoaded", function () {
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    const redirectBtn = document.getElementById("upiRedirectBtn");
+    const qrBtn = document.getElementById("upiQRBtn");
+
+    if (isMobile) {
+        // On mobile → show redirect button only
+        qrBtn.style.display = "none";
+    } else {
+        // On desktop → show QR button only
+        redirectBtn.style.display = "none";
+    }
+});
+document.getElementById("upiModal").addEventListener("click", function (e) {
+    if (e.target === this) {
+        closeUPIModal();
+    }
+});

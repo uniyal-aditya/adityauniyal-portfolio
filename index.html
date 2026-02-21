@@ -103,34 +103,31 @@
                 <h3 id="support-title">Support me</h3>
                 <p>Enjoying my work? A small coffee helps keep the projects alive.</p>
                 <div class="support-actions">
-                    <button class="bmc-btn" onclick="payUPI()">
-                        Buy Me a Coffee ☕
-                    </button>
-                    <button class="bmc-btn" onclick="handleUPIPayment()">
-                        Buy Me a Coffee ☕
-                    </button>
-                    <!-- Hidden QR Modal -->
-                    <div id="upiModal" class="upi-modal">
-                        <div class="upi-modal-content">
-                            <h3>Scan to Pay via UPI</h3>
-                            <img src="/assets/upi-qr.png" class="upi-qr" alt="UPI QR">
-                            <p>Scan using any UPI app</p>
-                            <button onclick="closeUPIModal()">Close</button>
-                        </div>
-                    </div>
 
-                    <script>
-                        function payUPI() {
-                            window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
-                        }
-                    </script>
+                    <!-- Mobile UPI Redirect Button -->
+                    <button id="upiRedirectBtn" class="bmc-btn" onclick="payUPI()">
+                        Buy Me a Coffee ☕
+                    </button>
+
+                    <!-- Desktop QR Button -->
+                    <button id="upiQRBtn" class="bmc-btn" onclick="openUPIModal()">
+                        Scan QR to Support ☕
+                    </button>
 
                 </div>
                 <p class="support-note">I reply within 24–48 hours for serious inquiries.</p>
             </aside>
         </section>
         </section>
-
+        <!-- UPI QR MODAL -->
+        <div id="upiModal" class="upi-modal">
+            <div class="upi-modal-content">
+                <h3>Scan to Pay via UPI</h3>
+                <img src="/assets/upi-qr.png" class="upi-qr" alt="UPI QR">
+                <p>Scan using any UPI app</p>
+                <button onclick="closeUPIModal()">Close</button>
+            </div>
+        </div>
 
         <!-- EXPLORE -->
         <section class="container peek">

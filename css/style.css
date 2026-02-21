@@ -981,7 +981,7 @@ body,
 
 /* QR */
 .upi-qr {
-    width: 200px;
+    width: 2000px;
     border-radius: 14px;
     margin: 18px 0;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);

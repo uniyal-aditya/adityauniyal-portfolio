@@ -106,6 +106,18 @@
                     <button class="bmc-btn" onclick="payUPI()">
                         Buy Me a Coffee ☕
                     </button>
+                    <button class="bmc-btn" onclick="handleUPIPayment()">
+                        Buy Me a Coffee ☕
+                    </button>
+                    <!-- Hidden QR Modal -->
+                    <div id="upiModal" class="upi-modal">
+                        <div class="upi-modal-content">
+                            <h3>Scan to Pay via UPI</h3>
+                            <img src="/assets/upi-qr.png" class="upi-qr" alt="UPI QR">
+                            <p>Scan using any UPI app</p>
+                            <button onclick="closeUPIModal()">Close</button>
+                        </div>
+                    </div>
 
                     <script>
                         function payUPI() {

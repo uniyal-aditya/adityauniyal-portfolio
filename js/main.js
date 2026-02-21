@@ -218,3 +218,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+function handleUPIPayment() {
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        window.location.href = "upi://pay?pa=yourupiid@bank&pn=Aditya%20Uniyal&cu=INR";
+    } else {
+        document.getElementById("upiModal").style.display = "flex";
+    }
+}
+
+function closeUPIModal() {
+    document.getElementById("upiModal").style.display = "none";
+}

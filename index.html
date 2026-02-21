@@ -87,9 +87,15 @@
                 <h3 id="support-title">Support me</h3>
                 <p>Enjoying my work? A small coffee helps keep the projects alive.</p>
                 <div class="support-actions">
-                    <a href="upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR" class="bmc-btn">
+                    <button class="bmc-btn" onclick="payUPI()">
                         Buy Me a Coffee ☕
-                    </a>
+                    </button>
+
+                    <script>
+                        function payUPI() {
+                            window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
+                        }
+                    </script>
 
                 </div>
                 <p class="support-note">I reply within 24–48 hours for serious inquiries.</p>

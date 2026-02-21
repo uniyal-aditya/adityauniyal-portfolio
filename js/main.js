@@ -208,3 +208,13 @@ reveals.forEach(el => {
     })();
 
 })();
+document.addEventListener("DOMContentLoaded", function () {
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const btn = document.querySelector(".bmc-btn");
+
+    if (!isMobile && btn) {
+        btn.style.display = "none"; // hides button on desktop
+    }
+
+});

@@ -208,30 +208,8 @@ reveals.forEach(el => {
     })();
 
 })();
-document.addEventListener("DOMContentLoaded", function () {
 
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const btn = document.querySelector(".bmc-btn");
 
-    if (!isMobile && btn) {
-        btn.style.display = "none"; // hides button on desktop
-    }
-
-});
-function handleUPIPayment() {
-
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        window.location.href = "upi://pay?pa=yourupiid@bank&pn=Aditya%20Uniyal&cu=INR";
-    } else {
-        document.getElementById("upiModal").style.display = "flex";
-    }
-}
-
-function closeUPIModal() {
-    document.getElementById("upiModal").style.display = "none";
-}
 function payUPI() {
     window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
 }
@@ -243,24 +221,46 @@ function openUPIModal() {
 function closeUPIModal() {
     document.getElementById("upiModal").classList.remove("active");
 }
-// Device detection
+
+
+// === UPI SUPPORT LOGIC ===
 document.addEventListener("DOMContentLoaded", function () {
 
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     const redirectBtn = document.getElementById("upiRedirectBtn");
     const qrBtn = document.getElementById("upiQRBtn");
+    const modal = document.getElementById("upiModal");
 
+    // Device toggle
     if (isMobile) {
-        // On mobile → show redirect button only
-        qrBtn.style.display = "none";
+        if (qrBtn) qrBtn.style.display = "none";
     } else {
-        // On desktop → show QR button only
-        redirectBtn.style.display = "none";
+        if (redirectBtn) redirectBtn.style.display = "none";
     }
-});
-document.getElementById("upiModal").addEventListener("click", function (e) {
-    if (e.target === this) {
-        closeUPIModal();
+
+    // Redirect (mobile)
+    window.payUPI = function () {
+        window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
+    };
+
+    // Open modal (desktop)
+    window.openUPIModal = function () {
+        if (modal) modal.classList.add("active");
+    };
+
+    // Close modal
+    window.closeUPIModal = function () {
+        if (modal) modal.classList.remove("active");
+    };
+
+    // Close when clicking outside
+    if (modal) {
+        modal.addEventListener("click", function (e) {
+            if (e.target === modal) {
+                modal.classList.remove("active");
+            }
+        });
     }
+
 });

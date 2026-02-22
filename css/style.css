@@ -1004,4 +1004,47 @@ body,
     transform: translateY(-2px);
 }
 
+/* Button base - adjust colors to match your theme */
+.btn-connect {
+    display: inline-block;
+    font-family: inherit;
+    font-weight: 600;
+    padding: 10px 18px;
+    margin-left: 12px;
+    /* space from existing button */
+    border-radius: 8px;
+    text-decoration: none;
+    color: #ffffff;
+    background: linear-gradient(180deg, #1fa2ff 0%, #0078d7 100%);
+    /* blue gradient */
+    box-shadow: 0 6px 14px rgba(2, 110, 245, 0.15);
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    border: none;
+    cursor: pointer;
+}
+
+/* Hover / focus */
+.btn-connect:hover,
+.btn-connect:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(2, 110, 245, 0.18);
+    outline: none;
+}
+
+/* If your Connect button is small, make this visually similar */
+.btn-connect.small {
+    padding: 8px 14px;
+    font-size: 0.95rem;
+}
+
+/* Responsive: stack vertically on narrow screens */
+@media (max-width: 640px) {
+    .btn-connect {
+        display: block;
+        width: 100%;
+        margin: 10px 0 0 0;
+        text-align: center;
+    }
+}
+
 /* End of stylesheet */

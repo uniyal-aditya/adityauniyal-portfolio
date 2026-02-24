@@ -263,4 +263,107 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+});// ---- Hire modal logic ----
+(function () {
+    const hireBtn = document.getElementById('hireBtn');
+    const hireModal = document.getElementById('hireModal');
+    const hireClose = document.getElementById('hireClose');
+
+    if (!hireModal) return;
+
+    // open
+    function openHire() {
+        hireModal.setAttribute('aria-hidden', 'false');
+        // focus first actionable element
+        const first = hireModal.querySelector('a, button');
+        if (first) first.focus();
+        document.body.style.overflow = 'hidden'; // optional: prevent page scroll
+    }
+
+    // close
+    function closeHire() {
+        hireModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (hireBtn) hireBtn.focus();
+    }
+
+    // click handlers
+    if (hireBtn) hireBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openHire();
+    });
+
+    if (hireClose) hireClose.addEventListener('click', closeHire);
+
+    // click outside panel to close
+    hireModal.addEventListener('click', function (e) {
+        if (e.target === this || e.target.dataset.close === "true") closeHire();
+    });
+
+    // ESC to close
+    window.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && hireModal.getAttribute('aria-hidden') === 'false') {
+            closeHire();
+        }
+    });
+
+    // simple focus trap
+    hireModal.addEventListener('keydown', function (ev) {
+        if (ev.key !== 'Tab') return;
+        const focusables = hireModal.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if (!focusables.length) return;
+        const first = focusables[0], last = focusables[focusables.length - 1];
+        if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+    });
+
+})();// Mobile menu toggle (safe: waits for DOMContentLoaded)
+document.addEventListener('DOMContentLoaded', function () {
+
+    const mobileToggle = document.getElementById('mobile-menu-toggle');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileClose = document.getElementById('mobileNavClose');
+
+    if (!mobileToggle || !mobileNav) return;
+
+    function openMobileNav() {
+        mobileNav.setAttribute('aria-hidden', 'false');
+        mobileToggle.classList.add('open');
+        mobileToggle.setAttribute('aria-expanded', 'true');
+        // trap focus to nav: focus first link
+        const first = mobileNav.querySelector('a, button');
+        if (first) first.focus();
+        // optionally prevent page scroll
+        document.documentElement.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+        mobileNav.setAttribute('aria-hidden', 'true');
+        mobileToggle.classList.remove('open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        document.documentElement.style.overflow = '';
+        mobileToggle.focus();
+    }
+
+    mobileToggle.addEventListener('click', function () {
+        if (mobileNav.getAttribute('aria-hidden') === 'false') closeMobileNav();
+        else openMobileNav();
+    });
+
+    if (mobileClose) mobileClose.addEventListener('click', closeMobileNav);
+
+    // click outside to close (backdrop)
+    mobileNav.addEventListener('click', function (ev) {
+        if (ev.target === mobileNav || ev.target.dataset.close === 'true') {
+            closeMobileNav();
+        }
+    });
+
+    // ESC to close
+    window.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && mobileNav.getAttribute('aria-hidden') === 'false') {
+            closeMobileNav();
+        }
+    });
+
 });

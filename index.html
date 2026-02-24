@@ -68,7 +68,39 @@
                 </span>
 
             </button>
+            <!-- Mobile menu button (place next to your theme toggle) -->
+            <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open site menu"
+                aria-controls="mobileNav" aria-expanded="false">
+                <span class="bar bar-1"></span>
+                <span class="bar bar-2"></span>
+                <span class="bar bar-3"></span>
+            </button>
 
+            <!-- Mobile nav panel  -->
+            <nav id="mobileNav" class="mobile-nav" aria-hidden="true" role="dialog" aria-modal="true" tabindex="-1">
+                <div class="mobile-nav-backdrop" data-close="true"></div>
+
+                <div class="mobile-nav-panel" role="document">
+                    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">&times;</button>
+
+                    <div class="mobile-brand">
+                        <strong>Aditya Uniyal</strong> - Dev
+                    </div>
+
+                    <ul class="mobile-nav-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="skills.html">Skills</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                        <li><a href="connect.html" class="mobile-cta">Connect</a></li>
+                    </ul>
+
+                    <div class="mobile-footer">
+                        <a href="/assets/Aditya_Uniyal_Resume.pdf" class="btn btn-outline" download>Download Resume</a>
+                    </div>
+                </div>
+            </nav>
         </div>
     </header>
 
@@ -83,19 +115,16 @@
                     to real-time web platforms and experimental interactive applications.
                 </p>
 
-                <div class="hero-ctas">
-                    <a href="projects.html" class="btn">View Projects</a>
+                <div class="hero-buttons">
+                    <a href="projects.html" class="btn primary">View Projects</a>
                     <a href="connect.html" class="btn btn-outline">Connect With Me</a>
-                    <a class="btn-connect" href="https://www.fiverr.com/s/8zXABXv" target="_blank"
-                        rel="noopener noreferrer" aria-label="Hire me on Fiverr">
-                        Hire me
-                    </a>
-                    <a href="/assets/My_resume.pdf" class="btn btn-outline" download>
+                    <a href="#" id="hireBtn" class="btn">Hire Me</a>
+                    <a href="/assets/Aditya_Uniyal_Resume.pdf" class="btn btn-outline" download>
                         Download Resume
                     </a>
                 </div>
 
-                <ul class="meta-list">
+                <ul class=" meta-list">
                     <li>Location: India</li>
                     <li>Available for: Collaborations, Freelance & Mentoring</li>
                 </ul>
@@ -204,7 +233,65 @@
             </div>
         </div>
     </footer>
+    <div id="hireModal" class="hire-modal" aria-hidden="true" role="dialog" aria-labelledby="hireModalTitle"
+        tabindex="-1">
+        <div class="hire-modal-backdrop" data-close="true"></div>
 
+        <div class="hire-modal-panel" role="document">
+            <button class="hire-close" id="hireClose" aria-label="Close dialog">&times;</button>
+
+            <header class="hire-head">
+                <h2 id="hireModalTitle">Hire Me — Quick Links</h2>
+                <p class="muted">Open a profile or gig — I’ll respond within 24–48 hours.</p>
+            </header>
+
+            <div class="hire-grid">
+                <!-- Fiverr profile -->
+                <a class="hire-card" href="https://www.fiverr.com/uniyal_aditya" target="_blank"
+                    rel="noopener noreferrer">
+                    <div class="hire-card-icon">🎯</div>
+                    <div class="hire-card-body">
+                        <strong>Fiverr profile</strong>
+                        <small>See my gigs & reviews</small>
+                    </div>
+                </a>
+
+                <!-- Fiverr gig (specific) -->
+                <a class="hire-card" href="https://www.fiverr.com/s/zWE9XVg" target="_blank" rel="noopener noreferrer">
+                    <div class="hire-card-icon">⚡</div>
+                    <div class="hire-card-body">
+                        <strong>Featured gig</strong>
+                        <small>Website Development and Design</small>
+                    </div>
+                </a>
+
+                <!-- LinkedIn -->
+                <a class="hire-card" href="https://www.linkedin.com/in/uniyaladitya" target="_blank"
+                    rel="noopener noreferrer">
+                    <div class="hire-card-icon">💼</div>
+                    <div class="hire-card-body">
+                        <strong>LinkedIn</strong>
+                        <small>Resume, endorsements & contact</small>
+                    </div>
+                </a>
+
+                <!-- Service / Contact page -->
+                <a class="hire-card" href="https://adityauniyal.is-a.dev/connect.html" target="_blank"
+                    rel="noopener noreferrer">
+                    <div class="hire-card-icon">🔗</div>
+                    <div class="hire-card-body">
+                        <strong>Service / Contact</strong>
+                        <small>Project details & custom offers</small>
+                    </div>
+                </a>
+            </div>
+
+            <footer class="hire-foot">
+                <small class="muted">Prefer a direct chat? DM me on Discord or Instagram or use the contact
+                    form.</small>
+            </footer>
+        </div>
+    </div>
     <script src="js/main.js"></script>
 
 </body>

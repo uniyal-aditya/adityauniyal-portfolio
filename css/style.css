@@ -1047,4 +1047,346 @@ body,
     }
 }
 
+/* Hire modal - backdrop & panel */
+.hire-modal {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 1500;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .28s ease;
+}
+
+.hire-modal[aria-hidden="false"] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* subtle blurred backdrop */
+.hire-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(7, 15, 20, 0.32), rgba(7, 15, 20, 0.36));
+    backdrop-filter: blur(8px) saturate(1.05);
+    -webkit-backdrop-filter: blur(8px) saturate(1.05);
+    transition: opacity .28s ease;
+}
+
+/* panel */
+.hire-modal-panel {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    margin: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(250, 250, 252, 0.88));
+    border-radius: 14px;
+    box-shadow: 0 18px 50px rgba(8, 20, 40, 0.16);
+    padding: 20px;
+    transform: translateY(12px) scale(.97);
+    opacity: 0;
+    transition: transform .36s cubic-bezier(.2, .9, .28, 1), opacity .28s ease;
+}
+
+/* visible state */
+.hire-modal[aria-hidden="false"] .hire-modal-panel {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+/* header */
+.hire-head {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.hire-head h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+}
+
+.muted {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* close */
+.hire-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    transition: transform .12s ease, background .12s ease;
+}
+
+.hire-close:hover {
+    transform: translateY(-2px);
+    background: rgba(0, 0, 0, 0.09);
+}
+
+/* grid of cards */
+.hire-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 8px 0 6px;
+}
+
+/* each card */
+.hire-card {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(250, 250, 252, 0.96));
+    border: 1px solid rgba(14, 42, 71, 0.04);
+    box-shadow: 0 8px 20px rgba(12, 24, 40, 0.04);
+    transition: transform .14s cubic-bezier(.2, .9, .28, 1), box-shadow .14s ease;
+}
+
+.hire-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 50px rgba(10, 30, 60, 0.12);
+}
+
+/* icon circle and text */
+.hire-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    background: linear-gradient(180deg, #f6fbff, #eef7ff);
+    border: 1px solid rgba(10, 100, 200, 0.04);
+}
+
+.hire-card-body strong {
+    display: block;
+    font-size: 15px;
+}
+
+.hire-card-body small {
+    color: #6b7280;
+}
+
+/* responsive */
+@media (max-width:640px) {
+    .hire-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hire-modal-panel {
+        padding: 16px;
+        margin: 14px;
+    }
+}
+
+/* -------------------
+ Mobile menu (hamburger + panel)
+---------------------*/
+
+/* Hide mobile menu button on larger screens */
+.mobile-menu-btn {
+    display: none;
+}
+
+/* Hamburger button */
+.mobile-menu-btn {
+    width: 44px;
+    height: 34px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    display: inline-grid;
+    place-items: center;
+    padding: 6px;
+    cursor: pointer;
+    position: relative;
+    transition: transform .12s ease;
+}
+
+.mobile-menu-btn:active {
+    transform: translateY(1px);
+}
+
+/* three bars */
+.mobile-menu-btn .bar {
+    display: block;
+    width: 22px;
+    height: 2.6px;
+    margin: 3px 0;
+    background: #0b6fb6;
+    /* adjust to your accent */
+    border-radius: 2px;
+    transition: transform .28s cubic-bezier(.2, .9, .28, 1), opacity .18s ease;
+}
+
+/* morph to X when open (we toggle .open on button) */
+.mobile-menu-btn.open .bar-1 {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.mobile-menu-btn.open .bar-2 {
+    opacity: 0;
+    transform: scaleX(.6);
+}
+
+.mobile-menu-btn.open .bar-3 {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Mobile nav panel + backdrop (hidden by default) */
+.mobile-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 1400;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .28s ease;
+    font-family: inherit;
+}
+
+/* visible */
+.mobile-nav[aria-hidden="false"] {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+/* backdrop */
+.mobile-nav-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(6, 12, 18, 0.42);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: opacity .28s ease;
+}
+
+/* panel */
+.mobile-nav-panel {
+    position: absolute;
+    right: 12px;
+    /* slide from right */
+    top: 60px;
+    width: calc(100% - 40px);
+    max-width: 360px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 251, 255, 0.94));
+    border-radius: 12px;
+    box-shadow: 0 22px 50px rgba(10, 20, 40, 0.14);
+    transform: translateY(-6px) translateX(10px) scale(.98);
+    opacity: 0;
+    transition: transform .36s cubic-bezier(.2, .9, .28, 1), opacity .28s ease;
+    padding: 18px;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+/* visible state */
+.mobile-nav[aria-hidden="false"] .mobile-nav-panel {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 1;
+}
+
+/* close button */
+.mobile-nav-close {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.06);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* brand inside panel */
+.mobile-brand {
+    font-weight: 700;
+    color: #0b6fb6;
+    margin-bottom: 12px;
+}
+
+/* nav list */
+.mobile-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 12px;
+    display: grid;
+    gap: 8px;
+}
+
+.mobile-nav-list a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #0f172a;
+    font-weight: 600;
+    transition: background .12s ease, transform .12s ease;
+}
+
+.mobile-nav-list a:hover {
+    background: rgba(14, 165, 233, 0.06);
+    transform: translateY(-2px);
+}
+
+/* CTA link style */
+.mobile-nav-list .mobile-cta {
+    background: linear-gradient(180deg, #06a0df, #0b6fb6);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(11, 111, 182, 0.16);
+}
+
+/* footer inside panel */
+.mobile-footer {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.mobile-footer .btn {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+/* Responsive: show hamburger only on small screens */
+@media (max-width: 900px) {
+    .mobile-menu-btn {
+        display: inline-grid;
+        margin-left: 10px;
+    }
+
+    /* hide original desktop nav if needed */
+    .main-nav {
+        display: none;
+    }
+}
+
+/* On wider screens keep normal nav and hide mobile nav entirely */
+@media (min-width: 901px) {
+    .mobile-nav {
+        display: none !important;
+    }
+}
+
 /* End of stylesheet */

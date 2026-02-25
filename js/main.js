@@ -1,65 +1,199 @@
+/* main.js — consolidated, robust, single-theme-toggle (PNG) + UI logic */
 (() => {
-    const yearEl = document.getElementById('year');
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
+    "use strict";
 
-    // nav toggle
-    const nav = document.querySelector('.main-nav');
-    const toggle = document.getElementById('nav-toggle');
-    if (toggle) {
-        toggle.addEventListener('click', () => nav.classList.toggle('open'));
+    const THEME_KEY = "site-theme";
+    const SUN_ICON = "/assets/icons/sun.png";
+    const MOON_ICON = "/assets/icons/moon.png";
+
+    /* ---------- Helpers ---------- */
+    const el = (sel) => document.querySelector(sel);
+    const els = (sel) => Array.from(document.querySelectorAll(sel));
+
+    function safeAddEvent(target, evt, fn, opts) {
+        if (!target) return;
+        target.addEventListener(evt, fn, opts);
     }
 
-    // modal logic
-    const modal = document.getElementById('modal');
-    const modalContent = document.getElementById('modal-content');
-    const modalClose = document.getElementById('modal-close');
+    /* ---------- Theme (single icon, PNG) ---------- */
+    function initThemeToggle() {
+        const root = document.documentElement;
+        const btn = document.getElementById("theme-toggle");
+        const iconImg = document.getElementById("theme-icon");
+        const iconSun = document.getElementById("icon-sun");   // fallback
+        const iconMoon = document.getElementById("icon-moon"); // fallback
 
-    function openModal(html) {
-        if (!modal) return;
-        modalContent.innerHTML = html;
-        modal.setAttribute('aria-hidden', 'false');
-    }
-    function closeModal() {
-        if (!modal) return;
-        modal.setAttribute('aria-hidden', 'true');
-        if (modalContent) modalContent.innerHTML = '';
-    }
-    if (modalClose) modalClose.addEventListener('click', closeModal);
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-    });
+        function showFallbackIcons(useDark) {
+            if (iconSun && iconMoon) {
+                iconSun.style.display = useDark ? "none" : "inline";
+                iconMoon.style.display = useDark ? "inline" : "none";
+            }
+        }
 
-    document.querySelectorAll('.open-case').forEach(btn => {
-        btn.addEventListener('click', (ev) => {
-            const slug = ev.currentTarget.getAttribute('data-slug');
-            const cases = {
-                'numexa': `<h2>Numexa — Discord Scientific Calculator</h2>
-                   <p><strong>Stack:</strong> Python, discord.py.</p>
-                   <ul><li>Complex math parsing</li><li>Command architecture</li></ul>`,
-                'raftarfun': `<h2>RaftarFun — Interactive Web Experiments</h2>
-                   <p><strong>Stack:</strong> JS, HTML5 Canvas.</p>`,
-                'quiz': `<h2>Multiplayer Quiz — Real-time Gameplay</h2><p><strong>Stack:</strong> WebSockets, Firebase/Socket.io</p>`,
-                'aichat': `<h2>AI Chatbot</h2><p><strong>Stack:</strong> Node/Python + LLM integration</p>`
-            };
-            openModal(cases[slug] || '<p>Case study not found.</p>');
+        function applyTheme(theme) {
+            const isDark = theme === "dark";
+            if (isDark) root.setAttribute("data-theme", "dark");
+            else root.removeAttribute("data-theme");
+
+            // primary behaviour: single png icon if present
+            if (iconImg) {
+                iconImg.src = isDark ? MOON_ICON : SUN_ICON;
+                iconImg.alt = isDark ? "Moon (dark theme active)" : "Sun (light theme active)";
+            } else {
+                // fallback: show/hide separate sun/moon elements if available
+                showFallbackIcons(!isDark);
+            }
+
+            if (btn) {
+                btn.setAttribute("aria-pressed", isDark ? "true" : "false");
+                btn.title = isDark ? "Switch to light theme" : "Switch to dark theme";
+            }
+        }
+
+        // Determine initial theme: saved > media query > light
+        let saved = null;
+        try { saved = localStorage.getItem(THEME_KEY); } catch (e) { /* ignore */ }
+
+        if (saved === "dark" || saved === "light") {
+            applyTheme(saved);
+        } else {
+            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            applyTheme(prefersDark ? "dark" : "light");
+        }
+
+        if (!btn) return;
+
+        btn.addEventListener("click", () => {
+            const curDark = document.documentElement.getAttribute("data-theme") === "dark";
+            const next = curDark ? "light" : "dark";
+            applyTheme(next);
+            try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
         });
-    });
 
-    document.querySelectorAll('.try-demo').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const demo = e.currentTarget.getAttribute('data-demo');
-            openModal(`<h2>Demo: ${demo}</h2><p>Interactive demo placeholder — replace this with an embed or iframe.</p>`);
+        // sync across tabs
+        window.addEventListener("storage", (ev) => {
+            if (ev.key === THEME_KEY) {
+                applyTheme(ev.newValue || "light");
+            }
         });
-    });
+    }
 
-    // Feedback form posting left unchanged - function posts to serverless function
-    const feedbackForm = document.getElementById('feedback-form');
-    if (feedbackForm) {
-        feedbackForm.addEventListener('submit', async (e) => {
+    /* ---------- Year replacement ---------- */
+    function initYear() {
+        const yearEl = document.getElementById("year");
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+    }
+
+    /* ---------- Desktop nav toggle (non-mobile) ---------- */
+    function initNavToggle() {
+        const nav = document.querySelector(".main-nav");
+        const toggle = document.getElementById("nav-toggle");
+        if (!toggle || !nav) return;
+        toggle.addEventListener("click", () => nav.classList.toggle("open"));
+    }
+
+    /* ---------- Mobile menu logic ---------- */
+    function initMobileNav() {
+        const mobileToggle = document.getElementById("mobile-menu-toggle");
+        const mobileNav = document.getElementById("mobileNav");
+        const mobileClose = document.getElementById("mobileNavClose");
+
+        if (!mobileToggle || !mobileNav) return;
+
+        function openMobileNav() {
+            mobileNav.setAttribute("aria-hidden", "false");
+            mobileToggle.classList.add("open");
+            mobileToggle.setAttribute("aria-expanded", "true");
+            const first = mobileNav.querySelector('a, button');
+            if (first) first.focus();
+            document.documentElement.style.overflow = "hidden";
+        }
+
+        function closeMobileNav() {
+            mobileNav.setAttribute("aria-hidden", "true");
+            mobileToggle.classList.remove("open");
+            mobileToggle.setAttribute("aria-expanded", "false");
+            document.documentElement.style.overflow = "";
+            mobileToggle.focus();
+        }
+
+        mobileToggle.addEventListener("click", () => {
+            if (mobileNav.getAttribute("aria-hidden") === "false") closeMobileNav();
+            else openMobileNav();
+        });
+
+        if (mobileClose) safeAddEvent(mobileClose, "click", closeMobileNav);
+
+        mobileNav.addEventListener("click", (ev) => {
+            if (ev.target === mobileNav || ev.target.dataset.close === "true") closeMobileNav();
+        });
+
+        window.addEventListener("keydown", (ev) => {
+            if (ev.key === "Escape" && mobileNav.getAttribute("aria-hidden") === "false") closeMobileNav();
+        });
+    }
+
+    /* ---------- Generic modal logic ---------- */
+    function makeModal(modalId, contentId, closeId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return null;
+        const content = contentId ? document.getElementById(contentId) : null;
+        const closeBtn = closeId ? document.getElementById(closeId) : null;
+        function open(html) {
+            if (content) content.innerHTML = html;
+            modal.setAttribute("aria-hidden", "false");
+        }
+        function close() {
+            modal.setAttribute("aria-hidden", "true");
+            if (content) content.innerHTML = "";
+        }
+        if (closeBtn) safeAddEvent(closeBtn, "click", close);
+        // escape to close
+        window.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && modal.getAttribute("aria-hidden") === "false") close(); });
+        // click outside to close
+        modal.addEventListener("click", (ev) => { if (ev.target === modal) close(); });
+        return { open, close, modal, content };
+    }
+
+    /* ---------- Project case modal wiring ---------- */
+    function initCaseModals() {
+        const caseModal = makeModal("modal", "modal-content", "modal-close");
+        // If there are .open-case buttons, attach their handlers
+        els(".open-case").forEach(btn => {
+            safeAddEvent(btn, "click", (ev) => {
+                const slug = ev.currentTarget.getAttribute("data-slug");
+                const cases = {
+                    'numexa': `<h2>Numexa — Discord Scientific Calculator</h2>
+                    <p><strong>Stack:</strong> Python, discord.py.</p>
+                    <ul><li>Complex math parsing</li><li>Command architecture</li></ul>`,
+                    'raftarfun': `<h2>RaftarFun — Interactive Web Experiments</h2>
+                        <p><strong>Stack:</strong> JS, HTML5 Canvas.</p>`,
+                    'quiz': `<h2>Multiplayer Quiz — Real-time Gameplay</h2><p><strong>Stack:</strong> WebSockets, Firebase/Socket.io</p>`,
+                    'aichat': `<h2>AI Chatbot</h2><p><strong>Stack:</strong> Node/Python + LLM integration</p>`
+                };
+                if (caseModal) caseModal.open(cases[slug] || "<p>Case study not found.</p>");
+            });
+        });
+        // demo buttons
+        els(".try-demo").forEach(btn => {
+            safeAddEvent(btn, "click", (ev) => {
+                ev.preventDefault();
+                const demo = ev.currentTarget.getAttribute("data-demo") || "Demo";
+                if (caseModal) caseModal.open(`<h2>Demo: ${demo}</h2><p>Interactive demo placeholder — replace with an embed or iframe.</p>`);
+            });
+        });
+    }
+
+    /* ---------- Feedback form ---------- */
+    function initFeedbackForm() {
+        const form = document.getElementById("feedback-form");
+        if (!form) return;
+
+        safeAddEvent(form, "submit", async (e) => {
             e.preventDefault();
-            const btn = feedbackForm.querySelector('button[type="submit"]');
-            const msgEl = document.getElementById('form-msg');
+            const btn = form.querySelector('button[type="submit"]');
+            const msgEl = document.getElementById("form-msg");
+
             const payload = {
                 name: document.getElementById('name') ? document.getElementById('name').value || 'Anonymous' : 'Anonymous',
                 email: document.getElementById('email') ? document.getElementById('email').value || '' : '',
@@ -69,7 +203,7 @@
             };
 
             if (btn) btn.disabled = true;
-            if (msgEl) msgEl.textContent = 'Sending...';
+            if (msgEl) msgEl.textContent = "Sending...";
 
             try {
                 const res = await fetch('/.netlify/functions/sendFeedback', {
@@ -79,291 +213,151 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    if (msgEl) msgEl.textContent = 'Thanks — feedback sent.';
-                    feedbackForm.reset();
+                    if (msgEl) msgEl.textContent = "Thanks — feedback sent.";
+                    form.reset();
                 } else {
-                    if (msgEl) msgEl.textContent = data.error || 'Failed to send. Check console.';
-                    console.error('sendFeedback error', data);
+                    if (msgEl) msgEl.textContent = data.error || "Failed to send. Check console.";
+                    console.error("sendFeedback error", data);
                 }
             } catch (err) {
                 console.error(err);
-                if (msgEl) msgEl.textContent = 'Network error — please try later.';
+                if (msgEl) msgEl.textContent = "Network error — please try later.";
             } finally {
                 if (btn) btn.disabled = false;
             }
         });
     }
-})();
-const reveals = document.querySelectorAll('.card, section');
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-        }
-    });
-}, { threshold: 0.1 });
 
-reveals.forEach(el => {
-    el.classList.add('reveal');
-    observer.observe(el);
-});
-(function () {
+    /* ---------- UPI modal & helper ---------- */
+    function initUPI() {
+        const modal = document.getElementById("upiModal");
+        const upiRedirectBtn = document.getElementById("upiRedirectBtn");
+        const upiQRBtn = document.getElementById("upiQRBtn");
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    const toggle = document.getElementById("theme-toggle");
-    const THEME_KEY = "site-theme";
+        if (upiRedirectBtn && isMobile) upiQRBtn && (upiQRBtn.style.display = "none");
+        if (upiQRBtn && !isMobile) upiRedirectBtn && (upiRedirectBtn.style.display = "none");
 
-    if (!toggle) return;
+        window.payUPI = function () {
+            window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
+        };
+        window.openUPIModal = function () { if (modal) modal.classList.add("active"); };
+        window.closeUPIModal = function () { if (modal) modal.classList.remove("active"); };
 
-    function applyTheme(theme) {
-        if (theme === "dark") {
-            document.documentElement.setAttribute("data-theme", "dark");
-            toggle.setAttribute("aria-pressed", "true");
-        } else {
-            document.documentElement.removeAttribute("data-theme");
-            toggle.setAttribute("aria-pressed", "false");
+        if (modal) {
+            modal.addEventListener("click", function (e) {
+                if (e.target === modal) modal.classList.remove("active");
+            });
         }
     }
 
-    function getSystemTheme() {
-        return window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
-    }
+    /* ---------- Hire modal (accessible) ---------- */
+    function initHireModal() {
+        const hireBtn = document.getElementById('hireBtn');
+        const hireModal = document.getElementById('hireModal');
+        const hireClose = document.getElementById('hireClose');
+        if (!hireModal) return;
 
-    const savedTheme = localStorage.getItem(THEME_KEY);
-    applyTheme(savedTheme || getSystemTheme());
-
-    toggle.addEventListener("click", () => {
-        const isDark = document.documentElement.hasAttribute("data-theme");
-        const newTheme = isDark ? "light" : "dark";
-        localStorage.setItem(THEME_KEY, newTheme);
-        applyTheme(newTheme);
-    });
-
-})();
-
-// THEME TOGGLE (place at end of js/main.js)
-(function () {
-    const KEY = 'site-theme'; // 'light' or 'dark'
-    const html = document.documentElement;
-    const btn = document.getElementById('theme-toggle');
-
-    if (!btn) return; // no toggle present
-
-    // Helpers
-    function applyTheme(theme) {
-        if (theme === 'dark') {
-            html.classList.add('dark');
-            btn.setAttribute('aria-pressed', 'true');
-            btn.title = 'Switch to light theme';
-        } else {
-            html.classList.remove('dark');
-            btn.setAttribute('aria-pressed', 'false');
-            btn.title = 'Switch to dark theme';
+        function openHire() {
+            hireModal.setAttribute('aria-hidden', 'false');
+            const first = hireModal.querySelector('a, button');
+            if (first) first.focus();
+            document.body.style.overflow = 'hidden';
         }
-    }
-
-    function getSaved() {
-        try {
-            return localStorage.getItem(KEY);
-        } catch (e) {
-            return null;
+        function closeHire() {
+            hireModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            if (hireBtn) hireBtn.focus();
         }
-    }
 
-    function save(theme) {
-        try { localStorage.setItem(KEY, theme); } catch (e) { }
-    }
+        if (hireBtn) safeAddEvent(hireBtn, 'click', (e) => { e.preventDefault(); openHire(); });
+        if (hireClose) safeAddEvent(hireClose, 'click', closeHire);
 
-    // Initialize: saved preference > OS preference > default 'light'
-    const saved = getSaved();
-    if (saved) {
-        applyTheme(saved);
-    } else {
-        const osPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(osPrefersDark ? 'dark' : 'light');
-    }
+        hireModal.addEventListener('click', (e) => { if (e.target === hireModal || e.target.dataset.close === "true") closeHire(); });
+        window.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && hireModal.getAttribute('aria-hidden') === 'false') closeHire(); });
 
-    // Toggle handler
-    btn.addEventListener('click', () => {
-        const nowIsDark = html.classList.contains('dark');
-        const newTheme = nowIsDark ? 'light' : 'dark';
-        applyTheme(newTheme);
-        save(newTheme);
-    });
-
-    // Sync across tabs/windows
-    window.addEventListener('storage', (ev) => {
-        if (ev.key === KEY) {
-            applyTheme(ev.newValue || 'light');
-        }
-    });
-
-    // Optional: keep toggle state if nav is re-rendered
-    // (ensures aria-pressed matches current theme)
-    // run once more to sync aria label
-    (function syncButtonAria() {
-        const isDark = html.classList.contains('dark');
-        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-    })();
-
-})();
-
-
-function payUPI() {
-    window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
-}
-
-function openUPIModal() {
-    document.getElementById("upiModal").classList.add("active");
-}
-
-function closeUPIModal() {
-    document.getElementById("upiModal").classList.remove("active");
-}
-
-
-// === UPI SUPPORT LOGIC ===
-document.addEventListener("DOMContentLoaded", function () {
-
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    const redirectBtn = document.getElementById("upiRedirectBtn");
-    const qrBtn = document.getElementById("upiQRBtn");
-    const modal = document.getElementById("upiModal");
-
-    // Device toggle
-    if (isMobile) {
-        if (qrBtn) qrBtn.style.display = "none";
-    } else {
-        if (redirectBtn) redirectBtn.style.display = "none";
-    }
-
-    // Redirect (mobile)
-    window.payUPI = function () {
-        window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
-    };
-
-    // Open modal (desktop)
-    window.openUPIModal = function () {
-        if (modal) modal.classList.add("active");
-    };
-
-    // Close modal
-    window.closeUPIModal = function () {
-        if (modal) modal.classList.remove("active");
-    };
-
-    // Close when clicking outside
-    if (modal) {
-        modal.addEventListener("click", function (e) {
-            if (e.target === modal) {
-                modal.classList.remove("active");
-            }
+        // very small focus-trap
+        hireModal.addEventListener('keydown', function (ev) {
+            if (ev.key !== 'Tab') return;
+            const focusables = hireModal.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+            if (!focusables.length) return;
+            const first = focusables[0], last = focusables[focusables.length - 1];
+            if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+            else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
         });
     }
 
-});// ---- Hire modal logic ----
-(function () {
-    const hireBtn = document.getElementById('hireBtn');
-    const hireModal = document.getElementById('hireModal');
-    const hireClose = document.getElementById('hireClose');
+    /* ---------- Intersection reveal & card reveals ---------- */
+    function initRevealObserver() {
+        const revealEls = Array.from(document.querySelectorAll('.card, section, .reveal-on-scroll'));
+        if (!revealEls.length) return;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
 
-    if (!hireModal) return;
-
-    // open
-    function openHire() {
-        hireModal.setAttribute('aria-hidden', 'false');
-        // focus first actionable element
-        const first = hireModal.querySelector('a, button');
-        if (first) first.focus();
-        document.body.style.overflow = 'hidden'; // optional: prevent page scroll
+        revealEls.forEach(el => {
+            if (!el.classList.contains('reveal')) el.classList.add('reveal');
+            observer.observe(el);
+        });
     }
 
-    // close
-    function closeHire() {
-        hireModal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        if (hireBtn) hireBtn.focus();
+    /* ---------- Skill bar animation ---------- */
+    function initSkillBars() {
+        const bars = Array.from(document.querySelectorAll('.bar div'));
+        if (!bars.length) return;
+
+        bars.forEach((b) => {
+            // capture target width from inline style or data attribute
+            let target = "";
+            const inline = b.getAttribute("style");
+            if (inline && /width\s*:\s*\d+%/.test(inline)) {
+                // keep inline width but animate from 0
+                const match = inline.match(/width\s*:\s*(\d+%)/);
+                target = match ? match[1] : "";
+                b.style.width = "0%";
+            } else if (b.dataset && b.dataset.width) {
+                target = b.dataset.width;
+                b.style.width = "0%";
+            } else {
+                // fallback: read computed width percentage (rare)
+                target = b.style.width || b.getAttribute('data-width') || "";
+                if (!target) target = "80%";
+                b.style.width = "0%";
+            }
+
+            // delay a tiny random amount for stagger effect
+            const delay = Math.random() * 300 + 120;
+            setTimeout(() => {
+                b.style.transition = "width .9s cubic-bezier(.2,.9,.28,1)";
+                b.style.width = target;
+            }, delay);
+        });
     }
 
-    // click handlers
-    if (hireBtn) hireBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openHire();
-    });
-
-    if (hireClose) hireClose.addEventListener('click', closeHire);
-
-    // click outside panel to close
-    hireModal.addEventListener('click', function (e) {
-        if (e.target === this || e.target.dataset.close === "true") closeHire();
-    });
-
-    // ESC to close
-    window.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Escape' && hireModal.getAttribute('aria-hidden') === 'false') {
-            closeHire();
-        }
-    });
-
-    // simple focus trap
-    hireModal.addEventListener('keydown', function (ev) {
-        if (ev.key !== 'Tab') return;
-        const focusables = hireModal.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
-        if (!focusables.length) return;
-        const first = focusables[0], last = focusables[focusables.length - 1];
-        if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
-        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
-    });
-
-})();// Mobile menu toggle (safe: waits for DOMContentLoaded)
-document.addEventListener('DOMContentLoaded', function () {
-
-    const mobileToggle = document.getElementById('mobile-menu-toggle');
-    const mobileNav = document.getElementById('mobileNav');
-    const mobileClose = document.getElementById('mobileNavClose');
-
-    if (!mobileToggle || !mobileNav) return;
-
-    function openMobileNav() {
-        mobileNav.setAttribute('aria-hidden', 'false');
-        mobileToggle.classList.add('open');
-        mobileToggle.setAttribute('aria-expanded', 'true');
-        // trap focus to nav: focus first link
-        const first = mobileNav.querySelector('a, button');
-        if (first) first.focus();
-        // optionally prevent page scroll
-        document.documentElement.style.overflow = 'hidden';
+    /* ---------- Small UI polish: smooth hover for cards and sections ---------- */
+    function addHoverSmoothing() {
+        // This is just a JS helper to add a class; main work is CSS — see CSS snippet below.
+        const hoverables = document.querySelectorAll('.card, .card .card-actions, .mini-contact .glass, .btn, .btn-outline');
+        hoverables.forEach(elm => elm.classList.add('hover-smooth'));
     }
 
-    function closeMobileNav() {
-        mobileNav.setAttribute('aria-hidden', 'true');
-        mobileToggle.classList.remove('open');
-        mobileToggle.setAttribute('aria-expanded', 'false');
-        document.documentElement.style.overflow = '';
-        mobileToggle.focus();
-    }
-
-    mobileToggle.addEventListener('click', function () {
-        if (mobileNav.getAttribute('aria-hidden') === 'false') closeMobileNav();
-        else openMobileNav();
+    /* ---------- Attach page-level behaviors ---------- */
+    document.addEventListener('DOMContentLoaded', () => {
+        initYear();
+        initNavToggle();
+        initMobileNav();
+        initThemeToggle();
+        initCaseModals();
+        initFeedbackForm();
+        initUPI();
+        initHireModal();
+        initRevealObserver();
+        initSkillBars();
+        addHoverSmoothing();
     });
 
-    if (mobileClose) mobileClose.addEventListener('click', closeMobileNav);
-
-    // click outside to close (backdrop)
-    mobileNav.addEventListener('click', function (ev) {
-        if (ev.target === mobileNav || ev.target.dataset.close === 'true') {
-            closeMobileNav();
-        }
-    });
-
-    // ESC to close
-    window.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Escape' && mobileNav.getAttribute('aria-hidden') === 'false') {
-            closeMobileNav();
-        }
-    });
-
-});
+})();

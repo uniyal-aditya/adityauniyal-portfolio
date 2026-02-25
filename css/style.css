@@ -848,7 +848,7 @@ body,
 
 /* Brand in dark */
 :root[data-theme="dark"] .brand strong {
-    color: var(--link);
+    color: var();
 }
 
 /* Cards & panels in dark */
@@ -1018,7 +1018,7 @@ body,
 }
 
 :root[data-theme="dark"] .mobile-brand {
-    color: var(--link);
+    color: var(--btn-text);
 }
 
 :root[data-theme="dark"] .mobile-nav-list a {
@@ -1456,10 +1456,32 @@ body,
     transform: translateY(-2px);
 }
 
+/* ==================================
+   MOBILE CONNECT — MATCH NAV STYLE
+   ================================== */
+
 .mobile-nav-list .mobile-cta {
-    background: linear-gradient(180deg, #06a0df, #0b6fb6);
-    color: #fff;
-    box-shadow: 0 8px 18px rgba(11, 111, 182, 0.16);
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    color: #ffffff;
+    box-shadow:
+        0 8px 20px rgba(14, 165, 233, 0.25),
+        0 2px 6px rgba(0, 0, 0, 0.08);
+    transition:
+        transform .25s cubic-bezier(.2, .9, .28, 1),
+        box-shadow .25s ease;
+}
+
+.mobile-nav-list .mobile-cta:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 14px 35px rgba(14, 165, 233, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="dark"] .mobile-nav-list .mobile-cta {
+    background: linear-gradient(135deg, #ffffff, #e5e7eb);
+    color: #000000;
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.12);
 }
 
 .mobile-footer {

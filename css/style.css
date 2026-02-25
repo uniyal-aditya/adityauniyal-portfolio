@@ -853,14 +853,19 @@ body,
 }
 
 /* SUPPORT CARD (replaces Featured Work) --------------------------- */
+/* Default (Light Mode) */
 .support-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 18px;
-    max-width: 300px;
-    box-shadow: 0 8px 20px rgba(22, 40, 68, 0.06);
-    margin-left: auto;
-    /* align to the right area like original Featured Work */
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dark Mode */
+html.dark .support-card {
+    background: linear-gradient(145deg, #111827, #0f172a);
+    color: #e5e7eb;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
 .support-card h3 {

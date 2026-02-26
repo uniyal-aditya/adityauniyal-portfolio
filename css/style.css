@@ -1728,5 +1728,625 @@ h2::after {
     }
 }
 
+/* ==================================
+   HERO — MOBILE REDESIGN
+   ================================== */
+
+@media (max-width: 900px) {
+
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 40px 0 20px;
+    }
+
+    .hero-left h1 {
+        font-size: 1.9rem;
+        margin-bottom: 10px;
+    }
+
+    .hero .lead {
+        font-size: 14.5px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+        color: var(--muted);
+    }
+
+    /* Button container */
+    .hero-ctas {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        max-width: 340px;
+        margin: 0 auto 24px;
+    }
+
+    /* Make first button primary */
+    .hero-ctas .btn:first-child {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    /* Secondary buttons cleaner */
+    .hero-ctas .btn-outline,
+    .hero-ctas .btn:not(:first-child) {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--surface-text);
+        box-shadow: none;
+    }
+
+    .hero-ctas .btn,
+    .hero-ctas .btn-outline {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: transform .2s ease, background .2s ease;
+    }
+
+    .hero-ctas .btn:hover,
+    .hero-ctas .btn-outline:hover {
+        transform: translateY(-3px);
+    }
+
+    /* Meta list spacing */
+    .meta-list {
+        margin-top: 12px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .meta-list li {
+        margin-bottom: 6px;
+    }
+}
+
+@media (max-width: 900px) {
+
+    :root[data-theme="dark"] .hero-ctas .btn-outline,
+    :root[data-theme="dark"] .hero-ctas .btn:not(:first-child) {
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #f3f4f6;
+    }
+}
+
+/* =====================================
+   🔥 FINAL CLEAN FIX PATCH
+   ===================================== */
+
+/* Fix broken brand color */
+:root[data-theme="dark"] .brand strong {
+    color: var(--text);
+}
+
+/* Clean hamburger visibility */
+.mobile-menu-btn {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .mobile-menu-btn {
+        display: inline-grid;
+        margin-left: 10px;
+    }
+
+    .main-nav {
+        display: none;
+    }
+}
+
+/* =====================================
+   HERO MOBILE — CLEAN VERSION
+   ===================================== */
+
+@media (max-width: 900px) {
+
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 40px 0 25px;
+    }
+
+    .hero-left h1 {
+        font-size: 1.9rem;
+        margin-bottom: 12px;
+    }
+
+    .hero .lead {
+        font-size: 14.5px;
+        line-height: 1.6;
+        margin-bottom: 26px;
+        max-width: 100%;
+    }
+
+    .hero-ctas {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        width: 100%;
+        max-width: 360px;
+        margin: 0 auto 26px;
+    }
+
+    /* PRIMARY BUTTON */
+    .hero-ctas .btn:first-child {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    /* SECONDARY BUTTONS — LIGHT MODE */
+    :root:not([data-theme="dark"]) .hero-ctas .btn:not(:first-child),
+    :root:not([data-theme="dark"]) .hero-ctas .btn-outline {
+        background: #ffffff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        color: var(--text);
+        box-shadow: none;
+    }
+
+    /* SECONDARY BUTTONS — DARK MODE */
+    :root[data-theme="dark"] .hero-ctas .btn:not(:first-child),
+    :root[data-theme="dark"] .hero-ctas .btn-outline {
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #f3f4f6;
+        box-shadow: none;
+    }
+
+    .hero-ctas .btn,
+    .hero-ctas .btn-outline {
+        width: 100%;
+        padding: 13px;
+        border-radius: 14px;
+        font-size: 14px;
+        transition: transform .2s ease;
+    }
+
+    .hero-ctas .btn:hover,
+    .hero-ctas .btn-outline:hover {
+        transform: translateY(-3px);
+    }
+
+    .meta-list {
+        margin-top: 14px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+}
+
+/* =========================================
+   MOBILE HERO — CLEAN MODERN REDESIGN
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .hero {
+        padding: 50px 0 30px;
+        text-align: center;
+    }
+
+    .hero-left h1 {
+        font-size: 1.85rem;
+        line-height: 1.3;
+        margin-bottom: 14px;
+    }
+
+    .hero .lead {
+        font-size: 14.5px;
+        line-height: 1.6;
+        max-width: 95%;
+        margin: 0 auto 28px;
+    }
+
+    /* BUTTON WRAPPER */
+    .hero-ctas {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 320px;
+        margin: 0 auto 30px;
+    }
+
+    /* ALL BUTTONS BASE */
+    .hero-ctas .btn,
+    .hero-ctas .btn-outline {
+        width: 100%;
+        padding: 14px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: none;
+        transition: transform .2s ease, background .2s ease, border .2s ease;
+    }
+
+    .hero-ctas .btn:hover,
+    .hero-ctas .btn-outline:hover {
+        transform: translateY(-3px);
+    }
+
+    /* PRIMARY BUTTON */
+    .hero-ctas .btn:first-child {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        color: #ffffff;
+    }
+
+    /* SECONDARY BUTTONS — LIGHT MODE */
+    :root:not([data-theme="dark"]) .hero-ctas .btn:not(:first-child),
+    :root:not([data-theme="dark"]) .hero-ctas .btn-outline {
+        background: transparent;
+        border: 1px solid rgba(15, 23, 42, 0.1);
+        color: var(--text);
+    }
+
+    /* SECONDARY BUTTONS — DARK MODE */
+    :root[data-theme="dark"] .hero-ctas .btn:not(:first-child),
+    :root[data-theme="dark"] .hero-ctas .btn-outline {
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #f3f4f6;
+    }
+
+    /* Meta list cleaner */
+    .meta-list {
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 1.7;
+        opacity: 0.85;
+    }
+
+    .meta-list li {
+        margin-bottom: 6px;
+    }
+
+    /* Remove hero glow on mobile */
+    .hero::before {
+        display: none;
+    }
+}
+
+/* ===============================
+   🚀 HARD RESET — MOBILE HERO
+   =============================== */
+
+@media (max-width: 900px) {
+
+    /* Reset hero buttons completely */
+    .hero-ctas .btn,
+    .hero-ctas .btn-outline {
+        all: unset;
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform .2s ease, background .2s ease, border .2s ease;
+    }
+
+    /* Primary */
+    .hero-ctas .btn:first-child {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        color: #ffffff;
+    }
+
+    /* Secondary Light */
+    html:not([data-theme="dark"]) .hero-ctas .btn:not(:first-child),
+    html:not([data-theme="dark"]) .hero-ctas .btn-outline {
+        background: #ffffff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        color: #0f172a;
+    }
+
+    /* Secondary Dark */
+    html[data-theme="dark"] .hero-ctas .btn:not(:first-child),
+    html[data-theme="dark"] .hero-ctas .btn-outline {
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #f3f4f6;
+    }
+
+    .hero-ctas {
+        max-width: 340px;
+        margin: 0 auto 28px;
+        gap: 14px;
+    }
+
+}
+
+/* ---------------------------
+   MOBILE HERO + BMC BUTTON FIXES
+   
+   --------------------------- */
+
+/* ===== Buy Me a Coffee (dark mode) - stronger specificity ===== */
+:root[data-theme="dark"] .support-card .bmc-btn,
+html[data-theme="dark"] .support-card .bmc-btn {
+    background: linear-gradient(135deg, #ffffff, #f3f4f6) !important;
+    color: #000000 !important;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.45),
+        0 4px 10px rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* keep hover crisp */
+:root[data-theme="dark"] .support-card .bmc-btn:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.5),
+        0 6px 14px rgba(255, 255, 255, 0.06);
+}
+
+/* ===== Hero mobile buttons — unified, animated, responsive ===== */
+@media (max-width: 900px) {
+    .hero-ctas {
+        max-width: 360px;
+        margin: 0 auto 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 12px;
+    }
+
+    /* base for all mobile hero CTAs */
+    .hero-ctas .btn,
+    .hero-ctas .btn-outline {
+        width: 100%;
+        padding: 12px 18px;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        border: none;
+        box-shadow: 0 6px 18px rgba(10, 30, 60, 0.06);
+        transition: transform .22s cubic-bezier(.2, .9, .28, 1), box-shadow .22s ease, opacity .22s ease;
+        will-change: transform, opacity;
+        opacity: 0;
+        transform: translateY(14px) scale(.995);
+        outline: none;
+    }
+
+    /* staggered entrance */
+    .hero-ctas .btn:nth-child(1) {
+        animation: hero-btn-in .48s ease forwards .04s;
+    }
+
+    .hero-ctas .btn:nth-child(2) {
+        animation: hero-btn-in .48s ease forwards .12s;
+    }
+
+    .hero-ctas .btn:nth-child(3) {
+        animation: hero-btn-in .48s ease forwards .20s;
+    }
+
+    .hero-ctas .btn:nth-child(4) {
+        animation: hero-btn-in .48s ease forwards .28s;
+    }
+
+    @keyframes hero-btn-in {
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Primary (first) button styling — blue in light, white in dark */
+    :root:not([data-theme="dark"]) .hero-ctas .btn:first-child {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(14, 165, 233, 0.20);
+    }
+
+    :root[data-theme="dark"] .hero-ctas .btn:first-child {
+        background: linear-gradient(135deg, #111111, #131313);
+        color: #ffffff;
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    /* Secondary buttons: white card on light, darker transparent on dark */
+    :root:not([data-theme="dark"]) .hero-ctas .btn:not(:first-child),
+    :root:not([data-theme="dark"]) .hero-ctas .btn-outline {
+        background: #ffffff;
+        color: var(--text);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        box-shadow: 0 6px 18px rgba(12, 24, 40, 0.04);
+    }
+
+    :root[data-theme="dark"] .hero-ctas .btn:not(:first-child),
+    :root[data-theme="dark"] .hero-ctas .btn-outline {
+        background: linear-gradient(180deg, #0e0e0e, #0a0a0a);
+        color: #f3f4f6;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    }
+
+    /* hover / active micro-interactions */
+    .hero-ctas .btn:hover,
+    .hero-ctas .btn-outline:hover {
+        transform: translateY(-3px) scale(1.01);
+        box-shadow: 0 14px 36px rgba(10, 30, 60, 0.10);
+    }
+
+    .hero-ctas .btn:active,
+    .hero-ctas .btn-outline:active {
+        transform: translateY(-1px) scale(.999);
+    }
+
+    /* focus visible */
+    .hero-ctas .btn:focus {
+        outline: 3px solid rgba(14, 165, 233, 0.12);
+        outline-offset: 4px;
+    }
+
+    /* slightly reduced radii for very narrow screens */
+    @media (max-width: 360px) {
+
+        .hero-ctas .btn,
+        .hero-ctas .btn-outline {
+            padding: 11px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+    }
+}
+
+/* ===== Mobile nav Connect button — match small rounded style ===== */
+.mobile-nav-list .mobile-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    min-height: 44px;
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+    transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* Light theme mobile connect */
+:root:not([data-theme="dark"]) .mobile-nav-list .mobile-cta {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    color: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.18);
+}
+
+/* Dark theme mobile connect — white pill with black text (keeps shape) */
+:root[data-theme="dark"] .mobile-nav-list .mobile-cta {
+    background: linear-gradient(135deg, #ffffff, #f3f4f6);
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+/* ensure the connect button doesn't get full-width weirdness inside the menu */
+.mobile-nav-list .mobile-cta {
+    width: auto;
+    white-space: nowrap;
+}
+
+/* small hover polish for the mobile connect */
+.mobile-nav-list .mobile-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ===== small fixes: make sure support-card uses the same inner padding on mobile so button sits nicely ===== */
+@media (max-width: 480px) {
+    .support-card {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .support-card .bmc-btn {
+        padding: 10px 16px;
+        border-radius: 10px;
+    }
+}
+
+/* =======================================
+   HERO MOBILE — PROPER CLEAN REDESIGN
+   ======================================= */
+
+@media (max-width: 900px) {
+
+    .hero {
+        padding: 40px 0 20px;
+    }
+
+    .hero-ctas {
+        max-width: 330px;
+        margin: 0 auto 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero-ctas .btn,
+    .hero-ctas .btn-outline {
+        width: 100%;
+        padding: 11px 16px;
+        border-radius: 12px;
+        font-size: 14.5px;
+        font-weight: 600;
+        letter-spacing: .2px;
+        transition: all .25s cubic-bezier(.2, .9, .28, 1);
+        opacity: 0;
+        transform: translateY(10px);
+        animation: heroFade .5s ease forwards;
+    }
+
+    .hero-ctas .btn:nth-child(1) {
+        animation-delay: .05s
+    }
+
+    .hero-ctas .btn:nth-child(2) {
+        animation-delay: .12s
+    }
+
+    .hero-ctas .btn:nth-child(3) {
+        animation-delay: .19s
+    }
+
+    .hero-ctas .btn:nth-child(4) {
+        animation-delay: .26s
+    }
+
+    @keyframes heroFade {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Primary button */
+    .hero-ctas .btn.primary,
+    .hero-ctas .btn:first-child {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        color: #fff;
+        box-shadow: 0 10px 26px rgba(14, 165, 233, .2);
+    }
+
+    /* Light secondary */
+    html:not([data-theme="dark"]) .hero-ctas .btn:not(.primary):not(:first-child),
+    html:not([data-theme="dark"]) .hero-ctas .btn-outline {
+        background: #ffffff;
+        border: 1px solid rgba(15, 23, 42, .06);
+        color: var(--text);
+        box-shadow: none;
+    }
+
+    /* Dark secondary */
+    html[data-theme="dark"] .hero-ctas .btn:not(.primary):not(:first-child),
+    html[data-theme="dark"] .hero-ctas .btn-outline {
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, .06);
+        color: #f3f4f6;
+        box-shadow: none;
+    }
+
+    /* Hover */
+    .hero-ctas .btn:hover {
+        transform: translateY(-3px);
+    }
+
+    .meta-list {
+        margin-top: 16px;
+        font-size: 13.8px;
+        line-height: 1.6;
+    }
+
+}
+
 /* final: ensure skill bars show intended percentages via inline style or width set in markup */
 /* Example usage: <div class="bar"><div style="width:90%"></div></div> */

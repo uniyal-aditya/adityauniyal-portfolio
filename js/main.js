@@ -19,62 +19,43 @@
     function initThemeToggle() {
         const root = document.documentElement;
         const btn = document.getElementById("theme-toggle");
-        const iconImg = document.getElementById("theme-icon");
-        const iconSun = document.getElementById("icon-sun");   // fallback
-        const iconMoon = document.getElementById("icon-moon"); // fallback
-
-        function showFallbackIcons(useDark) {
-            if (iconSun && iconMoon) {
-                iconSun.style.display = useDark ? "none" : "inline";
-                iconMoon.style.display = useDark ? "inline" : "none";
-            }
-        }
+        if (!btn) return;
 
         function applyTheme(theme) {
             const isDark = theme === "dark";
-            if (isDark) root.setAttribute("data-theme", "dark");
-            else root.removeAttribute("data-theme");
 
-            // primary behaviour: single png icon if present
-            if (iconImg) {
-                iconImg.src = isDark ? MOON_ICON : SUN_ICON;
-                iconImg.alt = isDark ? "Moon (dark theme active)" : "Sun (light theme active)";
+            if (isDark) {
+                root.setAttribute("data-theme", "dark");
             } else {
-                // fallback: show/hide separate sun/moon elements if available
-                showFallbackIcons(!isDark);
+                root.removeAttribute("data-theme");
             }
 
-            if (btn) {
-                btn.setAttribute("aria-pressed", isDark ? "true" : "false");
-                btn.title = isDark ? "Switch to light theme" : "Switch to dark theme";
+            // 🔁 Swap Lucide icon properly
+            btn.innerHTML = isDark
+                ? '<i data-lucide="sun"></i>'   // show sun in dark mode
+                : '<i data-lucide="moon"></i>'; // show moon in light mode
+
+            // Re-render lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
             }
         }
 
-        // Determine initial theme: saved > media query > light
-        let saved = null;
-        try { saved = localStorage.getItem(THEME_KEY); } catch (e) { /* ignore */ }
+        // Load saved theme
+        let saved = localStorage.getItem("site-theme");
 
         if (saved === "dark" || saved === "light") {
             applyTheme(saved);
         } else {
-            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
             applyTheme(prefersDark ? "dark" : "light");
         }
 
-        if (!btn) return;
-
         btn.addEventListener("click", () => {
-            const curDark = document.documentElement.getAttribute("data-theme") === "dark";
-            const next = curDark ? "light" : "dark";
+            const isDark = root.getAttribute("data-theme") === "dark";
+            const next = isDark ? "light" : "dark";
+            localStorage.setItem("site-theme", next);
             applyTheme(next);
-            try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
-        });
-
-        // sync across tabs
-        window.addEventListener("storage", (ev) => {
-            if (ev.key === THEME_KEY) {
-                applyTheme(ev.newValue || "light");
-            }
         });
     }
 

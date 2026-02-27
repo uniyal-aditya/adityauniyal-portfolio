@@ -26,6 +26,7 @@
     <meta property="og:description"
         content="Developer portfolio featuring production-ready bots, web apps and experimental platforms." />
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -51,8 +52,8 @@
             </nav>
 
             <!-- header: theme toggle -->
-            <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle theme">
-                <img id="theme-icon" src="/assets/icons/sun.png" alt="theme icon">
+            <button class="theme-toggle" id="theme-toggle">
+                <i data-lucide="moon"></i>
             </button>
             <!-- Mobile menu button  -->
             <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open site menu"
@@ -224,7 +225,7 @@
         <div class="hire-modal-backdrop" data-close="true"></div>
 
         <div class="hire-modal-panel" role="document">
-            <button class="hire-close" id="hireClose" aria-label="Close dialog">&times;</button>
+
 
             <header class="hire-head">
                 <h2 id="hireModalTitle">Hire Me — Quick Links</h2>
@@ -235,7 +236,9 @@
                 <!-- Fiverr profile -->
                 <a class="hire-card" href="https://www.fiverr.com/uniyal_aditya" target="_blank"
                     rel="noopener noreferrer">
-                    <div class="hire-card-icon">🎯</div>
+                    <div class="hire-card-icon">
+                        <i data-lucide="target"></i>
+                    </div>
                     <div class="hire-card-body">
                         <strong>Fiverr profile</strong>
                         <small>See my gigs & reviews</small>
@@ -244,7 +247,9 @@
 
                 <!-- Fiverr gig (specific) -->
                 <a class="hire-card" href="https://www.fiverr.com/s/zWE9XVg" target="_blank" rel="noopener noreferrer">
-                    <div class="hire-card-icon">⚡</div>
+                    <div class="hire-card-icon">
+                        <i data-lucide="zap"></i>
+                    </div>
                     <div class="hire-card-body">
                         <strong>Featured gig</strong>
                         <small>Website Development and Design</small>
@@ -254,7 +259,9 @@
                 <!-- LinkedIn -->
                 <a class="hire-card" href="https://www.linkedin.com/in/uniyaladitya" target="_blank"
                     rel="noopener noreferrer">
-                    <div class="hire-card-icon">💼</div>
+                    <div class="hire-card-icon">
+                        <i data-lucide="linkedin"></i>
+                    </div>
                     <div class="hire-card-body">
                         <strong>LinkedIn</strong>
                         <small>Resume, endorsements & contact</small>
@@ -264,10 +271,13 @@
                 <!-- Service / Contact page -->
                 <a class="hire-card" href="https://adityauniyal.is-a.dev/connect.html" target="_blank"
                     rel="noopener noreferrer">
-                    <div class="hire-card-icon">🔗</div>
+                    <div class="hire-card-icon">
+                        <i data-lucide="briefcase"></i>
+                    </div>
                     <div class="hire-card-body">
                         <strong>Service / Contact</strong>
                         <small>Project details & custom offers</small>
+
                     </div>
                 </a>
             </div>
@@ -275,11 +285,13 @@
             <footer class="hire-foot">
                 <small class="muted">Prefer a direct chat? DM me on Discord or Instagram or use the contact
                     form.</small>
+
             </footer>
         </div>
     </div>
     <script src="js/main.js"></script>
-    <script src="/path/to/theme-toggle.js" defer></script>
+
+
 </body>
 
 </html>

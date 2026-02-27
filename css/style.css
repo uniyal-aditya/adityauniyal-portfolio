@@ -1,8 +1,8 @@
 /* ===========================
-   style.css — Light & Dark (fixed)
+   style.css — Light & Dark 
    - Black & white dark mode
    - Blue links and skill bar colors
-   - Drop-in replacement (fixed issues)
+   
    =========================== */
 
 /* ---------------------------
@@ -2348,5 +2348,893 @@ html[data-theme="dark"] .support-card .bmc-btn {
 
 }
 
+/* ==============================
+   LIGHT THEME — BLACK & WHITE OVERRIDE
+   
+   ============================== */
+
+:root {
+    /* change the default accent used across the light theme to black */
+    --accent: #000000;
+    --btn-text: #ffffff;
+    --skill-start: #000000;
+    --skill-end: #555555;
+    --bar-bg: #eef2f4;
+    --glass: rgba(0, 0, 0, 0.03);
+}
+
+/* Make sure blobs / hero glow are grayscale in light theme */
+.bg-decoration .blob-1 {
+    background: #0b0b0b;
+    opacity: 0.12;
+}
+
+.bg-decoration .blob-2 {
+    background: #4a4a4a;
+    opacity: 0.08;
+}
+
+.bg-decoration .blob-3 {
+    background: #8a8a8a;
+    opacity: 0.06;
+}
+
+/* Remove blue hero glow in light theme */
+.hero::before {
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.06), transparent 70%);
+}
+
+/* Buttons — primary & generic (light mode) should use the new black accent */
+:root:not([data-theme="dark"]) .btn {
+    background: linear-gradient(135deg, var(--accent), #111111);
+    color: var(--btn-text);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Make hover subtle and consistent with black theme */
+:root:not([data-theme="dark"]) .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* Outline buttons (secondary) — white card with black border */
+:root:not([data-theme="dark"]) .btn-outline {
+    background: #ffffff;
+    color: var(--text);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 18px rgba(10, 20, 30, 0.04);
+}
+
+:root:not([data-theme="dark"]) .btn-outline:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+/* Buy-me-a-coffee (support) - match the black theme */
+:root:not([data-theme="dark"]) .bmc-btn {
+    background: linear-gradient(135deg, #0b0b0b, #222222);
+    color: #fff;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Make title highlights (brand strong) black in light mode */
+:root:not([data-theme="dark"]) .brand strong {
+    color: var(--text);
+}
+
+/* Replace any explicit blue hover background (nav) with neutral in light */
+.main-nav a:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text);
+}
+
+/* Keep inline links blue — do NOT change; these remain the same */
+a {
+    color: var(--link);
+}
+
+a:hover {
+    color: #0a7fe6;
+}
+
+/* BUT make the Connect CTA and .btn-connect black (special case) in light mode */
+:root:not([data-theme="dark"]) .btn-connect,
+:root:not([data-theme="dark"]) .main-nav .cta {
+    background: linear-gradient(135deg, #111111, #000000);
+    color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.20);
+}
+
+:root:not([data-theme="dark"]) .btn-connect:hover,
+:root:not([data-theme="dark"]) .main-nav .cta:hover {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+    transform: translateY(-3px);
+}
+
+/* Timeline dot uses the accent (now black) */
+.timeline-dot {
+    background: var(--accent);
+}
+
+/* Card subtle border glow: remove blue tint, use neutral */
+.card::before {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), transparent 60%);
+}
+
+/* Skill bars (light) — monochrome */
+.bar {
+    background: var(--bar-bg);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.bar div {
+    background: linear-gradient(90deg, var(--skill-start), var(--skill-end));
+    box-shadow: none;
+}
+
+/* Make mobile hamburger bars neutral */
+.mobile-menu-btn .bar {
+    background: #0b0b0b;
+}
+
+/* Hero buttons sizing & layout (desktop + responsive) — nicer spacing & animation */
+.hero-buttons,
+.hero-ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.hero-buttons .btn,
+.hero-ctas .btn {
+    min-width: 150px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* Slight staggered entrance for hero buttons (desktop & mobile) */
+.hero-buttons .btn:nth-child(1) {
+    animation: hb-in .36s ease .03s both;
+}
+
+.hero-buttons .btn:nth-child(2) {
+    animation: hb-in .36s ease .10s both;
+}
+
+.hero-buttons .btn:nth-child(3) {
+    animation: hb-in .36s ease .18s both;
+}
+
+.hero-buttons .btn:nth-child(4) {
+    animation: hb-in .36s ease .26s both;
+}
+
+@keyframes hb-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(.995);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Reduce bright blue card glow shadow used earlier */
+:root:not([data-theme="dark"]) .card:hover {
+    box-shadow: 0 20px 46px rgba(12, 24, 40, 0.08);
+}
+
+/* Accessibility: adjust focus ring to neutral */
+:root:not([data-theme="dark"]) a:focus,
+:root:not([data-theme="dark"]) button:focus,
+:root:not([data-theme="dark"]) input:focus {
+    outline: 3px solid rgba(0, 0, 0, 0.06);
+    outline-offset: 3px;
+}
+
+/* small: ensure mobile connect uses black pill style on small screens in light */
+@media (max-width: 900px) {
+    :root:not([data-theme="dark"]) .mobile-nav-list .mobile-cta {
+        background: linear-gradient(135deg, #111111, #000000);
+        color: white;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    /* keep hero button stacking tidy */
+    .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hero-buttons .btn {
+        min-width: auto;
+        width: 100%;
+    }
+}
+
+/* ======= Local color overrides: change "blue" accents for both themes =======
+   
+   - Light theme: links -> black; lines -> greyish-black; dots -> dark
+   - Dark theme: links -> light grey; lines -> light grey; dots -> light grey
+   - Keeps button text & original blue button gradients unchanged.
+   ================================================================ */
+
+/* --- define new variables (light default) --- */
+:root {
+    /* link text color (used for <a>) */
+    --link: #000000;
+
+    /* h2 underline color and section rule color (slightly softer) */
+    --h2-underline-color: rgba(0, 0, 0, 0.85);
+    --section-line-color: rgba(0, 0, 0, 0.08);
+
+    /* subtle card edge / decorative gradient used instead of blue */
+    --card-edge: rgba(0, 0, 0, 0.06);
+
+    /* timeline / tiny dots */
+    --timeline-dot: #0b0b0b;
+
+    /* decorative background blobs */
+    --blob-1: rgba(0, 0, 0, 0.06);
+    --blob-2: rgba(0, 0, 0, 0.04);
+    --blob-3: rgba(0, 0, 0, 0.03);
+}
+
+/* --- dark theme values (light greys) --- */
+:root[data-theme="dark"] {
+    --link: #d1d5db;
+    /* light grey link text */
+    --h2-underline-color: rgba(209, 213, 219, 0.7);
+    --section-line-color: rgba(255, 255, 255, 0.06);
+    --card-edge: rgba(255, 255, 255, 0.02);
+    --timeline-dot: rgba(209, 213, 219, 0.92);
+    --blob-1: rgba(255, 255, 255, 0.02);
+    --blob-2: rgba(255, 255, 255, 0.01);
+    --blob-3: rgba(255, 255, 255, 0.01);
+}
+
+/* ---------------- apply variables to visual elements ---------------- */
+
+/* links */
+a {
+    color: var(--link) !important;
+}
+
+/* keep hover underline behavior but with the chosen color */
+a:hover {
+    text-decoration: underline;
+    color: var(--link);
+}
+
+/* H2 underline — use the new underline color */
+h2::after {
+    background: linear-gradient(to right, var(--h2-underline-color), transparent);
+}
+
+/* section horizontal line / subtle divider */
+section::after {
+    background: linear-gradient(to right, transparent, var(--section-line-color), transparent);
+}
+
+/* card edge gradient (replace the blue glow used earlier) */
+.card::before {
+    background: linear-gradient(135deg, var(--card-edge), transparent 60%);
+}
+
+/* timeline dot (the small round markers) */
+.timeline-dot {
+    background: var(--timeline-dot) !important;
+    box-shadow: none;
+    /* remove any colored glow if present */
+}
+
+/* mobile hamburger bars: keep them consistent */
+.mobile-menu-btn .bar {
+    background: var(--timeline-dot) !important;
+}
+
+/* decorative blobs use variables now (overrides previous hard-coded blues) */
+.blob-1 {
+    background: var(--blob-1) !important;
+}
+
+.blob-2 {
+    background: var(--blob-2) !important;
+}
+
+.blob-3 {
+    background: var(--blob-3) !important;
+}
+
+/* handles / profile links (uses var(--link) already) */
+.handles a,
+.handles a:visited {
+    color: var(--link) !important;
+}
+
+/* project "Read more" and other small link styles */
+.card a,
+.cards-grid a,
+.connect-grid a {
+    color: var(--link) !important;
+}
+
+/* small footer links */
+.site-footer a {
+    color: var(--link) !important;
+    text-decoration: underline;
+}
+
+/* Fix components that accidentally used --link as a button background:
+   ensure modal/upi buttons keep the intended blue gradient (explicit override) */
+.upi-modal-content button,
+.upi-modal-content button:hover {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+}
+
+/* If any other component used var(--link) as a background unintentionally,
+   this keeps primary buttons visually unchanged (safe fallback for .btn-connect). */
+.btn-connect,
+.main-nav .cta {
+    /* don't change these; keep original gradient if present */
+    /* (no changes here; leaving for clarity) */
+}
+
+/* Accessibility: when focused the link color should still be visible */
+a:focus {
+    outline: 3px solid rgba(0, 0, 0, 0.06);
+    outline-offset: 2px;
+}
+
+
+/* =========================================
+   🔥 BUTTON VISIBILITY FIX (SAFE OVERRIDE)
+   Place at VERY END of file
+   ========================================= */
+
+/* Ensure all main buttons always show text */
+.btn,
+.btn-connect,
+.main-nav .cta,
+.mobile-nav-list .mobile-cta,
+.bmc-btn {
+    color: #ffffff !important;
+}
+
+/* Dark theme buttons should invert text */
+:root[data-theme="dark"] .btn,
+:root[data-theme="dark"] .btn-connect,
+:root[data-theme="dark"] .main-nav .cta,
+:root[data-theme="dark"] .mobile-nav-list .mobile-cta {
+    color: #000000 !important;
+}
+
+/* Outline buttons stay readable */
+.btn-outline {
+    color: var(--text) !important;
+}
+
+:root[data-theme="dark"] .btn-outline {
+    color: #f3f4f6 !important;
+}
+
+/* =========================================
+   🎯 FIX LIGHT MODE CONNECT BUTTON LOOK
+   ========================================= */
+
+:root:not([data-theme="dark"]) .btn-connect,
+:root:not([data-theme="dark"]) .main-nav .cta {
+    background: linear-gradient(135deg, #111111, #000000);
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.20);
+}
+
+/* ✨ NEW — Hover effect for Connect (LIGHT MODE ONLY) */
+:root:not([data-theme="dark"]) .btn-connect:hover,
+:root:not([data-theme="dark"]) .main-nav .cta:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.30);
+    background: linear-gradient(135deg, #000000, #111111);
+}
+
+/* =========================================
+   🎯 FIX "Contact Me" CTA (bottom section)
+   ========================================= */
+
+:root:not([data-theme="dark"]) .mini-contact .btn,
+:root:not([data-theme="dark"]) .mini-contact .btn-connect {
+    background: linear-gradient(135deg, #111111, #000000);
+    color: #ffffff !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================
+   Prevent link override from affecting buttons
+   ========================================= */
+
+.btn a,
+.btn-connect a,
+.main-nav .cta a {
+    color: inherit !important;
+}
+
+/* =========================================
+   🎯 FIX DARK THEME BAD BUTTONS
+   Make them white with black text
+   ========================================= */
+
+:root[data-theme="dark"] .btn,
+:root[data-theme="dark"] .btn-connect,
+:root[data-theme="dark"] .mini-contact .btn,
+:root[data-theme="dark"] .hero-ctas .btn,
+:root[data-theme="dark"] .form .btn {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* Hover for dark theme white buttons */
+:root[data-theme="dark"] .btn:hover,
+:root[data-theme="dark"] .btn-connect:hover,
+:root[data-theme="dark"] .mini-contact .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================================
+   🎯 FIX LIGHT THEME INVISIBLE BUTTON
+   ========================================= */
+
+:root:not([data-theme="dark"]) .mini-contact .btn,
+:root:not([data-theme="dark"]) .form .btn {
+    background: linear-gradient(135deg, #111111, #000000);
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================
+   🔥 Ensure text is ALWAYS visible
+   ========================================= */
+
+.btn,
+.btn-connect {
+    color: inherit;
+}
+
+.btn span,
+.btn-connect span {
+    color: inherit;
+}
+
+/* ===============================
+   CUSTOM PATCH — BUTTON FIXES
+   Place this at the end of style.css
+   =============================== */
+
+/* -----------------------------
+   1) Fix "Send Message" (Direct Communication) in LIGHT theme
+   ----------------------------- */
+:root:not([data-theme="dark"]) .mini-contact .btn,
+:root:not([data-theme="dark"]) .support-card .mini-contact .btn,
+:root:not([data-theme="dark"]) .form .btn,
+:root:not([data-theme="dark"]) .connect-grid .btn {
+    background: linear-gradient(135deg, #111111, #000000) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18) !important;
+    padding: 10px 16px;
+    border-radius: 10px;
+}
+
+:root:not([data-theme="dark"]) .mini-contact .btn:hover,
+:root:not([data-theme="dark"]) .support-card .mini-contact .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28) !important;
+}
+
+/* Ensure anchors inside buttons inherit correctly */
+.btn a,
+.mini-contact .btn a,
+.form .btn a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+/* -----------------------------
+   2) Alternate hero/home buttons in LIGHT theme
+   (1=white/black, 2=black/white, 3=white/black, 4=black/white)
+   Targets both .hero-buttons and .hero-ctas variants.
+   ----------------------------- */
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(1),
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(1) {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 6px 18px rgba(12, 24, 40, 0.04);
+}
+
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(2),
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(2) {
+    background: linear-gradient(135deg, #111111, #000000) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(3),
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(3) {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 6px 18px rgba(12, 24, 40, 0.04);
+}
+
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(4),
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(4) {
+    background: linear-gradient(135deg, #111111, #000000) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+/* Add small hover polish for hero buttons (light theme) */
+:root:not([data-theme="dark"]) .hero-buttons .btn:hover,
+:root:not([data-theme="dark"]) .hero-ctas .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.20);
+}
+
+/* -----------------------------
+   3) Keep DARK theme hero buttons consistent (white bg, black text)
+   (explicit stable override so nothing changes unexpectedly)
+   ----------------------------- */
+:root[data-theme="dark"] .hero-buttons .btn,
+:root[data-theme="dark"] .hero-ctas .btn,
+:root[data-theme="dark"] .mini-contact .btn,
+:root[data-theme="dark"] .form .btn {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Hover for dark theme white buttons (keep text readable) */
+:root[data-theme="dark"] .hero-buttons .btn:hover,
+:root[data-theme="dark"] .hero-ctas .btn:hover,
+:root[data-theme="dark"] .mini-contact .btn:hover,
+:root[data-theme="dark"] .form .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* -----------------------------
+   4) CONNECT button (dark theme) — hover should switch to black bg + white text
+   Prevents "all black (text unreadable)" hover effect
+   ----------------------------- */
+:root[data-theme="dark"] .btn-connect,
+:root[data-theme="dark"] .main-nav .cta {
+    /* keep base as white pill in dark (existing look) */
+    background: linear-gradient(135deg, #ffffff, #f3f4f6) !important;
+    color: #000000 !important;
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Hover: switch to black + white text (explicit) */
+:root[data-theme="dark"] .btn-connect:hover,
+:root[data-theme="dark"] .main-nav .cta:hover {
+    background: linear-gradient(135deg, #000000, #111111) !important;
+    color: #ffffff !important;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Ensure nav CTA anchor inherits */
+.btn-connect a,
+.main-nav .cta a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+/* -----------------------------
+   5) Accessibility & disabled states — make sure disabled still readable
+   ----------------------------- */
+.btn:disabled,
+.btn-connect:disabled,
+.main-nav .cta:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* -----------------------------
+   6) Small protective rule: always force visible contrast on button text
+   (final safeguard to avoid invisible/black-on-black)
+   ----------------------------- */
+.btn,
+.btn-connect,
+.main-nav .cta,
+.mini-contact .btn,
+.form .btn,
+.bmc-btn {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================
+   HERO BUTTONS — BWBW (Light)
+   WBWB (Dark)
+   ========================================= */
+
+/* ================= LIGHT THEME ================= */
+/* 1 & 3 → BLACK */
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(1),
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(3),
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(1),
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(3) {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 2 & 4 → WHITE */
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(2),
+:root:not([data-theme="dark"]) .hero-ctas .btn:nth-child(4),
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(2),
+:root:not([data-theme="dark"]) .hero-buttons .btn:nth-child(4) {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ================= DARK THEME ================= */
+/* 1 & 3 → WHITE */
+:root[data-theme="dark"] .hero-ctas .btn:nth-child(1),
+:root[data-theme="dark"] .hero-ctas .btn:nth-child(3),
+:root[data-theme="dark"] .hero-buttons .btn:nth-child(1),
+:root[data-theme="dark"] .hero-buttons .btn:nth-child(3) {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* 2 & 4 → BLACK */
+:root[data-theme="dark"] .hero-ctas .btn:nth-child(2),
+:root[data-theme="dark"] .hero-ctas .btn:nth-child(4),
+:root[data-theme="dark"] .hero-buttons .btn:nth-child(2),
+:root[data-theme="dark"] .hero-buttons .btn:nth-child(4) {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Subtle hover lift (keeps contrast safe) */
+.hero-ctas .btn:hover,
+.hero-buttons .btn:hover {
+    transform: translateY(-3px);
+}
+
+/* =========================================
+   CONNECT BUTTON — SMART INVERT SYSTEM
+   Light + Dark with visible outlines
+   ========================================= */
+
+/* ================= LIGHT THEME ================= */
+
+/* Base (Light theme = black button) */
+:root:not([data-theme="dark"]) .btn-connect,
+:root:not([data-theme="dark"]) .main-nav .cta {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+    transition: all .25s ease;
+}
+
+/* Hover → invert to white */
+:root:not([data-theme="dark"]) .btn-connect:hover,
+:root:not([data-theme="dark"]) .main-nav .cta:hover {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    /* outline appears when white */
+}
+
+/* ================= DARK THEME ================= */
+
+/* Base (Dark theme = white button) */
+:root[data-theme="dark"] .btn-connect,
+:root[data-theme="dark"] .main-nav .cta {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    transition: all .25s ease;
+}
+
+/* Hover → invert to black */
+:root[data-theme="dark"] .btn-connect:hover,
+:root[data-theme="dark"] .main-nav .cta:hover {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    /* outline appears when black */
+}
+
+/* Subtle lift effect */
+.btn-connect:hover,
+.main-nav .cta:hover {
+    transform: translateY(-3px);
+}
+
+/* Prevent anchor inside button from breaking color */
+.btn-connect a,
+.main-nav .cta a {
+    color: inherit !important;
+}
+
+/* =========================================
+   HIRE MODAL — CLEAN PROFESSIONAL REDESIGN
+   ========================================= */
+
+/* ===== Modal backdrop ===== */
+.hire-modal {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* ===== LIGHT THEME PANEL ===== */
+:root:not([data-theme="dark"]) .hire-modal-panel {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+}
+
+/* Cards inside modal — Light */
+:root:not([data-theme="dark"]) .hire-card {
+    background: #f8f9fb !important;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: #111111 !important;
+}
+
+:root:not([data-theme="dark"]) .hire-card:hover {
+    background: #ffffff !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== DARK THEME PANEL ===== */
+:root[data-theme="dark"] .hire-modal-panel {
+    background: #0b0b0b !important;
+    color: #f3f4f6 !important;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+}
+
+/* Cards inside modal — Dark */
+:root[data-theme="dark"] .hire-card {
+    background: #111111 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #f3f4f6 !important;
+}
+
+:root[data-theme="dark"] .hire-card:hover {
+    background: #161616 !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* ===== Remove close button completely (safety) ===== */
+#modal-close {
+    display: none !important;
+}
+
+/* ===== Exit note styling ===== */
+.modal-exit-note {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 13px;
+    opacity: 0.6;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s ease;
+}
+
+.modal-exit-note:hover {
+    opacity: 0.9;
+}
+
+/* Dark mode note color */
+:root[data-theme="dark"] .modal-exit-note {
+    color: #aaaaaa;
+}
+
+:root:not([data-theme="dark"]) .modal-exit-note {
+    color: #555555;
+}
+
+/* ===============================
+   HIRE MODAL ICON STYLING
+   =============================== */
+
+.hire-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+}
+
+/* Light theme */
+:root:not([data-theme="dark"]) .hire-card-icon {
+    background: #f1f3f6;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+:root:not([data-theme="dark"]) .hire-card-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: #000000;
+}
+
+/* Dark theme */
+:root[data-theme="dark"] .hire-card-icon {
+    background: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="dark"] .hire-card-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: #ffffff;
+}
+
+/* ===============================
+   THEME TOGGLE — LUCIDE VERSION
+   =============================== */
+
+.theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: transparent;
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+/* Light mode */
+:root:not([data-theme="dark"]) .theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    stroke: #000000;
+}
+
+/* Dark mode */
+:root[data-theme="dark"] .theme-toggle {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="dark"] .theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    stroke: #ffffff;
+}
+
+/* Hover animation */
+.theme-toggle:hover {
+    transform: translateY(-2px) rotate(8deg);
+}
+
+/* ============== end of patch ============== */
 /* final: ensure skill bars show intended percentages via inline style or width set in markup */
 /* Example usage: <div class="bar"><div style="width:90%"></div></div> */

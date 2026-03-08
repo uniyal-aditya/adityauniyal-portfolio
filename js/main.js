@@ -289,7 +289,9 @@
         if (upiQRBtn && !isMobile) upiRedirectBtn && (upiRedirectBtn.style.display = "none");
 
         window.payUPI = function () {
-            window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
+            const parts = ['ma f@', '9581380707'].map(s => s.split('').reverse().join(''));
+            const pa = parts[1] + parts[0].trim();
+            window.location.href = `upi://pay?pa=${pa}&pn=Aditya%20Uniyal&cu=INR`;
         };
         window.openUPIModal = function () { if (modal) modal.style.display = "flex"; modal && modal.classList.add("active"); };
         window.closeUPIModal = function () { if (modal) modal.classList.remove("active"); modal && (modal.style.display = "none"); };

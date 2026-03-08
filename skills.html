@@ -3,34 +3,70 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Aditya Uniyal — Developer</title>
-    <!-- Standard ICO (fallback for legacy browsers) -->
+    <title>Skills — Aditya Uniyal</title>
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
-
-    <!-- SVG (Best modern option – scalable & sharp) -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-
-    <!-- PNG Favicons -->
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
-
-    <!-- Android Chrome -->
     <link rel="icon" type="image/png" sizes="192x192" href="/assets/android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/android-chrome-512x512.png">
-
-    <!-- Apple (Rounded automatically by iOS) -->
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-
-    <!-- Web Manifest -->
     <link rel="manifest" href="/assets/site.webmanifest">
-
     <meta name="theme-color" content="#000000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/style.css">
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Technical skills and tools used by Aditya Uniyal — Python, JavaScript, Flutter, and more.">
+    <meta property="og:title" content="Skills — Aditya Uniyal" />
+    <meta property="og:description" content="Technical skills including Python, JavaScript, Flutter, and backend systems." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://adityauniyal.is-a.dev/skills.html" />
+    <link rel="canonical" href="https://adityauniyal.is-a.dev/skills.html">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Tools chip grid */
+        .tools-chip-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .tool-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .tool-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
+        }
+
+        .tool-chip svg {
+            width: 15px;
+            height: 15px;
+            opacity: 0.7;
+        }
+
+        :root[data-theme="dark"] .tool-chip {
+            background: #111;
+            border-color: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        :root[data-theme="dark"] .tool-chip:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+        }
+    </style>
 </head>
 
 <body>
@@ -46,30 +82,21 @@
                 <a href="skills.html">Skills</a>
                 <a href="feedback.html">Feedback</a>
                 <a href="connect.html" class="cta">Connect</a>
-                <button id="nav-toggle" aria-label="Open menu">☰</button>
             </nav>
-            <!-- header: theme toggle -->
-            <button class="theme-toggle" id="theme-toggle">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                 <i data-lucide="moon"></i>
             </button>
-            <!-- Mobile menu button  -->
             <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open site menu"
                 aria-controls="mobileNav" aria-expanded="false">
                 <span class="bar bar-1"></span>
                 <span class="bar bar-2"></span>
                 <span class="bar bar-3"></span>
             </button>
-            <!-- Mobile nav panel  -->
             <nav id="mobileNav" class="mobile-nav" aria-hidden="true" role="dialog" aria-modal="true" tabindex="-1">
                 <div class="mobile-nav-backdrop" data-close="true"></div>
-
                 <div class="mobile-nav-panel" role="document">
                     <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">&times;</button>
-
-                    <div class="mobile-brand">
-                        <strong>Aditya Uniyal</strong> - Dev
-                    </div>
-
+                    <div class="mobile-brand"><strong>Aditya Uniyal</strong> - Dev</div>
                     <ul class="mobile-nav-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About</a></li>
@@ -78,7 +105,6 @@
                         <li><a href="feedback.html">Feedback</a></li>
                         <li><a href="connect.html" class="mobile-cta">Connect</a></li>
                     </ul>
-
                     <div class="mobile-footer">
                         <a href="/assets/Aditya_Uniyal_Resume.pdf" class="btn btn-outline" download>Download Resume</a>
                     </div>
@@ -93,65 +119,54 @@
 
             <div class="skill">
                 <div class="skill-head"><span>Python</span><span>90%</span></div>
-                <div class="bar">
-                    <div style="width:90%"></div>
-                </div>
+                <div class="bar"><div style="width:90%"></div></div>
             </div>
-
             <div class="skill">
-                <div class="skill-head"><span>HTML/CSS</span><span>90%</span></div>
-                <div class="bar">
-                    <div style="width:90%"></div>
-                </div>
+                <div class="skill-head"><span>HTML / CSS</span><span>90%</span></div>
+                <div class="bar"><div style="width:90%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-head"><span>JavaScript</span><span>82%</span></div>
+                <div class="bar"><div style="width:82%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-head"><span>Backend (SQL / Firebase)</span><span>80%</span></div>
+                <div class="bar"><div style="width:80%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-head"><span>Flutter / Dart</span><span>75%</span></div>
+                <div class="bar"><div style="width:75%"></div></div>
             </div>
             <div class="skill">
                 <div class="skill-head"><span>C++</span><span>50%</span></div>
-                <div class="bar">
-                    <div style="width:50%"></div>
-                </div>
+                <div class="bar"><div style="width:50%"></div></div>
             </div>
+        </section>
 
-            <div class="skill">
-                <div class="skill-head"><span>JavaScript</span><span>82%</span></div>
-                <div class="bar">
-                    <div style="width:82%"></div>
-                </div>
-            </div>
-
-            <div class="skill">
-                <div class="skill-head"><span>Flutter / Dart</span><span>75%</span></div>
-                <div class="bar">
-                    <div style="width:75%"></div>
-                </div>
-            </div>
-
-            <div class="skill">
-                <div class="skill-head"><span>Backend (SQL / Firebase)</span><span>80%</span></div>
-                <div class="bar">
-                    <div style="width:80%"></div>
-                </div>
-            </div>
-
+        <section class="section">
             <h2>Tools</h2>
-            <ul class="tools-grid">
-                <li>Github</li>
-                <li>VS Code</li>
-                <li>Figma</li>
-                <li>Firebase</li>
-                <li>Sololearn</li>
-                <li>Replit</li>
-            </ul>
+            <div class="tools-chip-grid">
+                <span class="tool-chip"><i data-lucide="github"></i> GitHub</span>
+                <span class="tool-chip"><i data-lucide="code-2"></i> VS Code</span>
+                <span class="tool-chip"><i data-lucide="figma"></i> Figma</span>
+                <span class="tool-chip"><i data-lucide="flame"></i> Firebase</span>
+                <span class="tool-chip"><i data-lucide="book-open"></i> Sololearn</span>
+                <span class="tool-chip"><i data-lucide="terminal"></i> Replit</span>
+            </div>
         </section>
     </main>
 
     <footer class="site-footer">
-        <div class="container">
+        <div class="container footer-inner">
             <div>© <span id="year"></span> Aditya Uniyal</div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="connect.html">Connect</a>
+            </div>
         </div>
     </footer>
 
     <script src="js/main.js"></script>
-
 </body>
 
 </html>

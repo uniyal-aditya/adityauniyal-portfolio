@@ -3235,6 +3235,17 @@ a:focus {
     transform: translateY(-2px) rotate(8deg);
 }
 
+.brand {
+    text-decoration: none;
+    color: inherit;
+    font-weight: inherit;
+}
+
+.brand:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* ============== end of patch ============== */
 /* final: ensure skill bars show intended percentages via inline style or width set in markup */
 /* Example usage: <div class="bar"><div style="width:90%"></div></div> */

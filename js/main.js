@@ -1,61 +1,95 @@
-/* main.js — consolidated, robust, single-theme-toggle (PNG) + UI logic */
+/* main.js — drop-in replacement
+   - lucide-based theme icon toggle (sun <-> moon)
+   - robust localStorage + cross-tab sync
+   - mobile nav show/hide fix (removes invisible overlay when closed)
+   - safe modal/hire modal wiring (no errors if close btn missing)
+   - small safety / accessibility improvements
+*/
+
 (() => {
     "use strict";
 
     const THEME_KEY = "site-theme";
-    const SUN_ICON = "/assets/icons/sun.png";
-    const MOON_ICON = "/assets/icons/moon.png";
+    const SUN_ICON_PNG = "/assets/icons/sun.png";
+    const MOON_ICON_PNG = "/assets/icons/moon.png";
 
-    /* ---------- Helpers ---------- */
-    const el = (sel) => document.querySelector(sel);
-    const els = (sel) => Array.from(document.querySelectorAll(sel));
+    /* ---------- tiny helpers ---------- */
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+    function safeAddEvent(el, ev, fn, opts) { if (!el) return; el.addEventListener(ev, fn, opts); }
 
-    function safeAddEvent(target, evt, fn, opts) {
-        if (!target) return;
-        target.addEventListener(evt, fn, opts);
+    /* ---------- Theme toggle (lucide if available) ---------- */
+    function renderLucideSVG(name, options = {}) {
+        // lucide.icons[name].toSvg(...) -> returns markup string
+        if (window.lucide && window.lucide.icons && window.lucide.icons[name]) {
+            try {
+                return window.lucide.icons[name].toSvg(Object.assign({ width: 18, height: 18 }, options));
+            } catch (e) {
+                // fallthrough to png fallback
+            }
+        }
+        return null;
     }
 
-    /* ---------- Theme (single icon, PNG) ---------- */
+    function setThemeIcon(btn, isDark) {
+        if (!btn) return;
+        // Desired behaviour: when DARK theme is active -> show SUN icon (indicates switch to light)
+        // when LIGHT theme is active -> show MOON icon (indicates switch to dark)
+        const showSun = Boolean(isDark);
+        // Prefer lucide SVG icons (stroke uses currentColor)
+        const lucideMarkup = renderLucideSVG(showSun ? "sun" : "moon");
+        if (lucideMarkup) {
+            btn.innerHTML = lucideMarkup;
+            // ensure icon uses button color (lucide uses stroke="currentColor")
+            btn.style.color = isDark ? "#ffffff" : "#0b0b0b";
+        } else {
+            // fallback to simple img
+            const imgSrc = showSun ? SUN_ICON_PNG : MOON_ICON_PNG;
+            btn.innerHTML = `<img src="${imgSrc}" alt="${showSun ? "Sun" : "Moon"}" width="18" height="18" style="display:block">`;
+        }
+        btn.setAttribute("aria-pressed", isDark ? "true" : "false");
+        btn.title = isDark ? "Switch to light theme" : "Switch to dark theme";
+    }
+
     function initThemeToggle() {
         const root = document.documentElement;
         const btn = document.getElementById("theme-toggle");
-        if (!btn) return;
 
         function applyTheme(theme) {
             const isDark = theme === "dark";
-
-            if (isDark) {
-                root.setAttribute("data-theme", "dark");
-            } else {
-                root.removeAttribute("data-theme");
-            }
-
-            // 🔁 Swap Lucide icon properly
-            btn.innerHTML = isDark
-                ? '<i data-lucide="sun"></i>'   // show sun in dark mode
-                : '<i data-lucide="moon"></i>'; // show moon in light mode
-
-            // Re-render lucide icons
-            if (window.lucide) {
-                lucide.createIcons();
-            }
+            if (isDark) root.setAttribute("data-theme", "dark");
+            else root.removeAttribute("data-theme");
+            // set icon
+            setThemeIcon(btn, isDark);
+            // ensure body/bg accessible
+            document.body.style.background = ""; // leave theme CSS to handle backgrounds
         }
 
-        // Load saved theme
-        let saved = localStorage.getItem("site-theme");
+        // load saved
+        let saved = null;
+        try { saved = localStorage.getItem(THEME_KEY); } catch (e) { saved = null; }
 
         if (saved === "dark" || saved === "light") {
             applyTheme(saved);
         } else {
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            // respect OS preference
+            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
             applyTheme(prefersDark ? "dark" : "light");
         }
 
-        btn.addEventListener("click", () => {
-            const isDark = root.getAttribute("data-theme") === "dark";
-            const next = isDark ? "light" : "dark";
-            localStorage.setItem("site-theme", next);
+        if (!btn) return;
+
+        // toggle handler
+        safeAddEvent(btn, "click", () => {
+            const curDark = document.documentElement.getAttribute("data-theme") === "dark";
+            const next = curDark ? "light" : "dark";
             applyTheme(next);
+            try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
+        });
+
+        // sync across tabs
+        window.addEventListener("storage", (ev) => {
+            if (ev.key === THEME_KEY) applyTheme(ev.newValue === "dark" ? "dark" : "light");
         });
     }
 
@@ -73,7 +107,7 @@
         toggle.addEventListener("click", () => nav.classList.toggle("open"));
     }
 
-    /* ---------- Mobile menu logic ---------- */
+    /* ---------- Mobile nav logic (fix: avoid invisible overlay) ---------- */
     function initMobileNav() {
         const mobileToggle = document.getElementById("mobile-menu-toggle");
         const mobileNav = document.getElementById("mobileNav");
@@ -81,8 +115,22 @@
 
         if (!mobileToggle || !mobileNav) return;
 
+        // Ensure closed state is not blocking clicks (remove layout/display when closed)
+        function closeMobileNav() {
+            mobileNav.setAttribute("aria-hidden", "true");
+            mobileNav.style.display = "none";               // important fix
+            mobileToggle.classList.remove("open");
+            mobileToggle.setAttribute("aria-expanded", "false");
+            document.documentElement.style.overflow = "";
+            mobileToggle.focus();
+        }
+
         function openMobileNav() {
-            mobileNav.setAttribute("aria-hidden", "false");
+            mobileNav.style.display = "block";
+            // small delay to allow CSS transitions if any
+            requestAnimationFrame(() => {
+                mobileNav.setAttribute("aria-hidden", "false");
+            });
             mobileToggle.classList.add("open");
             mobileToggle.setAttribute("aria-expanded", "true");
             const first = mobileNav.querySelector('a, button');
@@ -90,12 +138,10 @@
             document.documentElement.style.overflow = "hidden";
         }
 
-        function closeMobileNav() {
+        // initial ensure closed / hidden
+        if (mobileNav.getAttribute("aria-hidden") !== "false") {
+            mobileNav.style.display = "none";
             mobileNav.setAttribute("aria-hidden", "true");
-            mobileToggle.classList.remove("open");
-            mobileToggle.setAttribute("aria-expanded", "false");
-            document.documentElement.style.overflow = "";
-            mobileToggle.focus();
         }
 
         mobileToggle.addEventListener("click", () => {
@@ -103,64 +149,86 @@
             else openMobileNav();
         });
 
-        if (mobileClose) safeAddEvent(mobileClose, "click", closeMobileNav);
+        safeAddEvent(mobileClose, "click", closeMobileNav);
 
         mobileNav.addEventListener("click", (ev) => {
-            if (ev.target === mobileNav || ev.target.dataset.close === "true") closeMobileNav();
+            // click backdrop or explicit data-close -> close
+            if (ev.target === mobileNav || ev.target.dataset.close === "true" || ev.target.classList.contains("mobile-nav-backdrop")) {
+                closeMobileNav();
+            }
         });
 
+        // escape key to close
         window.addEventListener("keydown", (ev) => {
             if (ev.key === "Escape" && mobileNav.getAttribute("aria-hidden") === "false") closeMobileNav();
         });
+
+        // keep responsive: on resize to desktop ensure menu removed
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 900 && mobileNav) {
+                mobileNav.style.display = ""; // let CSS take precedence on desktop
+                mobileNav.setAttribute("aria-hidden", "true");
+                mobileToggle.classList.remove("open");
+                mobileToggle.setAttribute("aria-expanded", "false");
+                document.documentElement.style.overflow = "";
+            }
+        });
     }
 
-    /* ---------- Generic modal logic ---------- */
+    /* ---------- Generic modal maker (safe) ---------- */
     function makeModal(modalId, contentId, closeId) {
         const modal = document.getElementById(modalId);
         if (!modal) return null;
         const content = contentId ? document.getElementById(contentId) : null;
         const closeBtn = closeId ? document.getElementById(closeId) : null;
+
         function open(html) {
-            if (content) content.innerHTML = html;
+            if (content && typeof html === "string") content.innerHTML = html;
             modal.setAttribute("aria-hidden", "false");
+            // make sure modal is visible
+            modal.style.display = "flex";
+            // trap focus lightly is handled by caller if needed
         }
+
         function close() {
             modal.setAttribute("aria-hidden", "true");
-            if (content) content.innerHTML = "";
+            if (content && typeof content.innerHTML === "string") content.innerHTML = "";
+            modal.style.display = "none";
         }
+
         if (closeBtn) safeAddEvent(closeBtn, "click", close);
+
         // escape to close
         window.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && modal.getAttribute("aria-hidden") === "false") close(); });
+
         // click outside to close
-        modal.addEventListener("click", (ev) => { if (ev.target === modal) close(); });
+        safeAddEvent(modal, "click", (ev) => { if (ev.target === modal || ev.target.dataset.close === "true") close(); });
+
+        // ensure initial hidden style
+        if (modal.getAttribute("aria-hidden") !== "false") {
+            modal.style.display = "none";
+            modal.setAttribute("aria-hidden", "true");
+        }
+
         return { open, close, modal, content };
     }
 
-    /* ---------- Project case modal wiring ---------- */
+    /* ---------- Case modals ---------- */
     function initCaseModals() {
         const caseModal = makeModal("modal", "modal-content", "modal-close");
-        // If there are .open-case buttons, attach their handlers
-        els(".open-case").forEach(btn => {
+        $$(".open-case").forEach(btn => {
             safeAddEvent(btn, "click", (ev) => {
                 const slug = ev.currentTarget.getAttribute("data-slug");
                 const cases = {
                     'numexa': `<h2>Numexa — Discord Scientific Calculator</h2>
-                    <p><strong>Stack:</strong> Python, discord.py.</p>
-                    <ul><li>Complex math parsing</li><li>Command architecture</li></ul>`,
+                        <p><strong>Stack:</strong> Python, discord.py.</p>
+                        <ul><li>Complex math parsing</li><li>Command architecture</li></ul>`,
                     'raftarfun': `<h2>RaftarFun — Interactive Web Experiments</h2>
                         <p><strong>Stack:</strong> JS, HTML5 Canvas.</p>`,
                     'quiz': `<h2>Multiplayer Quiz — Real-time Gameplay</h2><p><strong>Stack:</strong> WebSockets, Firebase/Socket.io</p>`,
                     'aichat': `<h2>AI Chatbot</h2><p><strong>Stack:</strong> Node/Python + LLM integration</p>`
                 };
                 if (caseModal) caseModal.open(cases[slug] || "<p>Case study not found.</p>");
-            });
-        });
-        // demo buttons
-        els(".try-demo").forEach(btn => {
-            safeAddEvent(btn, "click", (ev) => {
-                ev.preventDefault();
-                const demo = ev.currentTarget.getAttribute("data-demo") || "Demo";
-                if (caseModal) caseModal.open(`<h2>Demo: ${demo}</h2><p>Interactive demo placeholder — replace with an embed or iframe.</p>`);
             });
         });
     }
@@ -209,7 +277,7 @@
         });
     }
 
-    /* ---------- UPI modal & helper ---------- */
+    /* ---------- UPI modal helper ---------- */
     function initUPI() {
         const modal = document.getElementById("upiModal");
         const upiRedirectBtn = document.getElementById("upiRedirectBtn");
@@ -222,42 +290,52 @@
         window.payUPI = function () {
             window.location.href = "upi://pay?pa=7078311859@fam&pn=Aditya%20Uniyal&cu=INR";
         };
-        window.openUPIModal = function () { if (modal) modal.classList.add("active"); };
-        window.closeUPIModal = function () { if (modal) modal.classList.remove("active"); };
+        window.openUPIModal = function () { if (modal) modal.style.display = "flex"; modal && modal.classList.add("active"); };
+        window.closeUPIModal = function () { if (modal) modal.classList.remove("active"); modal && (modal.style.display = "none"); };
 
         if (modal) {
             modal.addEventListener("click", function (e) {
-                if (e.target === modal) modal.classList.remove("active");
+                if (e.target === modal) {
+                    modal.classList.remove("active");
+                    modal.style.display = "none";
+                }
             });
         }
     }
 
-    /* ---------- Hire modal (accessible) ---------- */
+    /* ---------- Hire modal ---------- */
     function initHireModal() {
         const hireBtn = document.getElementById('hireBtn');
         const hireModal = document.getElementById('hireModal');
-        const hireClose = document.getElementById('hireClose');
+        // there is intentionally no close button per requested UI — clicking outside closes.
         if (!hireModal) return;
 
         function openHire() {
             hireModal.setAttribute('aria-hidden', 'false');
+            hireModal.style.display = "grid";
             const first = hireModal.querySelector('a, button');
             if (first) first.focus();
             document.body.style.overflow = 'hidden';
         }
         function closeHire() {
             hireModal.setAttribute('aria-hidden', 'true');
+            hireModal.style.display = "none";
             document.body.style.overflow = '';
             if (hireBtn) hireBtn.focus();
         }
 
         if (hireBtn) safeAddEvent(hireBtn, 'click', (e) => { e.preventDefault(); openHire(); });
-        if (hireClose) safeAddEvent(hireClose, 'click', closeHire);
 
-        hireModal.addEventListener('click', (e) => { if (e.target === hireModal || e.target.dataset.close === "true") closeHire(); });
+        // close on backdrop or explicit data-close
+        safeAddEvent(hireModal, 'click', (e) => {
+            if (e.target === hireModal || e.target.dataset.close === "true" || e.target.classList.contains("hire-modal-backdrop")) {
+                closeHire();
+            }
+        });
+
         window.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && hireModal.getAttribute('aria-hidden') === 'false') closeHire(); });
 
-        // very small focus-trap
+        // small focus loop to prevent tab loss
         hireModal.addEventListener('keydown', function (ev) {
             if (ev.key !== 'Tab') return;
             const focusables = hireModal.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
@@ -266,19 +344,23 @@
             if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
             else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
         });
+
+        // ensure hidden by default
+        if (hireModal.getAttribute('aria-hidden') !== 'false') {
+            hireModal.style.display = "none";
+            hireModal.setAttribute('aria-hidden', 'true');
+        }
     }
 
-    /* ---------- Intersection reveal & card reveals ---------- */
+    /* ---------- Reveal observer (cards/sections) ---------- */
     function initRevealObserver() {
         const revealEls = Array.from(document.querySelectorAll('.card, section, .reveal-on-scroll'));
         if (!revealEls.length) return;
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('active');
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.08 });
 
         revealEls.forEach(el => {
             if (!el.classList.contains('reveal')) el.classList.add('reveal');
@@ -286,17 +368,14 @@
         });
     }
 
-    /* ---------- Skill bar animation ---------- */
+    /* ---------- Skill bars animation ---------- */
     function initSkillBars() {
         const bars = Array.from(document.querySelectorAll('.bar div'));
         if (!bars.length) return;
-
         bars.forEach((b) => {
-            // capture target width from inline style or data attribute
             let target = "";
             const inline = b.getAttribute("style");
             if (inline && /width\s*:\s*\d+%/.test(inline)) {
-                // keep inline width but animate from 0
                 const match = inline.match(/width\s*:\s*(\d+%)/);
                 target = match ? match[1] : "";
                 b.style.width = "0%";
@@ -304,13 +383,9 @@
                 target = b.dataset.width;
                 b.style.width = "0%";
             } else {
-                // fallback: read computed width percentage (rare)
-                target = b.style.width || b.getAttribute('data-width') || "";
-                if (!target) target = "80%";
+                target = b.style.width || b.getAttribute('data-width') || "80%";
                 b.style.width = "0%";
             }
-
-            // delay a tiny random amount for stagger effect
             const delay = Math.random() * 300 + 120;
             setTimeout(() => {
                 b.style.transition = "width .9s cubic-bezier(.2,.9,.28,1)";
@@ -319,14 +394,13 @@
         });
     }
 
-    /* ---------- Small UI polish: smooth hover for cards and sections ---------- */
+    /* ---------- Add hover smoothing class ---------- */
     function addHoverSmoothing() {
-        // This is just a JS helper to add a class; main work is CSS — see CSS snippet below.
         const hoverables = document.querySelectorAll('.card, .card .card-actions, .mini-contact .glass, .btn, .btn-outline');
         hoverables.forEach(elm => elm.classList.add('hover-smooth'));
     }
 
-    /* ---------- Attach page-level behaviors ---------- */
+    /* ---------- Boot sequence ---------- */
     document.addEventListener('DOMContentLoaded', () => {
         initYear();
         initNavToggle();

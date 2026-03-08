@@ -312,14 +312,9 @@
 
         function openHire() {
             hireModal.setAttribute('aria-hidden', 'false');
-
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-
+            hireModal.style.display = "grid";
             const first = hireModal.querySelector('a, button');
             if (first) first.focus();
-
             document.body.style.overflow = 'hidden';
         }
         function closeHire() {

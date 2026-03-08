@@ -54,42 +54,43 @@
     function initThemeToggle() {
         const root = document.documentElement;
         const btn = document.getElementById("theme-toggle");
+        if (!btn) return;
 
         function applyTheme(theme) {
             const isDark = theme === "dark";
-            if (isDark) root.setAttribute("data-theme", "dark");
-            else root.removeAttribute("data-theme");
-            // set icon
-            setThemeIcon(btn, isDark);
-            // ensure body/bg accessible
-            document.body.style.background = ""; // leave theme CSS to handle backgrounds
+
+            if (isDark) {
+                root.setAttribute("data-theme", "dark");
+            } else {
+                root.removeAttribute("data-theme");
+            }
+
+            // 🔁 Swap Lucide icon properly
+            btn.innerHTML = isDark
+                ? '<i data-lucide="sun"></i>'   // show sun in dark mode
+                : '<i data-lucide="moon"></i>'; // show moon in light mode
+
+            // Re-render lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
         }
 
-        // load saved
-        let saved = null;
-        try { saved = localStorage.getItem(THEME_KEY); } catch (e) { saved = null; }
+        // Load saved theme
+        let saved = localStorage.getItem("site-theme");
 
         if (saved === "dark" || saved === "light") {
             applyTheme(saved);
         } else {
-            // respect OS preference
-            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
             applyTheme(prefersDark ? "dark" : "light");
         }
 
-        if (!btn) return;
-
-        // toggle handler
-        safeAddEvent(btn, "click", () => {
-            const curDark = document.documentElement.getAttribute("data-theme") === "dark";
-            const next = curDark ? "light" : "dark";
+        btn.addEventListener("click", () => {
+            const isDark = root.getAttribute("data-theme") === "dark";
+            const next = isDark ? "light" : "dark";
+            localStorage.setItem("site-theme", next);
             applyTheme(next);
-            try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
-        });
-
-        // sync across tabs
-        window.addEventListener("storage", (ev) => {
-            if (ev.key === THEME_KEY) applyTheme(ev.newValue === "dark" ? "dark" : "light");
         });
     }
 

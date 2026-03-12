@@ -1,200 +1,287 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <title>Aditya Uniyal — Developer</title>
-    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/assets/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/assets/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-    <link rel="manifest" href="/assets/site.webmanifest">
-    <meta name="theme-color" content="#000000">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Aditya Uniyal — developer building scalable systems, Discord bots and interactive web platforms. Explore projects and collaborations.">
-    <meta property="og:title" content="Aditya Uniyal — Developer" />
-    <meta property="og:description" content="Developer portfolio featuring production-ready bots, web apps and experimental platforms." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://adityauniyal.is-a.dev/" />
-    <link rel="canonical" href="https://adityauniyal.is-a.dev/">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="utf-8">
+  <title>Aditya Uniyal — Developer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aditya Uniyal — developer building scalable systems, Discord bots, and interactive web platforms. Available for freelance.">
+  <meta property="og:title" content="Aditya Uniyal — Developer">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://adityauniyal.is-a.dev/">
+  <link rel="canonical" href="https://adityauniyal.is-a.dev/">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="assets/site.webmanifest">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-    <div class="bg-decoration">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+
+<!-- Cursor -->
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+<div class="scanline"></div>
+
+<!-- ══ NAV ══ -->
+<nav class="nav" id="mainNav">
+  <a href="index.html" class="nav-logo">AU<span class="dot">_</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="active" data-index="01">Home</a>
+    <a href="work.html" data-index="02">Work</a>
+    <a href="about.html" data-index="03">About</a>
+    <a href="connect.html" data-index="04">Contact</a>
+  </div>
+  <button class="nav-hire" data-hire>Hire Me →</button>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile nav -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html" class="active">Home</a>
+  <a href="work.html">Work</a>
+  <a href="about.html">About</a>
+  <a href="connect.html">Contact</a>
+  <div class="mobile-nav-foot">
+    <button class="btn-lime" data-hire>Hire Me →</button>
+    <a href="assets/Aditya_Uniyal_Resume.pdf" download class="btn-ghost-line">CV ↓</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-tag">Aditya Uniyal · Developer · India</div>
+      <h1 class="hero-h1">
+        SYSTEMS<br>THAT <em>work</em>.
+      </h1>
+    </div>
+    <div class="hero-right">
+      <div class="hero-typed-line">
+        <span class="prompt">~/au $</span>
+        <span id="typed-text"></span>
+        <span class="cursor-blink"></span>
+      </div>
+      <p class="hero-desc">
+        I design and build <span>scalable backends</span>, intelligent Discord bots, and interactive web platforms — with obsessive attention to architecture and performance.
+      </p>
+      <div class="hero-actions">
+        <a href="work.html" class="btn-lime">View Work →</a>
+        <button class="btn-ghost-line" data-hire>Hire Me</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticker bar -->
+  <div class="hero-bar">
+    <div class="hero-bar-ticker">
+      <div class="hero-bar-item"><strong>Available</strong> <span class="sep">·</span> Freelance & Collab</div>
+      <div class="hero-bar-item"><strong>Python</strong> <span class="sep">/</span> JavaScript <span class="sep">/</span> Web</div>
+      <div class="hero-bar-item"><strong>Discord Bots</strong> <span class="sep">·</span> Scalable Systems</div>
+      <div class="hero-bar-item"><strong>India</strong> <span class="sep">·</span> Remote Worldwide</div>
+      <div class="hero-bar-item"><strong>24h</strong> <span class="sep">·</span> Response Time</div>
+      <!-- duplicate for seamless loop -->
+      <div class="hero-bar-item"><strong>Available</strong> <span class="sep">·</span> Freelance & Collab</div>
+      <div class="hero-bar-item"><strong>Python</strong> <span class="sep">/</span> JavaScript <span class="sep">/</span> Web</div>
+      <div class="hero-bar-item"><strong>Discord Bots</strong> <span class="sep">·</span> Scalable Systems</div>
+      <div class="hero-bar-item"><strong>India</strong> <span class="sep">·</span> Remote Worldwide</div>
+      <div class="hero-bar-item"><strong>24h</strong> <span class="sep">·</span> Response Time</div>
+    </div>
+  </div>
+
+  <div class="hero-bg-text">BUILD</div>
+</section>
+
+<!-- ══ ABOUT SNAP ══ -->
+<section>
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-number">AU</div>
+      <div class="about-copy reveal">
+        <div class="eyebrow">Who I am</div>
+        <h2>Developer<br>by <em>obsession</em>.</h2>
+        <p>I build things from first principles — starting with system design before writing a single line. <span>Architecture first, implementation second</span>, always.</p>
+        <p>From Discord bots that handle complex scientific calculations to restaurant websites with silky reservation flows, I build across the full stack with <span>Python, JavaScript, and modern web tools</span>.</p>
+        <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="about.html" class="btn-ghost-line">Full story →</a>
+          <a href="assets/Aditya_Uniyal_Resume.pdf" download class="btn-lime" style="font-size:11px; padding: 12px 22px;">Download CV</a>
+        </div>
+      </div>
+      <div class="about-aside reveal d2">
+        <div class="aside-block">
+          <div class="label">Status</div>
+          <div class="value">
+            Open to work
+            <small>Freelance · Collab · Mentoring</small>
+          </div>
+        </div>
+        <div class="aside-block">
+          <div class="label">Based in</div>
+          <div class="value">India <small>Remote worldwide</small></div>
+        </div>
+        <div class="aside-block stat-row">
+          <div class="stat-big">3+</div>
+          <div class="stat-label">Production projects</div>
+        </div>
+        <div class="aside-block stat-row">
+          <div class="stat-big">∞</div>
+          <div class="stat-label">Coffees consumed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SELECTED WORK ══ -->
+<section style="border-top: 1px solid var(--line);">
+  <div class="container">
+    <div class="work-header reveal">
+      <h2>Selected<br><em>work</em>.</h2>
+      <div class="work-header-meta">
+        <span>03</span>
+        Projects shipped
+      </div>
     </div>
 
-    <header class="site-header">
-        <div class="container header-inner">
-            <a href="index.html" class="brand">
-                <strong>Aditya</strong> <strong>Uniyal</strong> - Dev
-            </a>
-            <nav class="main-nav" aria-label="Main navigation">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="projects.html">Projects</a>
-                <a href="skills.html">Skills</a>
-                <a href="feedback.html">Feedback</a>
-                <a href="connect.html" class="cta">Connect</a>
-            </nav>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-                <i data-lucide="moon"></i>
-            </button>
-            <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open site menu"
-                aria-controls="mobileNav" aria-expanded="false">
-                <span class="bar bar-1"></span>
-                <span class="bar bar-2"></span>
-                <span class="bar bar-3"></span>
-            </button>
-            <nav id="mobileNav" class="mobile-nav" aria-hidden="true" role="dialog" aria-modal="true" tabindex="-1">
-                <div class="mobile-nav-backdrop" data-close="true"></div>
-                <div class="mobile-nav-panel" role="document">
-                    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">&times;</button>
-                    <div class="mobile-brand"><strong>Aditya Uniyal</strong> - Dev</div>
-                    <ul class="mobile-nav-list">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="projects.html">Projects</a></li>
-                        <li><a href="skills.html">Skills</a></li>
-                        <li><a href="feedback.html">Feedback</a></li>
-                        <li><a href="connect.html" class="mobile-cta">Connect</a></li>
-                    </ul>
-                    <div class="mobile-footer">
-                        <a href="/assets/Aditya_Uniyal_Resume.pdf" class="btn btn-outline" download>Download Resume</a>
-                    </div>
-                </div>
-            </nav>
+    <div class="project-list reveal d1">
+      <div class="project-row">
+        <div class="project-num">01</div>
+        <div class="project-main">
+          <div class="project-title">Numexa</div>
+          <div class="project-desc">Scientific Discord calculator bot — advanced math parsing, sub-ms response</div>
         </div>
-    </header>
-
-    <main>
-        <!-- HERO -->
-        <section class="hero container">
-            <div class="hero-left">
-                <h1>Hi — I'm <span class="accent">Aditya Uniyal</span></h1>
-                <p class="lead">
-                    I design and build scalable digital systems — from production-ready Discord bots
-                    to real-time web platforms and experimental interactive applications.
-                </p>
-                <div class="hero-ctas">
-                    <a href="projects.html" class="btn primary">View Projects</a>
-                    <a href="connect.html" class="btn btn-outline">Connect With Me</a>
-                    <a href="#" id="hireBtn" class="btn">Hire Me</a>
-                    <a href="/assets/Aditya_Uniyal_Resume.pdf" class="btn btn-outline" download>Download Resume</a>
-                </div>
-                <ul class="meta-list">
-                    <li>Location: India</li>
-                    <li>Available for: Collaborations, Freelance &amp; Mentoring</li>
-                </ul>
-            </div>
-
-            <aside class="support-card" aria-labelledby="support-title">
-                <h3 id="support-title">Support me</h3>
-                <p>Enjoying my work? A small coffee helps keep the projects alive.</p>
-                <div class="support-actions">
-                    <button id="upiRedirectBtn" class="bmc-btn" onclick="payUPI()">Buy Me a Coffee ☕</button>
-                    <button id="upiQRBtn" class="bmc-btn" onclick="openUPIModal()">Buy Me a Coffee ☕</button>
-                </div>
-            </aside>
-        </section>
-
-        <!-- UPI QR MODAL -->
-        <div id="upiModal" class="upi-modal">
-            <div class="upi-modal-content">
-                <h3>Scan to Pay via UPI</h3>
-                <img src="/assets/upi-qr.png" class="upi-qr" alt="UPI QR Code">
-                <p>Scan using any UPI app</p>
-                <button onclick="closeUPIModal()">Close</button>
-            </div>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">discord.py</span>
+          <span class="tag">Bot</span>
         </div>
-
-        <!-- EXPLORE PROJECTS -->
-        <section class="container peek">
-            <h2>Explore Projects</h2>
-            <div class="cards-grid">
-                <article class="card project-card">
-                    <h3>Numexa</h3>
-                    <p>Scientific Discord calculator bot with advanced math parsing, expression evaluation and optimized command architecture.</p>
-                    <div class="card-actions">
-                        <a href="projects.html#numexa">Read more</a>
-                    </div>
-                </article>
-                <article class="card project-card">
-                    <h3>Music Bot Zero</h3>
-                    <p>High-performance Discord music bot with queue management, streaming support and optimized playback architecture.</p>
-                    <div class="card-actions">
-                        <a href="projects.html#zero">Read more</a>
-                    </div>
-                </article>
-                <article class="card project-card">
-                    <h3>Delight Restaurant</h3>
-                    <p>Interactive restaurant website with menu display, reservation system and responsive design.</p>
-                    <div class="card-actions">
-                        <a href="projects.html#delight">Read more</a>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <!-- QUICK CONTACT -->
-        <section class="container mini-contact">
-            <div class="glass">
-                <h3>Have an idea or collaboration in mind?</h3>
-                <p>I respond within 24–48 hours for serious inquiries.</p>
-                <a class="btn" href="connect.html">Contact Me</a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <div class="container footer-inner">
-            <div>© <span id="year"></span> Aditya Uniyal</div>
-            <div class="footer-links">
-                <a href="privacy.html">Privacy</a>
-                <a href="connect.html">Connect</a>
-            </div>
+        <div class="project-status"><span class="status-live">Live</span></div>
+      </div>
+      <div class="project-row">
+        <div class="project-num">02</div>
+        <div class="project-main">
+          <div class="project-title">Music Bot Zero</div>
+          <div class="project-desc">High-performance Discord music bot — queue, streaming, real-time playback</div>
         </div>
-    </footer>
-
-    <!-- HIRE MODAL -->
-    <div id="hireModal" class="hire-modal" aria-hidden="true" role="dialog" aria-labelledby="hireModalTitle" tabindex="-1">
-        <div class="hire-modal-backdrop" data-close="true"></div>
-        <div class="hire-modal-panel" role="document">
-            <header class="hire-head">
-                <h2 id="hireModalTitle">Hire Me — Quick Links</h2>
-                <p class="muted">Open a profile or gig — I'll respond within 24–48 hours.</p>
-            </header>
-            <div class="hire-grid">
-                <a class="hire-card" href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener noreferrer">
-                    <div class="hire-card-icon"><i data-lucide="target"></i></div>
-                    <div class="hire-card-body"><strong>Fiverr profile</strong><small>See my gigs &amp; reviews</small></div>
-                </a>
-                <a class="hire-card" href="https://www.fiverr.com/s/zWE9XVg" target="_blank" rel="noopener noreferrer">
-                    <div class="hire-card-icon"><i data-lucide="zap"></i></div>
-                    <div class="hire-card-body"><strong>Featured gig</strong><small>Website Development and Design</small></div>
-                </a>
-                <a class="hire-card" href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener noreferrer">
-                    <div class="hire-card-icon"><i data-lucide="linkedin"></i></div>
-                    <div class="hire-card-body"><strong>LinkedIn</strong><small>Resume, endorsements &amp; contact</small></div>
-                </a>
-                <a class="hire-card" href="https://adityauniyal.is-a.dev/connect.html" target="_blank" rel="noopener noreferrer">
-                    <div class="hire-card-icon"><i data-lucide="briefcase"></i></div>
-                    <div class="hire-card-body"><strong>Service / Contact</strong><small>Project details &amp; custom offers</small></div>
-                </a>
-            </div>
-            <footer class="hire-foot">
-                <small class="muted">Prefer a direct chat? DM me on Discord or Instagram or use the contact form.</small>
-            </footer>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">FFmpeg</span>
+          <span class="tag">asyncio</span>
         </div>
+        <div class="project-status"><span class="status-live">Live</span></div>
+      </div>
+      <div class="project-row">
+        <div class="project-num">03</div>
+        <div class="project-main">
+          <div class="project-title">Delight Restaurant</div>
+          <div class="project-desc">Interactive restaurant site — menu, reservations, responsive design</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JS</span>
+        </div>
+        <div class="project-status"><span class="status-live">Live</span></div>
+      </div>
     </div>
 
-    <script src="js/main.js"></script>
+    <div style="margin-top: 40px;" class="reveal d3">
+      <a href="work.html" class="btn-ghost-line">View all projects →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SKILLS STRIP ══ -->
+<section style="border-top: 1px solid var(--line); padding: 80px 0;">
+  <div class="skills-eyebrow reveal">Stack & Tools</div>
+  <div class="skills-marquee-wrap">
+    <div class="skills-marquee">
+      <span class="skill-pill"><span class="ico">🐍</span>Python</span>
+      <span class="skill-pill"><span class="ico">⚡</span>JavaScript</span>
+      <span class="skill-pill"><span class="ico">🤖</span>discord.py</span>
+      <span class="skill-pill"><span class="ico">🌐</span>Node.js</span>
+      <span class="skill-pill"><span class="ico">🎵</span>FFmpeg</span>
+      <span class="skill-pill"><span class="ico">📦</span>REST APIs</span>
+      <span class="skill-pill"><span class="ico">🔧</span>Git & GitHub</span>
+      <span class="skill-pill"><span class="ico">🧩</span>asyncio</span>
+      <span class="skill-pill"><span class="ico">🚀</span>Netlify</span>
+      <span class="skill-pill"><span class="ico">📱</span>Responsive Design</span>
+      <span class="skill-pill"><span class="ico">🏗️</span>System Architecture</span>
+      <span class="skill-pill"><span class="ico">💡</span>WebSockets</span>
+      <!-- duplicate -->
+      <span class="skill-pill"><span class="ico">🐍</span>Python</span>
+      <span class="skill-pill"><span class="ico">⚡</span>JavaScript</span>
+      <span class="skill-pill"><span class="ico">🤖</span>discord.py</span>
+      <span class="skill-pill"><span class="ico">🌐</span>Node.js</span>
+      <span class="skill-pill"><span class="ico">🎵</span>FFmpeg</span>
+      <span class="skill-pill"><span class="ico">📦</span>REST APIs</span>
+      <span class="skill-pill"><span class="ico">🔧</span>Git & GitHub</span>
+      <span class="skill-pill"><span class="ico">🧩</span>asyncio</span>
+      <span class="skill-pill"><span class="ico">🚀</span>Netlify</span>
+      <span class="skill-pill"><span class="ico">📱</span>Responsive Design</span>
+      <span class="skill-pill"><span class="ico">🏗️</span>System Architecture</span>
+      <span class="skill-pill"><span class="ico">💡</span>WebSockets</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA BAND ══ -->
+<section class="cta-band">
+  <div class="eyebrow"><span></span>Currently available</div>
+  <h2>GOT A <em>project</em>?<br>LET'S BUILD.</h2>
+  <p>Whether it's a bot, a web app, or a full system — I bring clean architecture, fast delivery, and genuine craft to every project.</p>
+  <div class="actions">
+    <a href="connect.html" class="btn-lime" style="font-size:13px; padding:14px 32px;">Start a conversation →</a>
+    <button class="btn-ghost-line" data-hire style="font-size:13px; padding:14px 28px;">View hire options</button>
+  </div>
+  <div class="respond-note">Responds within <span>24 hours</span> · Fiverr · LinkedIn · Direct</div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <div class="footer-left">© <span id="yr"></span> <strong>Aditya Uniyal</strong> · Built from scratch.</div>
+  <div class="footer-right">
+    <a href="privacy.html">Privacy</a>
+    <a href="work.html">Work</a>
+    <a href="connect.html">Contact</a>
+    <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener">Fiverr</a>
+    <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+<!-- ══ HIRE MODAL ══ -->
+<div class="modal-bg" id="hireModal">
+  <div class="modal-box">
+    <button class="modal-x" id="modalClose">✕</button>
+    <h3>Hire Me.</h3>
+    <div class="sub">// pick your preferred channel — I respond fast.</div>
+    <div class="hire-opts">
+      <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener" class="hire-opt">
+        <span class="hire-opt-ico">🎯</span>
+        <span class="hire-opt-text">Fiverr Profile<small>Browse gigs & reviews</small></span>
+        <span class="hire-opt-arr">→</span>
+      </a>
+      <a href="https://www.fiverr.com/s/zWE9XVg" target="_blank" rel="noopener" class="hire-opt">
+        <span class="hire-opt-ico">⚡</span>
+        <span class="hire-opt-text">Featured Gig<small>Website Development & Design</small></span>
+        <span class="hire-opt-arr">→</span>
+      </a>
+      <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener" class="hire-opt">
+        <span class="hire-opt-ico">💼</span>
+        <span class="hire-opt-text">LinkedIn<small>Resume, endorsements & DMs</small></span>
+        <span class="hire-opt-arr">→</span>
+      </a>
+      <a href="connect.html" class="hire-opt">
+        <span class="hire-opt-ico">✉️</span>
+        <span class="hire-opt-text">Direct Contact<small>Scoped brief & custom offers</small></span>
+        <span class="hire-opt-arr">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
 </body>
-
 </html>

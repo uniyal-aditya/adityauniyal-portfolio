@@ -1,109 +1,157 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <title>Connect — Aditya Uniyal</title>
-    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/assets/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/assets/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-    <link rel="manifest" href="/assets/site.webmanifest">
-    <meta name="theme-color" content="#000000">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Connect with Aditya Uniyal — available for collaborations, freelance work, and technical discussions.">
-    <meta property="og:title" content="Connect — Aditya Uniyal" />
-    <meta property="og:description" content="Available for collaborations, freelance work, and technical discussions." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://adityauniyal.is-a.dev/connect.html" />
-    <link rel="canonical" href="https://adityauniyal.is-a.dev/connect.html">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="utf-8">
+  <title>Contact — Aditya Uniyal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Get in touch with Aditya Uniyal — freelance, collaborations, and project inquiries.">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-    <header class="site-header">
-        <div class="container header-inner">
-            <a href="index.html" class="brand">
-                <strong>Aditya</strong> <strong>Uniyal</strong> - Dev
+<div class="cursor"></div><div class="cursor-ring"></div><div class="scanline"></div>
+
+<nav class="nav stuck" id="mainNav">
+  <a href="index.html" class="nav-logo">AU<span class="dot">_</span></a>
+  <div class="nav-links">
+    <a href="index.html" data-index="01">Home</a>
+    <a href="work.html" data-index="02">Work</a>
+    <a href="about.html" data-index="03">About</a>
+    <a href="connect.html" class="active" data-index="04">Contact</a>
+  </div>
+  <button class="nav-hire" data-hire>Hire Me →</button>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="work.html">Work</a>
+  <a href="about.html">About</a>
+  <a href="connect.html" class="active">Contact</a>
+  <div class="mobile-nav-foot">
+    <button class="btn-lime" data-hire>Hire Me →</button>
+    <a href="assets/Aditya_Uniyal_Resume.pdf" download class="btn-ghost-line">CV ↓</a>
+  </div>
+</nav>
+
+<main>
+  <div class="page-top">
+    <div class="container">
+      <div class="pt-label">Get in touch</div>
+      <h1>Let's <em>talk</em>.</h1>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Left: info -->
+        <div>
+          <div class="contact-eyebrow reveal">// Reach out</div>
+          <div class="contact-big reveal d1">I respond to <em>serious</em><br>inquiries fast.</div>
+          <p style="font-size:16px; color:var(--dim); line-height:1.75; font-weight:300; max-width:40ch; margin-bottom:40px;" class="reveal d2">Tell me what you're building, what you need, and when. The more context the better — I'll respond with a scoped take within 24 hours.</p>
+
+          <div class="contact-methods reveal d3">
+            <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener" class="contact-method">
+              <span class="ico">🎯</span>
+              <span class="info"><strong>Fiverr</strong><span>fiverr.com/uniyal_aditya</span></span>
+              <span class="arrow">→</span>
             </a>
-            <nav class="main-nav" aria-label="Main navigation">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="projects.html">Projects</a>
-                <a href="skills.html">Skills</a>
-                <a href="feedback.html">Feedback</a>
-                <a href="connect.html" class="cta">Connect</a>
-            </nav>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-                <i data-lucide="moon"></i>
-            </button>
-            <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open site menu"
-                aria-controls="mobileNav" aria-expanded="false">
-                <span class="bar bar-1"></span>
-                <span class="bar bar-2"></span>
-                <span class="bar bar-3"></span>
-            </button>
-            <nav id="mobileNav" class="mobile-nav" aria-hidden="true" role="dialog" aria-modal="true" tabindex="-1">
-                <div class="mobile-nav-backdrop" data-close="true"></div>
-                <div class="mobile-nav-panel" role="document">
-                    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">&times;</button>
-                    <div class="mobile-brand"><strong>Aditya Uniyal</strong> - Dev</div>
-                    <ul class="mobile-nav-list">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="projects.html">Projects</a></li>
-                        <li><a href="skills.html">Skills</a></li>
-                        <li><a href="feedback.html">Feedback</a></li>
-                        <li><a href="connect.html" class="mobile-cta">Connect</a></li>
-                    </ul>
-                    <div class="mobile-footer">
-                        <a href="/assets/Aditya_Uniyal_Resume.pdf" class="btn btn-outline" download>Download Resume</a>
-                    </div>
+            <a href="https://www.fiverr.com/s/zWE9XVg" target="_blank" rel="noopener" class="contact-method">
+              <span class="ico">⚡</span>
+              <span class="info"><strong>Featured Gig</strong><span>Website Development & Design</span></span>
+              <span class="arrow">→</span>
+            </a>
+            <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener" class="contact-method">
+              <span class="ico">💼</span>
+              <span class="info"><strong>LinkedIn</strong><span>linkedin.com/in/uniyaladitya</span></span>
+              <span class="arrow">→</span>
+            </a>
+            <a href="assets/Aditya_Uniyal_Resume.pdf" download class="contact-method">
+              <span class="ico">📄</span>
+              <span class="info"><strong>Resume</strong><span>Download PDF</span></span>
+              <span class="arrow">↓</span>
+            </a>
+          </div>
+
+          <!-- Availability badge -->
+          <div style="margin-top:40px; padding:24px; border:1px solid var(--line); border-radius:3px; display:flex; align-items:center; gap:16px; background:var(--sand);" class="reveal d4">
+            <span style="width:10px; height:10px; border-radius:50%; background:var(--lime); flex-shrink:0; animation: pulse-lime 2s infinite; display:block;"></span>
+            <div>
+              <div style="font-family:var(--f-mono); font-size:11px; color:var(--lime); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px;">Currently available</div>
+              <div style="font-size:14px; color:var(--dim);">Open to freelance, collaborations, and mentoring</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="reveal d2">
+          <div id="formWrap">
+            <div style="font-family:var(--f-mono); font-size:11px; color:var(--lime); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:24px; display:flex; align-items:center; gap:8px;">
+              // Send a message
+              <span style="flex:1; height:1px; background:var(--line);"></span>
+            </div>
+            <form class="cf" id="cf" novalidate>
+              <div class="cf-row">
+                <div class="cf-group">
+                  <label class="cf-label" for="name">Name</label>
+                  <input class="cf-input" type="text" id="name" placeholder="Your name" required>
                 </div>
-            </nav>
+                <div class="cf-group">
+                  <label class="cf-label" for="email">Email</label>
+                  <input class="cf-input" type="email" id="email" placeholder="you@example.com" required>
+                </div>
+              </div>
+              <div class="cf-group">
+                <label class="cf-label" for="project">What are you building?</label>
+                <input class="cf-input" type="text" id="project" placeholder="Discord bot, web app, full-stack system…">
+              </div>
+              <div class="cf-group">
+                <label class="cf-label" for="msg">Details</label>
+                <textarea class="cf-textarea" id="msg" placeholder="Describe the scope, timeline, and any technical requirements…" required></textarea>
+              </div>
+              <button type="submit" class="btn-lime" style="width:100%; justify-content:center; font-size:13px; padding:14px 24px; letter-spacing:0.1em;">
+                SEND MESSAGE →
+              </button>
+              <p style="font-family:var(--f-mono); font-size:10px; color:var(--dim); text-align:center; letter-spacing:0.06em; margin-top:12px;">Response within 24 hours guaranteed.</p>
+            </form>
+          </div>
+
+          <div id="formOk" style="display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 32px; border:1px solid var(--line); gap:20px; background:var(--sand);">
+            <div style="font-size:3rem;">✓</div>
+            <div style="font-family:var(--f-display); font-size:2rem; letter-spacing:-0.01em;">Message sent.</div>
+            <div style="font-family:var(--f-mono); font-size:12px; color:var(--dim); letter-spacing:0.06em;">I'll respond within 24 hours.</div>
+            <a href="work.html" class="btn-ghost-line" style="margin-top:8px;">View my work →</a>
+          </div>
         </div>
-    </header>
+      </div>
+    </div>
+  </section>
+</main>
 
-    <main class="container section">
-        <h1>Connect With Me</h1>
-        <p class="muted">Interested in collaboration, development work, or technical discussion?</p>
+<footer class="footer">
+  <div class="footer-left">© <span id="yr"></span> <strong>Aditya Uniyal</strong> · Built from scratch.</div>
+  <div class="footer-right">
+    <a href="privacy.html">Privacy</a>
+    <a href="work.html">Work</a>
+    <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener">Fiverr</a>
+    <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
 
-        <div class="connect-grid">
-            <div class="card glass">
-                <h3>Direct Communication</h3>
-                <p>For project discussions, collaborations, or opportunities, please use the secure contact form below.</p>
-                <p>Status: <span class="status-badge available">Available for Collaboration</span></p>
-                <a href="feedback.html" class="btn">Send Message</a>
-            </div>
-
-            <div class="card glass">
-                <h3>Developer Profiles</h3>
-                <ul class="handles">
-                    <li>GitHub → <a href="https://github.com/uniyal-aditya" target="_blank" rel="noopener">uniyal-aditya</a></li>
-                    <li>Fiverr → <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener">uniyal_aditya</a></li>
-                    <li>LinkedIn → <a href="https://linkedin.com/in/uniyaladitya" target="_blank" rel="noopener">uniyaladitya</a></li>
-                    <li>X / Twitter → <a href="https://x.com/uaditya_dev" target="_blank" rel="noopener">@uaditya_dev</a></li>
-                    <li>YouTube → <a href="https://youtube.com/@Raftar-exe" target="_blank" rel="noopener">@Raftar-exe</a></li>
-                    <li>Discord → <a href="https://discord.com/users/800553680704110624" target="_blank" rel="noopener">uniyal_aditya</a></li>
-                </ul>
-            </div>
-        </div>
-    </main>
-
-    <footer class="site-footer">
-        <div class="container footer-inner">
-            <div>© <span id="year"></span> Aditya Uniyal</div>
-            <div class="footer-links">
-                <a href="privacy.html">Privacy</a>
-                <a href="connect.html">Connect</a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/main.js"></script>
+<div class="modal-bg" id="hireModal">
+  <div class="modal-box">
+    <button class="modal-x" id="modalClose">✕</button>
+    <h3>Hire Me.</h3>
+    <div class="sub">// pick your preferred channel</div>
+    <div class="hire-opts">
+      <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener" class="hire-opt"><span class="hire-opt-ico">🎯</span><span class="hire-opt-text">Fiverr Profile<small>Browse gigs & reviews</small></span><span class="hire-opt-arr">→</span></a>
+      <a href="https://www.fiverr.com/s/zWE9XVg" target="_blank" rel="noopener" class="hire-opt"><span class="hire-opt-ico">⚡</span><span class="hire-opt-text">Featured Gig<small>Website Development & Design</small></span><span class="hire-opt-arr">→</span></a>
+      <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener" class="hire-opt"><span class="hire-opt-ico">💼</span><span class="hire-opt-text">LinkedIn<small>Resume & professional contact</small></span><span class="hire-opt-arr">→</span></a>
+    </div>
+  </div>
+</div>
+<script src="js/main.js"></script>
 </body>
-
 </html>

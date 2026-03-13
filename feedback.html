@@ -13,7 +13,8 @@
     <link rel="manifest" href="/assets/site.webmanifest">
     <meta name="theme-color" content="#000000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Send feedback to Aditya Uniyal — share your experience with projects or the site.">
+    <meta name="description"
+        content="Send feedback to Aditya Uniyal — share your experience with projects or the site.">
     <meta property="og:title" content="Feedback — Aditya Uniyal" />
     <meta property="og:description" content="Share your experience or get in touch with Aditya Uniyal." />
     <meta property="og:type" content="website" />
@@ -44,8 +45,8 @@
         }
 
         .star-rating label:hover,
-        .star-rating label:hover ~ label,
-        .star-rating input:checked ~ label {
+        .star-rating label:hover~label,
+        .star-rating input:checked~label {
             color: #f59e0b;
         }
 
@@ -54,8 +55,8 @@
         }
 
         :root[data-theme="dark"] .star-rating label:hover,
-        :root[data-theme="dark"] .star-rating label:hover ~ label,
-        :root[data-theme="dark"] .star-rating input:checked ~ label {
+        :root[data-theme="dark"] .star-rating label:hover~label,
+        :root[data-theme="dark"] .star-rating input:checked~label {
             color: #fbbf24;
         }
     </style>
@@ -107,7 +108,8 @@
 
     <main class="container section">
         <h1>Feedback</h1>
-        <p class="muted">Your feedback helps me improve my projects and site. Optionally provide your email if you want a reply.</p>
+        <p class="muted">Your feedback helps me improve my projects and site. Optionally provide your email if you want
+            a reply.</p>
 
         <form id="feedback-form" class="form">
             <label>
@@ -207,6 +209,9 @@
                 });
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/gh/iMiMofficial/Seazonify@main/assets/controller/v3/seazonify.js"
+        visual="https://cdn.jsdelivr.net/gh/iMiMofficial/Seazonify@main/assets/effects/visual/dist/volcanic-ash-min-v1.0.1.js"
+        defer crossorigin="anonymous"></script>
 </body>
 
 </html>

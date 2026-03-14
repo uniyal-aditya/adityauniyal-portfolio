@@ -172,7 +172,14 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js"></script><!-- Vercel Web Analytics (visitors, page views, etc.) -->
+    <script defer src="/_vercel/insights/script.js"></script>
+
+    <!-- Vercel Speed Insights (performance / Core Web Vitals) -->
+    <script>
+        window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/speed.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
         (function () { emailjs.init("xPYwrcIVmeLYO2V6a"); })();

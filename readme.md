@@ -17,9 +17,9 @@
 ```yaml
 name: Aditya Uniyal
 location: Dehradun, Uttarakhand 🏔️
-university: Graphic Era Hill University
-degree: B.Tech Computer Science Engineering (2025–2029)
-status: Incoming Freshman — Starting August 2025
+university: Doon University
+degree: B.Tech Computer Science Engineering (2026–2030)
+
 
 currently_learning:
   - Google Cloud & AI Agents (GEAR Program)

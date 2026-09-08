@@ -33,6 +33,7 @@
       <a href="work.html" data-index="02">Work</a>
       <a href="about.html" data-index="03">About</a>
       <a href="connect.html" data-index="04">Contact</a>
+      <a href="/blog/" data-index="05">Journal</a>
     </div>
     <button class="nav-hire" data-hire>Hire Me →</button>
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -46,6 +47,7 @@
     <a href="work.html">Work</a>
     <a href="about.html">About</a>
     <a href="connect.html">Contact</a>
+    <a href="/blog/">Journal</a>
     <div class="mobile-nav-foot">
       <button class="btn-lime" data-hire>Hire Me →</button>
       <a href="assets/Aditya_Uniyal_Resume.pdf" download class="btn-ghost-line">Resume ↓</a>
@@ -203,6 +205,25 @@
     </div>
   </section>
 
+  <!-- ══ FROM THE JOURNAL ══ -->
+  <section id="from-the-journal" style="border-top: 1px solid var(--line); padding: 100px 0;">
+    <div class="container">
+      <div class="work-header reveal">
+        <h2>From the<br><em>journal</em>.</h2>
+        <div class="work-header-meta">
+          <a href="/blog/" style="color:var(--lime); text-decoration:none; display:block; margin-bottom:6px;">AU_ / JOURNAL →</a>
+          Ideas. Experiments.<br>Things worth sharing.
+        </div>
+      </div>
+      <div id="journalTeaser" class="reveal d1">
+        <!-- latest 3 journal posts injected by js/journal-home.js when Supabase is configured -->
+      </div>
+      <div style="margin-top: 36px;" class="reveal d3">
+        <a href="/blog/" class="btn-ghost-line">Read the journal →</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ══ SKILLS STRIP ══ -->
   <section style="border-top: 1px solid var(--line); padding: 80px 0;">
     <div class="skills-eyebrow reveal">Stack & Tools</div>
@@ -293,6 +314,11 @@
     </div>
   </div>
 
+  <script src="js/supabase-config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/journal-ui.js"></script>
+  <script src="js/journal-api.js"></script>
+  <script src="js/journal-home.js"></script>
   <script src="js/main.js"></script><!-- Vercel Web Analytics (visitors, page views, etc.) -->
   <script defer src="/_vercel/insights/script.js"></script>
 

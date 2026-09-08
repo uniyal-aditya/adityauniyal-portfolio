@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sign in — AU_ Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sign in to the AU_ Journal — read, write, contribute.">
+  <meta name="robots" content="noindex">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/journal.css">
+</head>
+<body>
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <div class="scanline"></div>
+
+  <nav class="nav stuck journal-nav" id="mainNav">
+    <a href="/" class="journal-logo">AU<span class="dot">_</span><span class="slash">/</span><span class="jl">JOURNAL</span></a>
+    <div class="nav-links">
+      <a href="/" data-index="01">Home</a>
+      <a href="/blog/" data-index="02">Journal</a>
+      <a href="/blog/search/" data-index="03">Search</a>
+    </div>
+    <div class="journal-nav-user" id="journalUser"></div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <main>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="auth-brand"><strong>AU_</strong> <span class="jl">/ JOURNAL</span> · access</div>
+        <h2>Sign in.</h2>
+        <div class="auth-sub">// readers, contributors and admins</div>
+
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab active" id="tabSignIn" role="tab" aria-selected="true">Sign in</button>
+          <button class="auth-tab" id="tabSignUp" role="tab" aria-selected="false">Create account</button>
+        </div>
+
+        <form class="dash-form" id="authForm">
+          <div class="cf-group">
+            <label class="cf-label" for="authEmail">Email</label>
+            <input type="email" id="authEmail" required placeholder="you@example.com" autocomplete="email">
+          </div>
+          <div class="cf-group" id="pwGroup">
+            <label class="cf-label" for="authPw">Password</label>
+            <input type="password" id="authPw" placeholder="••••••••" autocomplete="current-password" minlength="6">
+          </div>
+          <button class="btn-lime" type="submit" id="authSubmit" style="justify-content:center; font-size:12px; padding:13px 24px;">Sign in →</button>
+          <button class="btn-ghost-line" type="button" id="magicBtn" style="justify-content:center; font-size:11px; padding:12px 24px;">✉ Send me a magic link instead</button>
+          <div id="authMsg" class="auth-note" role="status" aria-live="polite"></div>
+        </form>
+
+        <div class="auth-note" style="margin-top:28px; border-top:1px solid var(--line); padding-top:18px;">
+          New accounts start as readers.<br>Want to write? Pitch via the
+          <a href="/connect.html" style="color:var(--lime)">contact page</a> and an admin will promote you.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/supabase-config.js"></script>
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/journal-ui.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    let mode = 'signin';
+
+    function setMode(m) {
+      mode = m;
+      $('tabSignIn').classList.toggle('active', m === 'signin');
+      $('tabSignUp').classList.toggle('active', m === 'signup');
+      $('tabSignIn').setAttribute('aria-selected', String(m === 'signin'));
+      $('tabSignUp').setAttribute('aria-selected', String(m === 'signup'));
+      $('pwGroup').style.display = m === 'signup' ? '' : '';
+      $('authSubmit').textContent = m === 'signin' ? 'Sign in →' : 'Create account →';
+      $('authPw').setAttribute('autocomplete', m === 'signin' ? 'current-password' : 'new-password');
+      $('authMsg').textContent = '';
+    }
+    $('tabSignIn').addEventListener('click', () => setMode('signin'));
+    $('tabSignUp').addEventListener('click', () => setMode('signup'));
+
+    async function boot() {
+      await window.AUJournalReady;
+      if (!window.SUPABASE_CONFIG.configured()) {
+        $('authMsg').innerHTML = 'Auth is not configured yet.<br>Add SUPABASE_URL and SUPABASE_ANON_KEY to <span style="color:var(--lime)">js/supabase-config.js</span>.';
+        return;
+      }
+      // already signed in? → dashboard
+      const user = await window.AUAuth.getUser();
+      if (user) { window.location.replace('/blog/dashboard/'); return; }
+    }
+
+    $('authForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      await window.AUJournalReady;
+      const email = $('authEmail').value.trim();
+      const pw = $('authPw').value;
+      const msg = $('authMsg');
+      $('authSubmit').disabled = true;
+      $('authSubmit').textContent = 'Working…';
+      try {
+        if (mode === 'signin') {
+          const { error } = await window.AUAuth.signIn(email, pw);
+          if (error) { msg.textContent = error.message; }
+          else { window.location.href = '/blog/dashboard/'; return; }
+        } else {
+          if (!pw || pw.length < 6) { msg.textContent = 'Password must be at least 6 characters.'; }
+          else {
+            const { data, error } = await window.AUAuth.signUp(email, pw);
+            if (error) { msg.textContent = error.message; }
+            else if (data && data.session) { window.location.href = '/blog/dashboard/'; return; }
+            else { msg.innerHTML = 'Account created.<br>Check your email to confirm, then sign in.'; setMode('signin'); }
+          }
+        }
+      } finally {
+        $('authSubmit').disabled = false;
+        $('authSubmit').textContent = mode === 'signin' ? 'Sign in →' : 'Create account →';
+      }
+    });
+
+    $('magicBtn').addEventListener('click', async () => {
+      await window.AUJournalReady;
+      const email = $('authEmail').value.trim();
+      if (!email) { $('authMsg').textContent = 'Enter your email first.'; return; }
+      const { error } = await window.AUAuth.sendMagicLink(email);
+      $('authMsg').textContent = error ? error.message : 'Magic link sent — check your inbox.';
+    });
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

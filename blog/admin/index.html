@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin — AU_ Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/journal.css">
+</head>
+<body class="admin-shell">
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <div class="scanline"></div>
+
+  <nav class="nav stuck journal-nav" id="mainNav">
+    <a href="/" class="journal-logo">AU<span class="dot">_</span><span class="slash">/</span><span class="jl">ADMIN</span></a>
+    <div class="nav-links">
+      <a href="/blog/" data-index="01">Journal</a>
+      <a href="/blog/dashboard/" data-index="02">Dashboard</a>
+    </div>
+    <div class="journal-nav-user" id="journalUser"></div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <main>
+    <div class="journal-top" style="border-bottom:none; padding-bottom:20px">
+      <div class="container">
+        <div class="jt-label">operations</div>
+        <h1 style="font-size:clamp(2.4rem,5vw,4rem)">Control <em>room</em>.</h1>
+      </div>
+    </div>
+
+    <div class="container" style="padding-bottom:100px">
+      <div class="admin-tabs" id="adminTabs">
+        <a href="?tab=overview" data-tab="overview" class="active">Overview</a>
+        <a href="?tab=posts" data-tab="posts">Posts</a>
+        <a href="?tab=queue" data-tab="queue">Review queue</a>
+        <a href="?tab=users" data-tab="users">Users</a>
+        <a href="?tab=comments" data-tab="comments">Comments</a>
+        <a href="?tab=reports" data-tab="reports">Reports</a>
+        <a href="?tab=categories" data-tab="categories">Categories</a>
+        <a href="?tab=media" data-tab="media">Media</a>
+        <a href="?tab=analytics" data-tab="analytics">Analytics</a>
+        <a href="?tab=newsletter" data-tab="newsletter">Newsletter</a>
+      </div>
+      <div id="adminContent" style="min-height:360px">
+        <div class="empty-state"><div class="es-glyph">…</div><div class="es-title">Checking permissions…</div></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/supabase-config.js"></script>
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/journal-ui.js"></script>
+  <script src="/js/journal-api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const UI = window.UI;
+    let profile = null;
+    const tab = UI.qs('tab') || 'overview';
+
+    const tabTitles = {
+      overview: ['site-wide numbers — real data only', 'Site <em>overview</em>.'],
+      posts: ['everything published and hidden', 'All <em>posts</em>.'],
+      queue: ['submitted · review · approved', 'Review <em>queue</em>.'],
+      users: ['roles, verification, suspension', 'Users &amp; <em>authors</em>.'],
+      comments: ['moderate the conversation', 'Comments <em>moderation</em>.'],
+      reports: ['abuse reports', 'Reports <em>inbox</em>.'],
+      categories: ['topics shown in the nav', 'Categories &amp; <em>tags</em>.'],
+      media: ['all uploaded media', 'Media <em>library</em>.'],
+      analytics: ['traffic and engagement', 'Analytics.'],
+      newsletter: ['AU Weekly subscribers', 'Newsletter.'],
+    };
+
+    async function boot() {
+      await window.AUJournalReady;
+      const s = await window.AUAuth.getSession();
+      profile = s.profile;
+      UI.renderNavUser(s.user, profile);
+      if (!s.user) { window.location.replace('/blog/login/'); return; }
+      if (!profile || !['admin', 'owner'].includes(profile.role)) {
+        $('adminContent').innerHTML = UI.empty('Access denied.', 'This console requires an admin or owner role.',
+          false) + '<div style="text-align:center; margin-top:20px"><a class="btn-ghost-line" href="/blog/dashboard/">← Back to dashboard</a></div>';
+        return;
+      }
+      highlight(tab);
+      render(tab);
+    }
+
+    function highlight(t) {
+      document.querySelectorAll('#adminTabs a').forEach(a => {
+        const on = a.getAttribute('data-tab') === t;
+        a.classList.toggle('active', on);
+        a.href = '?tab=' + a.getAttribute('data-tab');
+      });
+    }
+
+    function head(t) {
+      const [label, title] = tabTitles[t] || ['', t];
+      return '<div class="admin-bar"><div class="ab-title">' + label + '</div>' +
+        '<div class="ab-actions"><a class="mini-btn" href="/blog/dashboard/editor/">+ New article</a></div></div>' +
+        '<div class="jsection-head" style="margin-bottom:24px"><div><div class="js-label">' + label + '</div>' +
+        '<h2 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">' + title + '</h2></div></div>';
+    }
+
+    function statusChip(s) { return '<span class="status-chip ' + UI.escapeHtml(s) + '">' + UI.escapeHtml(s) + '</span>'; }
+
+    const renderers = {
+      overview: async (c) => {
+        const a = await API.adminAnalytics();
+        if (!a) { c.innerHTML = head('overview') + UI.empty('No data yet.', window.API.lastError || 'Analytics unavailable.'); return; }
+        c.innerHTML = head('overview') +
+          '<div class="admin-grid">' +
+          [['Published Articles', a.published], ['Drafts', a.drafts], ['Review Queue', a.review_queue], ['Authors', a.authors],
+           ['Users', a.users], ['Views', UI.fmtNum(a.views)], ['Comments', a.comments], ['Reports', a.open_reports]]
+            .map(x => '<div class="stat-card"><div class="sc-num">' + x[1] + '</div><div class="sc-label">' + x[0] + '</div></div>').join('') +
+          '</div>' +
+          '<div style="margin-top:32px" id="trendSlot"></div>';
+        const trend = await API.adminTrafficTrend(14);
+        const max = Math.max(1, ...trend.map(d => Number(d.views)));
+        $('trendSlot').innerHTML =
+          '<div class="js-label" style="font-family:var(--f-mono); font-size:10px; color:var(--lime); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:14px;">// traffic · last 14 days</div>' +
+          (trend.some(d => Number(d.views) > 0)
+            ? '<div class="trend-chart-wrap"><div class="trend-chart">' +
+              trend.map(d => '<div class="bar" style="height:' + Math.max(2, (Number(d.views) / max) * 100) + '%" title="' + d.day + ': ' + d.views + ' views"><span>' + String(d.day).slice(5) + '</span></div>').join('') +
+              '</div></div>'
+            : UI.empty('No data yet.', 'Traffic appears once articles start getting views.'));
+      },
+
+      posts: async (c) => {
+        const posts = await API.allPosts();
+        c.innerHTML = head('posts') + (posts.length
+          ? '<div class="table-wrap admin-table-compact"><table class="data"><thead><tr>' +
+            '<th>Title</th><th>Author</th><th>Status</th><th>Featured</th><th>Views</th><th>Updated</th><th>Actions</th></tr></thead><tbody>' +
+            posts.map(p => {
+              const author = (p.profiles || {});
+              return '<tr>' +
+                '<td style="max-width:260px"><a href="/blog/dashboard/editor/?id=' + p.id + '">' + UI.escapeHtml(p.title) + '</a></td>' +
+                '<td class="meta"><a href="/blog/author/' + UI.escapeHtml(author.username || '') + '/">' + UI.escapeHtml(author.display_name || author.username || '—') + '</a></td>' +
+                '<td>' + statusChip(p.status) + '</td>' +
+                '<td>' + (p.featured ? '★' : '·') + '</td>' +
+                '<td>' + UI.fmtNum(p.view_count) + '</td>' +
+                '<td class="meta">' + UI.timeAgo(p.updated_at) + '</td>' +
+                '<td><div style="display:flex; gap:6px; flex-wrap:wrap">' +
+                  '<button class="mini-btn" data-feature="' + p.id + '">' + (p.featured ? 'Unfeature' : 'Feature') + '</button>' +
+                  (p.status !== 'published' ? '<button class="mini-btn solid" data-publish="' + p.id + '">Publish</button>' : '') +
+                  (p.status !== 'archived' ? '<button class="mini-btn" data-archive="' + p.id + '">Archive</button>' : '') +
+                '</div></td></tr>';
+            }).join('') + '</tbody></table></div>'
+          : UI.empty('No data yet.', 'No posts exist yet.'));
+        wirePosts(c);
+      },
+
+      queue: async (c) => {
+        const posts = await API.reviewQueue();
+        c.innerHTML = head('queue') + (posts.length
+          ? '<div class="table-wrap admin-table-compact"><table class="data"><thead><tr>' +
+            '<th>Title</th><th>Author</th><th>Status</th><th>Submitted</th><th>Actions</th></tr></thead><tbody>' +
+            posts.map(p => {
+              const author = (p.profiles || {});
+              return '<tr>' +
+                '<td style="max-width:260px"><a href="/blog/dashboard/editor/?id=' + p.id + '">' + UI.escapeHtml(p.title) + '</a></td>' +
+                '<td class="meta">' + UI.escapeHtml(author.display_name || author.username || '—') + '</td>' +
+                '<td>' + statusChip(p.status) + '</td>' +
+                '<td class="meta">' + UI.timeAgo(p.updated_at) + '</td>' +
+                '<td><div style="display:flex; gap:6px; flex-wrap:wrap">' +
+                  '<button class="mini-btn solid" data-publish="' + p.id + '">Approve &amp; publish</button>' +
+                  '<button class="mini-btn" data-review="' + p.id + '">In review</button>' +
+                  '<button class="mini-btn danger" data-reject="' + p.id + '">Reject</button>' +
+                '</div></td></tr>';
+            }).join('') + '</tbody></table></div>'
+          : UI.empty('Review queue is clear.', 'New submissions land here.'));
+        wirePosts(c);
+      },
+
+      users: async (c) => {
+        const users = await API.adminUsers();
+        c.innerHTML = head('users') + (users.length
+          ? '<div class="table-wrap admin-table-compact"><table class="data"><thead><tr>' +
+            '<th>User</th><th>Role</th><th>Verified</th><th>Joined</th><th>Actions</th></tr></thead><tbody>' +
+            users.map(u =>
+              '<tr>' +
+              '<td><a href="/blog/author/' + UI.escapeHtml(u.username) + '/"><strong>' + UI.escapeHtml(u.display_name || u.username) + '</strong></a>' +
+              '<div class="meta">' + UI.escapeHtml(u.email || '') + '</div></td>' +
+              '<td><span class="role-chip ' + UI.escapeHtml(u.role) + '">' + UI.escapeHtml(u.role) + '</span></td>' +
+              '<td>' + (u.verified ? '<span style="color:var(--lime)">✓</span>' : '·') + '</td>' +
+              '<td class="meta">' + UI.fmtDate(u.created_at) + '</td>' +
+              '<td><div style="display:flex; gap:6px; flex-wrap:wrap">' +
+                '<select data-role-for="' + u.id + '" style="background:var(--ink); border:1px solid var(--line); color:var(--bone); font-family:var(--f-mono); font-size:10px; padding:5px 8px; border-radius:3px">' +
+                  ['reader', 'contributor', 'verified_author', 'admin', 'owner'].map(r =>
+                    '<option value="' + r + '"' + (u.role === r ? ' selected' : '') + '>' + r + '</option>').join('') +
+                '</select>' +
+                '<button class="mini-btn" data-verify="' + u.id + '">' + (u.verified ? 'Unverify' : 'Verify') + '</button>' +
+              '</div></td></tr>').join('') + '</tbody></table></div>'
+          : UI.empty('No data yet.', 'Users appear as they sign up.'));
+        c.querySelectorAll('[data-role-for]').forEach(sel => sel.addEventListener('change', async () => {
+          const ok = await API.adminSetUserRole(sel.getAttribute('data-role-for'), sel.value);
+          if (ok) UI.toast('Role updated to ' + sel.value + '.');
+          else { UI.err(window.API.lastError || 'Update failed.'); render('users'); }
+        }));
+        c.querySelectorAll('[data-verify]').forEach(b => b.addEventListener('click', async () => {
+          const u = users.find(x => x.id === b.getAttribute('data-verify'));
+          const ok = await API.adminSetVerified(u.id, !u.verified);
+          if (ok) { UI.toast(u.verified ? 'Verification removed.' : 'Author verified ✓'); render('users'); }
+          else UI.err(window.API.lastError || 'Update failed.');
+        }));
+      },
+
+      comments: async (c) => {
+        const comments = await API.adminComments();
+        c.innerHTML = head('comments') + (comments.length
+          ? '<div class="table-wrap admin-table-compact"><table class="data"><thead><tr>' +
+            '<th>Comment</th><th>By</th><th>On</th><th>Status</th><th>Actions</th></tr></thead><tbody>' +
+            comments.map(cm => {
+              const p = cm.profiles || {}; const post = cm.posts || {};
+              return '<tr>' +
+                '<td style="max-width:300px">' + UI.escapeHtml(cm.body.slice(0, 120)) + (cm.body.length > 120 ? '…' : '') + '</td>' +
+                '<td class="meta">' + UI.escapeHtml(p.display_name || p.username || '—') + '</td>' +
+                '<td class="meta"><a href="/blog/post/' + UI.escapeHtml(post.slug || '') + '/">' + UI.escapeHtml((post.title || '—').slice(0, 40)) + '</a></td>' +
+                '<td>' + statusChip(cm.status) + '</td>' +
+                '<td><div style="display:flex; gap:6px; flex-wrap:wrap">' +
+                  (cm.status !== 'visible' ? '<button class="mini-btn solid" data-cm="' + cm.id + '" data-st="visible">Approve</button>' : '') +
+                  (cm.status !== 'hidden' ? '<button class="mini-btn" data-cm="' + cm.id + '" data-st="hidden">Hide</button>' : '') +
+                  '<button class="mini-btn danger" data-cm="' + cm.id + '" data-st="deleted">Delete</button>' +
+                '</div></td></tr>';
+            }).join('') + '</tbody></table></div>'
+          : UI.empty('No comments yet.', 'Reader discussion appears here for moderation.'));
+        c.querySelectorAll('[data-cm]').forEach(b => b.addEventListener('click', async () => {
+          const ok = await API.adminSetCommentStatus(b.getAttribute('data-cm'), b.getAttribute('data-st'));
+          if (ok) { UI.toast('Comment ' + b.getAttribute('data-st') + '.'); render('comments'); }
+          else UI.err(window.API.lastError || 'Update failed.');
+        }));
+      },
+
+      reports: async (c) => {
+        const reports = await API.adminReports();
+        c.innerHTML = head('reports') + (reports.length
+          ? '<div class="table-wrap admin-table-compact"><table class="data"><thead><tr>' +
+            '<th>Reason</th><th>Details</th><th>By</th><th>Status</th><th>Actions</th></tr></thead><tbody>' +
+            reports.map(r => {
+              const p = r.profiles || {};
+              return '<tr>' +
+                '<td class="meta">' + UI.escapeHtml(r.reason) + '</td>' +
+                '<td style="max-width:280px">' + UI.escapeHtml(r.details || '—') + '</td>' +
+                '<td class="meta">' + UI.escapeHtml(p.username || '—') + '</td>' +
+                '<td>' + statusChip(r.status) + '</td>' +
+                '<td><div style="display:flex; gap:6px">' +
+                  (r.status === 'open' ? '<button class="mini-btn solid" data-rp="' + r.id + '" data-st="resolved">Resolve</button>' : '') +
+                  '<button class="mini-btn" data-rp="' + r.id + '" data-st="dismissed">Dismiss</button>' +
+                '</div></td></tr>';
+            }).join('') + '</tbody></table></div>'
+          : UI.empty('No open reports.', 'All clear.'));
+        c.querySelectorAll('[data-rp]').forEach(b => b.addEventListener('click', async () => {
+          const ok = await API.adminResolveReport(b.getAttribute('data-rp'), b.getAttribute('data-st'));
+          if (ok) { UI.toast('Report updated.'); render('reports'); }
+          else UI.err(window.API.lastError || 'Update failed.');
+        }));
+      },
+
+      categories: async (c) => {
+        const cats = await API.categories();
+        const tags = await API.tags(100);
+        c.innerHTML = head('categories') +
+          '<div class="dash-form" style="margin-bottom:32px; border:1px solid var(--line); border-radius:4px; background:var(--sand); padding:24px">' +
+          '<div class="dash-row">' +
+          '<div class="cf-group"><label class="cf-label" for="catName">New category name</label><input id="catName" placeholder="Machine Learning"></div>' +
+          '<div class="cf-group"><label class="cf-label" for="catSlug">Slug</label><input id="catSlug" placeholder="machine-learning"></div>' +
+          '</div>' +
+          '<div class="cf-group"><label class="cf-label" for="catDesc">Description</label><input id="catDesc" placeholder="Short description shown on the topic page."></div>' +
+          '<button class="btn-lime" id="catAdd" style="font-size:11px; padding:11px 20px;">+ Add category</button>' +
+          '</div>' +
+          '<div class="table-wrap admin-table-compact" style="margin-bottom:36px"><table class="data"><thead><tr><th>Category</th><th>Slug</th><th></th></tr></thead><tbody>' +
+          cats.map(cat => '<tr><td><strong>' + UI.escapeHtml(cat.name) + '</strong></td><td class="meta">' + UI.escapeHtml(cat.slug) + '</td>' +
+            '<td><button class="mini-btn danger" data-catdel="' + cat.id + '">Delete</button></td></tr>').join('') +
+          '</tbody></table></div>' +
+          '<div class="js-label" style="font-family:var(--f-mono); font-size:10px; color:var(--lime); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:14px;">// tags</div>' +
+          '<div class="tag-cloud">' + (tags.length
+            ? tags.map(t => '<span class="topic-pill">#' + UI.escapeHtml(t.name) + '</span>').join('')
+            : UI.empty('No tags yet.', 'Tags are created by authors.', true)) + '</div>';
+        $('catAdd').addEventListener('click', async () => {
+          const name = $('catName').value.trim();
+          if (!name) { UI.err('Name required.'); return; }
+          const slug = UI.slugify($('catSlug').value || name);
+          const ok = await API.adminSaveCategory({ name, slug, description: $('catDesc').value.trim() || null });
+          if (ok) { UI.toast('Category added.'); render('categories'); }
+          else UI.err(window.API.lastError || 'Save failed.');
+        });
+        c.querySelectorAll('[data-catdel]').forEach(b => b.addEventListener('click', async () => {
+          if (!confirm('Delete this category? Posts keep existing but lose the topic.')) return;
+          const ok = await API.adminDeleteCategory(b.getAttribute('data-catdel'));
+          if (ok) { UI.toast('Category deleted.'); render('categories'); }
+          else UI.err(window.API.lastError || 'Delete failed.');
+        }));
+      },
+
+      media: async (c) => {
+        const rows = await API.myMedia();
+        c.innerHTML = head('media') + (rows.length
+          ? '<div class="media-grid">' + rows.map(m =>
+              '<div class="media-item"><img src="' + UI.escapeHtml(m.public_url) + '" alt="' + UI.escapeHtml(m.alt_text || '') + '" loading="lazy">' +
+              '<div class="mi-meta">' + UI.escapeHtml(m.alt_text || m.storage_path) + '</div></div>').join('') + '</div>'
+          : UI.empty('No media yet.', 'Uploads from the editor appear here.'));
+      },
+
+      analytics: async (c) => {
+        const rows = await API.myAnalytics();
+        c.innerHTML = head('analytics') + (rows.length
+          ? '<div class="table-wrap admin-table-compact"><table class="data"><thead><tr>' +
+            '<th>Article</th><th>Status</th><th>Views</th><th>Likes</th><th>Bookmarks</th><th>Comments</th><th>Avg progress</th><th>Completion</th></tr></thead><tbody>' +
+            rows.map(r =>
+              '<tr><td style="max-width:260px"><a href="/blog/post/' + UI.escapeHtml(r.slug) + '/">' + UI.escapeHtml(r.title) + '</a></td>' +
+              '<td>' + statusChip(r.status) + '</td>' +
+              '<td>' + UI.fmtNum(r.views) + '</td><td>' + UI.fmtNum(r.likes) + '</td><td>' + UI.fmtNum(r.bookmarks) + '</td>' +
+              '<td>' + UI.fmtNum(r.comments) + '</td><td>' + (r.avg_progress || 0) + '%</td><td>' + (r.completion_rate || 0) + '%</td></tr>').join('') +
+            '</tbody></table></div>'
+          : UI.empty('No data yet.', 'Analytics appear once articles get reads.'));
+      },
+
+      newsletter: async (c) => {
+        const subs = await API.adminNewsletter();
+        c.innerHTML = head('newsletter') + (subs.length
+          ? '<div class="meta" style="margin-bottom:20px">' + subs.length + ' subscribers · ' +
+            subs.filter(s => s.confirmed).length + ' confirmed</div>' +
+            '<div class="table-wrap admin-table-compact"><table class="data"><thead><tr><th>Email</th><th>Confirmed</th><th>Joined</th></tr></thead><tbody>' +
+            subs.map(s => '<tr><td>' + UI.escapeHtml(s.email) + '</td>' +
+              '<td>' + (s.confirmed ? '<span style="color:var(--lime)">✓</span>' : '·') + '</td>' +
+              '<td class="meta">' + UI.fmtDate(s.created_at) + '</td></tr>').join('') +
+            '</tbody></table></div>'
+          : UI.empty('No subscribers yet.', 'Signups from the journal footer land here.'));
+      },
+    };
+
+    function wirePosts(c) {
+      c.querySelectorAll('[data-publish]').forEach(b => b.addEventListener('click', async () => {
+        const ok = await API.adminSetStatus(b.getAttribute('data-publish'), 'published');
+        if (ok) { UI.toast('Published.'); render(tab); } else UI.err(window.API.lastError || 'Failed.');
+      }));
+      c.querySelectorAll('[data-archive]').forEach(b => b.addEventListener('click', async () => {
+        const ok = await API.adminSetStatus(b.getAttribute('data-archive'), 'archived');
+        if (ok) { UI.toast('Archived.'); render(tab); } else UI.err(window.API.lastError || 'Failed.');
+      }));
+      c.querySelectorAll('[data-review]').forEach(b => b.addEventListener('click', async () => {
+        const ok = await API.adminSetStatus(b.getAttribute('data-review'), 'review');
+        if (ok) { UI.toast('Marked in review.'); render(tab); } else UI.err(window.API.lastError || 'Failed.');
+      }));
+      c.querySelectorAll('[data-reject]').forEach(b => b.addEventListener('click', async () => {
+        const ok = await API.adminSetStatus(b.getAttribute('data-reject'), 'rejected');
+        if (ok) { UI.toast('Rejected.'); render(tab); } else UI.err(window.API.lastError || 'Failed.');
+      }));
+      c.querySelectorAll('[data-feature]').forEach(b => b.addEventListener('click', async () => {
+        const post = (await API.allPosts()).find(p => p.id === b.getAttribute('data-feature'));
+        const ok = await API.adminToggleFeature(post);
+        if (ok) { UI.toast(post.featured ? 'Unfeatured.' : 'Featured ✓'); render(tab); } else UI.err(window.API.lastError || 'Failed.');
+      }));
+    }
+
+    async function render(t) {
+      highlight(t);
+      const c = $('adminContent');
+      try { await renderers[t](c); }
+      catch (e) { c.innerHTML = head(t) + UI.empty('Something went wrong.', e.message || String(e)); }
+    }
+
+    document.querySelectorAll('#adminTabs a').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      history.replaceState(null, '', a.getAttribute('href'));
+      render(a.getAttribute('data-tab'));
+    }));
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

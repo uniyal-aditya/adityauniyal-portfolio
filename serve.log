@@ -1,0 +1,401 @@
+ INFO  Accepting connections at http://localhost:8123
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 200 in 42 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /blog/
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 200 in 2 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /blog/search/
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 200 in 2 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /blog/login/
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 200 in 2 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /blog/dashboard/
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 200 in 2 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /blog/admin/
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 200 in 1 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /blog/post/why-i-built-numexa/
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 404 in 1 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /work.html
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /about.html
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:29:47 pm ::1 GET /connect.html
+ HTTP  8/9/2026 8:29:47 pm ::1 Returned 301 in 0 ms
+ HTTP  8/9/2026 8:29:48 pm ::1 GET /projects.html
+ HTTP  8/9/2026 8:29:48 pm ::1 Returned 301 in 0 ms
+ HTTP  8/9/2026 8:29:48 pm ::1 GET /skills.html
+ HTTP  8/9/2026 8:29:48 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:29:48 pm ::1 GET /feedback.html
+ HTTP  8/9/2026 8:29:48 pm ::1 Returned 301 in 0 ms
+ HTTP  8/9/2026 8:29:48 pm ::1 GET /privacy.html
+ HTTP  8/9/2026 8:29:48 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:32:36 pm ::1 GET /blog/post/x/
+ HTTP  8/9/2026 8:32:36 pm ::1 Returned 404 in 1 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /blog/
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 3 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /blog/
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 1 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 4 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 8 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 8 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 7 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 7 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 7 ms
+ HTTP  8/9/2026 8:33:40 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:33:40 pm ::1 Returned 200 in 6 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /index.html
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 301 in 10 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /index
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 200 in 5 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /js/journal-home.js
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:37:04 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 8:37:04 pm ::1 Returned 200 in 13 ms
+ HTTP  8/9/2026 8:37:05 pm ::1 GET /_vercel/insights/script.js
+ HTTP  8/9/2026 8:37:05 pm ::1 Returned 404 in 4 ms
+ HTTP  8/9/2026 8:37:05 pm ::1 GET /_vercel/insights/speed.js
+ HTTP  8/9/2026 8:37:05 pm ::1 Returned 404 in 1 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /work.html
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /work
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 200 in 7 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /js/journal-home.js
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /_vercel/insights/script.js
+ HTTP  8/9/2026 8:38:58 pm ::1 GET /_vercel/insights/speed.js
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 404 in 7 ms
+ HTTP  8/9/2026 8:38:58 pm ::1 Returned 404 in 7 ms
+ HTTP  8/9/2026 8:39:56 pm ::1 GET /blog/login/
+ HTTP  8/9/2026 8:39:56 pm ::1 Returned 200 in 18 ms
+ HTTP  8/9/2026 8:39:56 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:39:56 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:39:56 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 8:39:56 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:39:56 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:39:56 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:39:56 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:39:56 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:39:56 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:39:56 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:39:56 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:39:56 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /blog/search/
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 200 in 3 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:40:35 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:40:35 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:42:04 pm ::1 GET /blog/post/test-slug/
+ HTTP  8/9/2026 8:42:04 pm ::1 Returned 404 in 5 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /blog/post/index.html
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /blog/post/index
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 301 in 0 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /blog/post
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 200 in 4 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /js/journal-md.js
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /js/journal-post.js
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:43:37 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 200 in 9 ms
+ HTTP  8/9/2026 8:43:37 pm ::1 Returned 200 in 8 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /blog/dashboard/index.html
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 301 in 3 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /blog/dashboard/index
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 301 in 3 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /blog/dashboard
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 200 in 2 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 5 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/journal-md.js
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 5 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /blog/login/
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:44:43 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 8:44:43 pm ::1 Returned 304 in 18 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /blog/admin/index.html
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 301 in 3 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /blog/admin/index
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 301 in 2 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /blog/admin
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 200 in 6 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 5 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /blog/login/
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:45:14 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 8:45:14 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:46:39 pm ::1 GET /projects
+ HTTP  8/9/2026 8:46:39 pm ::1 Returned 200 in 16 ms
+ HTTP  8/9/2026 8:46:39 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:46:39 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:46:39 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 8:46:39 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:46:39 pm ::1 GET /_vercel/insights/script.js
+ HTTP  8/9/2026 8:46:39 pm ::1 Returned 404 in 5 ms
+ HTTP  8/9/2026 8:46:39 pm ::1 GET /_vercel/insights/speed.js
+ HTTP  8/9/2026 8:46:39 pm ::1 Returned 404 in 3 ms
+ HTTP  8/9/2026 8:48:55 pm ::1 GET /blog/series/test/
+ HTTP  8/9/2026 8:48:55 pm ::1 Returned 404 in 5 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /blog/series/index.html
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 301 in 0 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /blog/series/index
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 301 in 4 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /blog/series
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 200 in 5 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 304 in 15 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 8:50:16 pm ::1 Returned 304 in 5 ms
+ HTTP  8/9/2026 8:51:15 pm ::1 GET /blog/author/someone/
+ HTTP  8/9/2026 8:51:15 pm ::1 Returned 404 in 7 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /blog/author/index.html
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 301 in 2 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /blog/author/index
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 301 in 0 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /blog/author
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 200 in 4 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 304 in 9 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 304 in 9 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 304 in 7 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 8:52:29 pm ::1 Returned 304 in 0 ms
+ HTTP  8/9/2026 8:53:44 pm ::1 GET /blog/topic/engineering/
+ HTTP  8/9/2026 8:53:44 pm ::1 Returned 404 in 2 ms
+ HTTP  8/9/2026 8:55:33 pm ::1 GET /blog/topic/index.html
+ HTTP  8/9/2026 8:55:33 pm ::1 Returned 301 in 41 ms
+ HTTP  8/9/2026 8:55:33 pm ::1 GET /blog/topic/index
+ HTTP  8/9/2026 8:55:33 pm ::1 Returned 301 in 1 ms
+ HTTP  8/9/2026 8:55:33 pm ::1 GET /blog/topic
+ HTTP  8/9/2026 8:55:33 pm ::1 Returned 200 in 17 ms
+ HTTP  8/9/2026 8:55:34 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 8:55:34 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 8:55:34 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 8:55:34 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:55:34 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:55:34 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:55:34 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 8:55:34 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 8:55:34 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 8:55:34 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:55:34 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 8:55:34 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 8:55:34 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 8:55:34 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /blog/
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 200 in 40 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 304 in 5 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 200 in 2 ms
+ HTTP  8/9/2026 9:05:21 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 9:05:21 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /blog/dashboard
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 10 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 5 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/journal-md.js
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /blog/login/
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 3 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 4 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 6 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 9:08:52 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:08:52 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /blog/dashboard/editor/index.html
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 301 in 2 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /blog/dashboard/editor/index
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 301 in 0 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /blog/dashboard/editor
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 200 in 3 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/journal-md.js
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/journal-api.js
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 2 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /blog/login/
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /css/journal.css
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/supabase-config.js
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 0 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/supabase-client.js
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 0 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/journal-ui.js
+ HTTP  8/9/2026 9:09:51 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:09:51 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:12:15 pm ::1 GET /feedback
+ HTTP  8/9/2026 9:12:15 pm ::1 Returned 200 in 11 ms
+ HTTP  8/9/2026 9:12:15 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 9:12:15 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:12:15 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 9:12:15 pm ::1 Returned 304 in 1 ms
+ HTTP  8/9/2026 9:12:16 pm ::1 GET /_vercel/insights/script.js
+ HTTP  8/9/2026 9:12:16 pm ::1 Returned 404 in 4 ms
+ HTTP  8/9/2026 9:12:16 pm ::1 GET /_vercel/insights/speed.js
+ HTTP  8/9/2026 9:12:16 pm ::1 Returned 404 in 2 ms
+ HTTP  8/9/2026 9:14:20 pm ::1 GET /connect
+ HTTP  8/9/2026 9:14:20 pm ::1 Returned 200 in 5 ms
+ HTTP  8/9/2026 9:14:20 pm ::1 GET /css/style.css
+ HTTP  8/9/2026 9:14:20 pm ::1 GET /js/main.js
+ HTTP  8/9/2026 9:14:20 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 9:14:20 pm ::1 Returned 304 in 8 ms
+ HTTP  8/9/2026 9:14:20 pm ::1 GET /_vercel/insights/script.js
+ HTTP  8/9/2026 9:14:20 pm ::1 GET /_vercel/insights/speed.js
+ HTTP  8/9/2026 9:14:20 pm ::1 Returned 404 in 2 ms
+ HTTP  8/9/2026 9:14:20 pm ::1 Returned 404 in 3 ms

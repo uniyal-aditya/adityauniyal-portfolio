@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Series — AU_ Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An article series on the AU_ Journal.">
+  <meta name="robots" content="noindex">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/journal.css">
+</head>
+<body>
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <div class="scanline"></div>
+
+  <nav class="nav stuck journal-nav" id="mainNav">
+    <a href="/" class="journal-logo">AU<span class="dot">_</span><span class="slash">/</span><span class="jl">JOURNAL</span></a>
+    <div class="nav-links">
+      <a href="/" data-index="01">Home</a>
+      <a href="/work.html" data-index="02">Work</a>
+      <a href="/about.html" data-index="03">About</a>
+      <a href="/blog/" data-index="04">Journal</a>
+    </div>
+    <div class="journal-nav-user" id="journalUser"></div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <a href="/">Home</a><a href="/work.html">Work</a><a href="/about.html">About</a><a href="/blog/">Journal</a>
+    <div class="mobile-nav-foot">
+      <a href="/blog/login/" class="btn-lime">Sign in →</a>
+      <a href="/blog/dashboard/" class="btn-ghost-line">Dashboard</a>
+    </div>
+  </nav>
+
+  <main id="seriesMain"></main>
+
+  <footer class="footer">
+    <div class="footer-left">© <span id="yr"></span> <strong>Aditya Uniyal</strong> · Built from scratch.</div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a>
+      <a href="/blog/">Journal</a>
+      <a href="/blog/rss.xml">RSS</a>
+      <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="/js/supabase-config.js"></script>
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/journal-ui.js"></script>
+  <script src="/js/journal-api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const UI = window.UI;
+
+    function slug() {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const i = parts.indexOf('series');
+      if (i >= 0 && parts[i + 1]) return decodeURIComponent(parts[i + 1]);
+      return UI.qs('s') || '';
+    }
+
+    async function boot() {
+      await window.AUJournalReady;
+      try { const s = await window.AUAuth.getSession(); UI.renderNavUser(s.user, s.profile); } catch (e) {}
+
+      const s = slug();
+      const main = $('seriesMain');
+      if (!window.SUPABASE_CONFIG.configured()) {
+        main.innerHTML = '<div class="journal-top"><div class="container">' + UI.empty('Journal is not connected yet.', 'See the README for setup.') + '</div></div>';
+        return;
+      }
+      const res = await window.API.getSeries(s);
+      if (!res || !res.series) {
+        main.innerHTML = '<div class="journal-top"><div class="container">' +
+          UI.empty('Series not found.', 'Series are listed from the journal index.') +
+          '<div style="text-align:center; margin-top:24px"><a class="btn-ghost-line" href="/blog/">← All articles</a></div></div></div>';
+        return;
+      }
+      const { series, posts } = res;
+      document.title = series.title + ' — AU_ Journal';
+
+      // reading progress: how many of the series' posts the user has ≥90% read
+      let progressNote = '';
+      if (posts.length) {
+        const me = await window.AUAuth.getUser();
+        if (me) {
+          const { data } = await window.getSupabase().from('reading_history')
+            .select('post_id, progress').eq('user_id', me.id);
+          const readDone = (data || []).filter(r => Number(r.progress) >= 90).map(r => r.post_id);
+          const done = posts.filter(p => readDone.includes(p.id)).length;
+          progressNote = '<div class="meta" style="margin-top:16px"><span>Your progress: <strong style="color:var(--lime)">' +
+            done + ' / ' + posts.length + '</strong> articles read</span></div>';
+        }
+      }
+
+      main.innerHTML =
+        '<div class="journal-top">' +
+          '<div class="container">' +
+            '<div class="jt-label">series</div>' +
+            '<h1>' + UI.escapeHtml(series.title) + '</h1>' +
+            (series.description ? '<p class="jt-sub">' + UI.escapeHtml(series.description) + '</p>' : '') +
+            progressNote +
+          '</div>' +
+        '</div>' +
+        '<section class="jsection"><div class="container">' +
+          '<div class="jsection-head"><div><div class="js-label">' + posts.length + ' parts · read in order</div><h2>The <em>series</em>.</h2></div></div>' +
+          '<div class="series-nav" style="margin:0 0 40px"><div class="sn-label">CHAPTERS</div><ol>' +
+            posts.map((p, i) => '<li><a href="/blog/post/' + UI.escapeHtml(p.slug) + '/">' + UI.escapeHtml(p.title) + ' <span style="color:var(--dim)">· ' + (p.reading_time || 1) + ' min</span></a></li>').join('') +
+          '</ol></div>' +
+          '<div id="seriesPosts"></div>' +
+        '</div></section>';
+
+      $('seriesPosts').innerHTML = posts.length
+        ? posts.map((p, i) => UI.postRow(p, i + 1)).join('')
+        : UI.empty('No articles yet.', 'Parts of this series will appear here.');
+
+      observeReveals();
+    }
+
+    function observeReveals() {
+      window.UI.observeReveals();
+    }
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

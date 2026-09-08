@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Journal — AU_ by Aditya Uniyal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AU_ Journal — thoughts, build logs, tutorials, experiments and stories from the things Aditya Uniyal builds and learns.">
+  <link rel="canonical" href="https://adityauniyal.is-a.dev/blog/">
+  <meta property="og:title" content="AU_ / JOURNAL">
+  <meta property="og:description" content="Ideas. Experiments. Things worth sharing.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://adityauniyal.is-a.dev/blog/">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="alternate" type="application/rss+xml" title="AU_ Journal RSS" href="/blog/rss.xml">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/journal.css">
+</head>
+<body>
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <div class="scanline"></div>
+
+  <nav class="nav stuck journal-nav" id="mainNav">
+    <a href="/" class="journal-logo">AU<span class="dot">_</span><span class="slash">/</span><span class="jl">JOURNAL</span></a>
+    <div class="nav-links">
+      <a href="/" data-index="01">Home</a>
+      <a href="/work.html" data-index="02">Work</a>
+      <a href="/about.html" data-index="03">About</a>
+      <a href="/blog/search/" data-index="04">Search</a>
+    </div>
+    <div class="journal-nav-user" id="journalUser"></div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <a href="/">Home</a>
+    <a href="/work.html">Work</a>
+    <a href="/about.html">About</a>
+    <a href="/blog/">Journal</a>
+    <a href="/blog/search/">Search</a>
+    <div class="mobile-nav-foot">
+      <a href="/blog/login/" class="btn-lime">Sign in →</a>
+      <a href="/blog/dashboard/" class="btn-ghost-line">Dashboard</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <div class="journal-top">
+      <div class="container">
+        <div class="jt-label">publication</div>
+        <h1>IDEAS.<br>EXPERIMENTS.<br>THINGS WORTH <em>sharing</em>.</h1>
+        <p class="jt-sub">Thoughts, build logs, tutorials, experiments and stories from the things
+          <span>I build and learn</span> — plus writing from approved contributors.</p>
+        <form class="jsearch" action="/blog/search/" method="get" role="search">
+          <input type="search" name="q" id="homeSearch" placeholder="search the journal — ⌕ title, author, tag…" aria-label="Search the journal">
+        </form>
+        <div class="topic-row" id="topicRow" aria-label="Topics">
+          <a class="topic-pill active" href="/blog/">All</a>
+          <!-- categories injected here dynamically from Supabase -->
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURED -->
+    <section class="jsection" id="featuredSection" hidden>
+      <div class="container">
+        <div class="jsection-head">
+          <div>
+            <div class="js-label">featured</div>
+            <h2>Editor's <em>pick</em>.</h2>
+          </div>
+        </div>
+        <div id="featuredSlot"></div>
+      </div>
+    </section>
+
+    <!-- TRENDING -->
+    <section class="jsection">
+      <div class="container">
+        <div class="jsection-head">
+          <div>
+            <div class="js-label">hot right now</div>
+            <h2>Trending <em>now</em>.</h2>
+          </div>
+          <span class="js-link">views + likes + bookmarks · last 7 days</span>
+        </div>
+        <div id="trendingSlot"></div>
+      </div>
+    </section>
+
+    <!-- LATEST -->
+    <section class="jsection">
+      <div class="container">
+        <div class="jsection-head">
+          <div>
+            <div class="js-label">fresh off the keyboard</div>
+            <h2>Latest <em>articles</em>.</h2>
+          </div>
+          <a class="js-link" href="/blog/search/?sort=newest">View all →</a>
+        </div>
+        <div id="latestSlot"></div>
+        <div style="margin-top:36px; text-align:center;">
+          <button class="btn-ghost-line" id="loadMore" hidden>Load more ↓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FROM THE BUILDER -->
+    <section class="jsection" id="builderSection" hidden>
+      <div class="container">
+        <div class="jsection-head">
+          <div>
+            <div class="js-label">~/au/projects</div>
+            <h2>From the <em>builder</em>.</h2>
+          </div>
+          <a class="js-link" href="/blog/topic/engineering/">Engineering →</a>
+        </div>
+        <div id="builderSlot"></div>
+      </div>
+    </section>
+
+    <!-- PROJECT JOURNALS -->
+    <section class="jsection" id="projectsSection" hidden>
+      <div class="container">
+        <div class="jsection-head">
+          <div>
+            <div class="js-label">connected builds</div>
+            <h2>Project <em>journals</em>.</h2>
+          </div>
+          <a class="js-link" href="/work.html">View portfolio →</a>
+        </div>
+        <div id="projectPostsSlot"></div>
+      </div>
+    </section>
+
+    <!-- WRITERS -->
+    <section class="jsection">
+      <div class="container">
+        <div class="jsection-head">
+          <div>
+            <div class="js-label">the humans</div>
+            <h2>Featured <em>writers</em>.</h2>
+          </div>
+        </div>
+        <div id="writersSlot"></div>
+      </div>
+    </section>
+
+    <!-- WRITE FOR AU CTA -->
+    <section class="jsection cta-band journal-cta">
+      <div class="eyebrow"><span></span>Open call</div>
+      <h2>HAVE SOMETHING<br>WORTH <em>sharing</em>?</h2>
+      <p>AU Journal publishes technical tutorials, build logs, case studies and notes from guest contributors.
+        Pitch your idea — if it's a fit, you get an author profile and an editor who actually reads.</p>
+      <div class="actions">
+        <a href="/blog/login/" class="btn-lime" style="font-size:13px; padding:14px 32px;">Become a contributor →</a>
+        <a href="/connect.html" class="btn-ghost-line" style="font-size:13px; padding:14px 28px;">Pitch via contact</a>
+      </div>
+      <div class="respond-note">Draft → review → publish · Full author credit + profile</div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter-band">
+      <div class="container">
+        <div class="newsletter-box">
+          <div class="nb-label">AU WEEKLY</div>
+          <h3>One email. <em>Zero fluff.</em></h3>
+          <p>What I'm building, breaking and learning — plus the best journal posts of the week. No spam, unsubscribe anytime.</p>
+          <form class="newsletter-form" id="newsletterForm">
+            <input type="email" required placeholder="you@example.com" aria-label="Email address" id="nlEmail">
+            <button class="btn-lime" type="submit" style="font-size:12px; padding:13px 22px;">Subscribe →</button>
+          </form>
+          <div class="newsletter-note">Join the list · est. 2026</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-left">© <span id="yr"></span> <strong>Aditya Uniyal</strong> · Built from scratch.</div>
+    <div class="footer-right">
+      <a href="/privacy.html">Privacy</a>
+      <a href="/work.html">Work</a>
+      <a href="/about.html">About</a>
+      <a href="/blog/rss.xml">RSS</a>
+      <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="/js/supabase-config.js"></script>
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/journal-ui.js"></script>
+  <script src="/js/journal-api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+
+    async function boot() {
+      await window.AUJournalReady;
+      // nav user
+      try {
+        const { user, profile } = await window.AUAuth.getSession();
+        window.UI.renderNavUser(user, profile);
+      } catch (e) { /* stay signed out */ }
+
+      const configured = window.SUPABASE_CONFIG.configured();
+      if (!configured) {
+        $('latestSlot').innerHTML = window.UI.empty(
+          'Journal is not connected yet.',
+          'Backend keys are missing — see js/supabase-config.js in the repo README.'
+        );
+        $('trendingSlot').innerHTML = window.UI.empty('No data yet.', 'Connect Supabase to power trending.', true);
+        $('writersSlot').innerHTML = window.UI.empty('No data yet.', 'Authors appear here once the journal is live.', true);
+        return;
+      }
+
+      // dynamic topic nav
+      window.API.categories().then(cats => {
+        const row = $('topicRow');
+        (cats || []).forEach(c => {
+          const a = document.createElement('a');
+          a.className = 'topic-pill';
+          a.href = '/blog/topic/' + c.slug + '/';
+          a.textContent = c.name;
+          row.appendChild(a);
+        });
+      });
+
+      // featured
+      window.API.featuredPost().then(fp => {
+        if (!fp) { $('featuredSection').hidden = true; return; }
+        $('featuredSection').hidden = false;
+        const p = fp.profiles || {};
+        const cat = fp.categories || {};
+        $('featuredSlot').innerHTML =
+          '<article class="feature-card">' +
+            '<a class="feature-media" href="/blog/post/' + window.UI.escapeHtml(fp.slug) + '/" tabindex="-1" aria-hidden="true">' + window.UI.coverMedia(fp) + '</a>' +
+            '<div class="feature-body">' +
+              '<div class="f-meta meta">' + window.UI.catChip(cat.name, cat.slug) + window.UI.typeChip(fp.post_type) +
+                '<span class="cat-chip" style="color:var(--rust);border-color:rgba(232,89,58,0.35);background:rgba(232,89,58,0.06)">FEATURED</span></div>' +
+              '<h3><a href="/blog/post/' + window.UI.escapeHtml(fp.slug) + '/">' + window.UI.escapeHtml(fp.title) + '</a></h3>' +
+              (fp.subtitle ? '<div class="f-sub">' + window.UI.escapeHtml(fp.subtitle) + '</div>' : '') +
+              (fp.excerpt ? '<div class="f-excerpt">' + window.UI.escapeHtml(fp.excerpt) + '</div>' : '') +
+              '<div class="f-foot meta">' + window.UI.authorChip(fp) +
+                '<span class="dot-sep">·</span><span>' + window.UI.fmtDate(fp.published_at) + '</span>' +
+                '<span class="dot-sep">·</span><span>' + (fp.reading_time || 1) + ' min read</span></div>' +
+            '</div>' +
+          '</article>';
+      });
+
+      // trending
+      window.API.trendingPosts(4).then(posts => {
+        if (!posts.length) { $('trendingSlot').innerHTML = window.UI.empty('No data yet.', 'Trending needs recent reads, likes and bookmarks.', true); return; }
+        $('trendingSlot').innerHTML = posts.map((p, i) => window.UI.postRow(p, i + 1)).join('');
+        observeReveals();
+      });
+
+      // latest + pagination
+      let offset = 0; const PAGE = 6; let done = false;
+      async function loadLatest() {
+        const posts = await window.API.latestPosts(PAGE, offset);
+        if (offset === 0) $('latestSlot').innerHTML = '';
+        if (!posts.length && offset === 0) {
+          $('latestSlot').innerHTML = window.UI.empty('No articles yet.', 'Published stories will appear here.');
+          $('loadMore').hidden = true;
+          return;
+        }
+        $('latestSlot').insertAdjacentHTML('beforeend', posts.map((p, i) => window.UI.postRow(p, offset + i + 1)).join(''));
+        offset += posts.length;
+        $('loadMore').hidden = posts.length < PAGE;
+        if (!done) { done = true; observeReveals(); }
+      }
+      $('loadMore').addEventListener('click', loadLatest);
+      await loadLatest();
+
+      // from the builder + project journals (posts owned by Aditya)
+      const owner = await window.API.profileByUsername(window.SUPABASE_CONFIG.ownerUsername);
+      if (owner) {
+        const own = await window.API.postsByAuthor(owner.username, 8);
+        const builder = own.filter(p => p.post_type !== 'project_journal').slice(0, 4);
+        const pj = own.filter(p => p.post_type === 'project_journal' || p.related_project);
+        if (builder.length) { $('builderSection').hidden = false; $('builderSlot').innerHTML = '<div class="builder-strip">' + builder.map((p, i) => window.UI.builderCell(p, i + 1)).join('') + '</div>'; }
+        if (pj.length) { $('projectsSection').hidden = false; $('projectPostsSlot').innerHTML = '<div class="post-grid">' + pj.slice(0, 3).map(p => window.UI.postCard(p)).join('') + '</div>'; }
+      }
+
+      // writers: owner + any verified/contributor with published posts
+      window.API.categories(); // warm
+      const { data: writers } = await window.getSupabase()
+        .from('profiles').select('username, display_name, avatar_url, bio, role, verified')
+        .in('role', ['owner', 'admin', 'verified_author', 'contributor']).limit(8);
+      if (writers && writers.length) {
+        $('writersSlot').innerHTML = '<div class="writers-grid">' + writers.map(w => window.UI.writerCard(w)).join('') + '</div>';
+        observeReveals();
+      } else {
+        $('writersSlot').innerHTML = window.UI.empty('No writers yet.', 'Contributors appear here as they join.', true);
+      }
+
+      observeReveals();
+    }
+
+    function observeReveals() {
+      window.UI.observeReveals();
+    }
+
+    // newsletter
+    $('newsletterForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = $('nlEmail').value.trim();
+      if (!email) return;
+      await window.AUJournalReady;
+      const ok = await window.API.subscribeNewsletter(email);
+      if (ok) { window.UI.toast('Subscribed — see you in the next issue.'); $('nlEmail').value = ''; }
+      else window.UI.err(window.API.lastError || 'Subscription failed.');
+    });
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

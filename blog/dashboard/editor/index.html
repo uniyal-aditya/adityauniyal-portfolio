@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Editor — AU_ Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/journal.css">
+</head>
+<body>
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <div class="scanline"></div>
+
+  <nav class="nav stuck journal-nav" id="mainNav">
+    <a href="/" class="journal-logo">AU<span class="dot">_</span><span class="slash">/</span><span class="jl">JOURNAL</span></a>
+    <div class="nav-links">
+      <a href="/blog/dashboard/" data-index="01">← Dashboard</a>
+      <a href="/blog/" data-index="02">Journal</a>
+    </div>
+    <div class="journal-nav-user" id="journalUser"></div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <main>
+    <div class="journal-top" style="border-bottom:none; padding-bottom:24px">
+      <div class="container">
+        <div class="jt-label">editor</div>
+        <h1 id="editorHeading" style="font-size:clamp(2.2rem,5vw,3.6rem)">New <em>article</em>.</h1>
+        <div class="meta" style="margin-top:16px" id="editorMeta"></div>
+      </div>
+    </div>
+
+    <div class="container" style="padding-bottom:100px">
+      <form class="dash-form" id="editorForm" style="max-width:none" onsubmit="return false">
+        <div class="dash-row">
+          <div class="cf-group">
+            <label class="cf-label" for="eTitle">Title *</label>
+            <input id="eTitle" required maxlength="120" placeholder="Why I built Numexa">
+          </div>
+          <div class="cf-group">
+            <label class="cf-label" for="eSlug">Slug *</label>
+            <input id="eSlug" required pattern="[a-z0-9-]+" title="lowercase-with-dashes" placeholder="why-i-built-numexa">
+          </div>
+        </div>
+        <div class="cf-group">
+          <label class="cf-label" for="eSubtitle">Subtitle</label>
+          <input id="eSubtitle" maxlength="200" placeholder="The story, in one italic line.">
+        </div>
+        <div class="cf-group">
+          <label class="cf-label" for="eExcerpt">Excerpt <span id="excerptCount" class="meta">(0 / 220)</span></label>
+          <textarea id="eExcerpt" maxlength="240" placeholder="One or two sentences shown in listings and search results."></textarea>
+        </div>
+
+        <div class="dash-row">
+          <div class="cf-group">
+            <label class="cf-label" for="eCategory">Category</label>
+            <select id="eCategory"><option value="">— none —</option></select>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label" for="eType">Post type</label>
+            <select id="eType">
+              <option value="article">Article</option>
+              <option value="tutorial">Tutorial</option>
+              <option value="guide">Guide</option>
+              <option value="build_log">Build log</option>
+              <option value="note">Note</option>
+              <option value="case_study">Case study</option>
+              <option value="project_journal">Project journal</option>
+            </select>
+          </div>
+        </div>
+        <div class="cf-group">
+          <label class="cf-label" for="eTags">Tags <span class="meta">(comma separated, max 8)</span></label>
+          <input id="eTags" placeholder="python, systems, discord">
+        </div>
+
+        <div class="dash-row">
+          <div class="cf-group">
+            <label class="cf-label" for="eSeries">Series</label>
+            <select id="eSeries"><option value="">— none —</option></select>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label" for="eProject">Related portfolio project</label>
+            <select id="eProject">
+              <option value="">— none —</option>
+              <option value="numexa">Numexa</option>
+              <option value="music-bot-zero">Music Bot Zero</option>
+              <option value="delight-restaurant">Delight Restaurant</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- COVER -->
+        <div class="cf-group">
+          <label class="cf-label">Cover image</label>
+          <div class="dropzone" id="coverDrop" role="button" tabindex="0" aria-label="Upload cover image">
+            DROP IMAGE HERE / CLICK TO UPLOAD <span class="meta">(jpg · png · webp · gif · max 5 MB)</span>
+          </div>
+          <input type="file" id="coverFile" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden>
+          <div class="upload-progress" id="coverProgress" hidden><div class="up-bar" id="coverBar"></div></div>
+          <div id="coverPreview" style="margin-top:12px"></div>
+          <div class="cf-group" style="margin-top:10px">
+            <input id="eCoverAlt" placeholder="Alt text — describe the image (accessibility)">
+          </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="cf-group">
+          <label class="cf-label" for="eContent">Content * <span class="meta">markdown · est. reading time <span id="rtEstimate">1</span> min</span></label>
+          <div class="editor-shell">
+            <div class="editor-toolbar" role="toolbar" aria-label="Formatting">
+              <button type="button" data-md="h2" title="Heading">H2</button>
+              <button type="button" data-md="h3" title="Subheading">H3</button>
+              <button type="button" data-md="bold" title="Bold"><strong>B</strong></button>
+              <button type="button" data-md="italic" title="Italic"><em>I</em></button>
+              <button type="button" data-md="code" title="Inline code">&lt;/&gt;</button>
+              <span class="et-sep"></span>
+              <button type="button" data-md="ul" title="Bullet list">• List</button>
+              <button type="button" data-md="ol" title="Numbered list">1. List</button>
+              <button type="button" data-md="quote" title="Blockquote">❝</button>
+              <button type="button" data-md="hr" title="Divider">—</button>
+              <span class="et-sep"></span>
+              <button type="button" data-md="link" title="Link">🔗 Link</button>
+              <button type="button" data-md="codeblock" title="Code block">{ } Code</button>
+              <button type="button" data-md="img" title="Image">🖼 Image</button>
+              <span class="et-sep"></span>
+              <button type="button" id="btnPreview" title="Preview">👁 Preview</button>
+            </div>
+            <textarea id="eContent" class="editor-area" required
+              data-placeholder="Write in Markdown. Headings (#), **bold**, *italic*, `code`, ``` blocks, > quotes, lists, [links](https://…), images, bare YouTube/GitHub URLs become embeds…"
+              style="font-family:var(--f-mono); font-size:14px"></textarea>
+          </div>
+        </div>
+
+        <!-- SEO -->
+        <details style="border:1px solid var(--line); border-radius:4px; background:var(--sand); padding:20px 24px;">
+          <summary style="font-family:var(--f-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--dim); cursor:pointer;">SEO &amp; META</summary>
+          <div class="dash-form" style="margin-top:18px">
+            <div class="cf-group">
+              <label class="cf-label" for="eSeoTitle">SEO title override</label>
+              <input id="eSeoTitle" maxlength="70" placeholder="Defaults to the article title">
+            </div>
+            <div class="cf-group">
+              <label class="cf-label" for="eSeoDesc">SEO description</label>
+              <textarea id="eSeoDesc" maxlength="160" placeholder="Defaults to the excerpt."></textarea>
+            </div>
+          </div>
+        </details>
+
+        <!-- ACTIONS -->
+        <div style="display:flex; gap:10px; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:24px; margin-top:8px;">
+          <button class="btn-lime" type="button" id="btnSave" style="font-size:12px; padding:13px 26px;">Save draft →</button>
+          <button class="btn-ghost-line" type="button" id="btnSubmit" style="font-size:12px; padding:13px 26px;">Submit for review</button>
+          <button class="btn-lime" type="button" id="btnPublish" style="font-size:12px; padding:13px 26px; display:none;">Publish now →</button>
+          <a class="btn-ghost-line" href="/blog/dashboard/" style="font-size:12px; padding:13px 26px;">Back to dashboard</a>
+          <span class="meta" id="saveState" style="align-self:center"></span>
+        </div>
+      </form>
+
+      <!-- PREVIEW DRAWER -->
+      <div id="previewPane" hidden style="margin-top:40px; border-top:1px solid var(--line); padding-top:32px;">
+        <div class="js-label" style="font-family:var(--f-mono); font-size:10px; color:var(--lime); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:16px;">// PREVIEW — how readers will see it</div>
+        <h2 style="font-family:var(--f-display); font-size:clamp(2rem,5vw,3.4rem); line-height:0.98; margin-bottom:12px;" id="pvTitle"></h2>
+        <div id="pvSubtitle" style="font-family:var(--f-serif); font-style:italic; color:var(--dim); margin-bottom:24px;"></div>
+        <article class="article-body" id="pvBody"></article>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/supabase-config.js"></script>
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/journal-ui.js"></script>
+  <script src="/js/journal-md.js"></script>
+  <script src="/js/journal-api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const UI = window.UI;
+    let user = null, profile = null, postId = null, coverUrl = null;
+    const canPublish = () => profile && ['verified_author', 'admin', 'owner'].includes(profile.role);
+
+    async function boot() {
+      await window.AUJournalReady;
+      const s = await window.AUAuth.getSession();
+      user = s.user; profile = s.profile;
+      UI.renderNavUser(user, profile);
+      if (!user) { window.location.replace('/blog/login/'); return; }
+      if (!['contributor', 'verified_author', 'admin', 'owner'].includes(profile?.role || '')) {
+        $('editorMeta').innerHTML = '<span style="color:var(--rust)">Your account is not a contributor yet — you can draft, but publishing requires promotion. Pitch via the contact page.</span>';
+      } else {
+        $('editorMeta').innerHTML = 'role: <span class="role-chip ' + profile.role + '">' + profile.role + '</span>' +
+          (canPublish() ? ' · direct publishing enabled' : ' · submissions go through review');
+      }
+      if (canPublish()) $('btnPublish').style.display = '';
+
+      // categories + series dropdowns
+      const [cats, series] = await Promise.all([API.categories(), API.seriesList()]);
+      $('eCategory').innerHTML += (cats || []).map(c => '<option value="' + c.id + '">' + UI.escapeHtml(c.name) + '</option>').join('');
+      $('eSeries').innerHTML += (series || []).map(sr => '<option value="' + sr.id + '">' + UI.escapeHtml(sr.title) + '</option>').join('');
+
+      // editing existing post?
+      const id = UI.qs('id');
+      if (id) {
+        postId = id;
+        const post = await API.getMyPost(id);
+        if (!post) { UI.err('Article not found or not yours.'); return; }
+        $('editorHeading').innerHTML = 'Edit: ' + UI.escapeHtml(post.title);
+        $('eTitle').value = post.title;
+        $('eSlug').value = post.slug;
+        $('eSubtitle').value = post.subtitle || '';
+        $('eExcerpt').value = post.excerpt || '';
+        $('eCategory').value = post.category_id || '';
+        $('eType').value = post.post_type;
+        $('eSeries').value = post.series_id || '';
+        $('eProject').value = post.related_project || '';
+        $('eContent').value = post.content || '';
+        $('eSeoTitle').value = post.seo_title || '';
+        $('eSeoDesc').value = post.seo_description || '';
+        coverUrl = post.cover_image_url || null;
+        if (coverUrl) renderCover();
+        const tags = await API.getPostTags(id);
+        $('eTags').value = tags.map(t => t.name).join(', ');
+        $('eMeta').textContent = 'status: ' + post.status + ' · reading time ' + post.reading_time + ' min';
+      }
+
+      wire();
+    }
+
+    function renderCover() {
+      $('coverPreview').innerHTML = coverUrl
+        ? '<img src="' + UI.escapeHtml(coverUrl) + '" alt="Cover preview" style="max-width:420px; border:1px solid var(--line); border-radius:4px">' +
+          '<button class="mini-btn danger" id="coverRemove" style="margin-top:8px">Remove cover</button>'
+        : '';
+      $('coverRemove')?.addEventListener('click', () => { coverUrl = null; renderCover(); });
+    }
+
+    async function uploadCover(file) {
+      if (!file) return;
+      $('coverProgress').hidden = false;
+      $('coverBar').style.width = '30%';
+      const row = await API.uploadMedia(file);
+      $('coverBar').style.width = '100%';
+      setTimeout(() => { $('coverProgress').hidden = true; $('coverBar').style.width = '0%'; }, 500);
+      if (row) { coverUrl = row.public_url; renderCover(); UI.toast('Cover uploaded.'); }
+      else UI.err(window.API.lastError || 'Upload failed.');
+    }
+
+    /* ── markdown toolbar ── */
+    function wrapSelection(before, after) {
+      const ta = $('eContent');
+      const s = ta.selectionStart, e = ta.selectionEnd;
+      const v = ta.value;
+      const sel = v.slice(s, e) || 'text';
+      ta.value = v.slice(0, s) + before + sel + after + v.slice(e);
+      ta.focus();
+      ta.selectionStart = s + before.length;
+      ta.selectionEnd = s + before.length + sel.length;
+    }
+    function prefixLines(prefix) {
+      const ta = $('eContent');
+      const s = ta.selectionStart, e = ta.selectionEnd;
+      const v = ta.value;
+      const start = v.lastIndexOf('\n', s - 1) + 1;
+      let end = v.indexOf('\n', e); if (end === -1) end = v.length;
+      const block = v.slice(start, end).split('\n').map(l => prefix + l).join('\n');
+      ta.value = v.slice(0, start) + block + v.slice(end);
+      ta.focus();
+    }
+    function insertAtCursor(text) {
+      const ta = $('eContent');
+      const s = ta.selectionStart;
+      ta.value = ta.value.slice(0, s) + text + ta.value.slice(ta.selectionEnd);
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = s + text.length;
+    }
+
+    function wire() {
+      // slug auto-generation
+      let slugDirty = false;
+      $('eSlug').addEventListener('input', () => { slugDirty = true; });
+      $('eTitle').addEventListener('input', () => {
+        if (!postId && !slugDirty) $('eSlug').value = UI.slugify($('eTitle').value);
+      });
+      // excerpt counter
+      $('eExcerpt').addEventListener('input', () => {
+        $('excerptCount').textContent = '(' + $('eExcerpt').value.length + ' / 220)';
+      });
+      // reading time estimate
+      $('eContent').addEventListener('input', () => {
+        $('rtEstimate').textContent = UI.readingTime($('eContent').value);
+      });
+
+      // toolbar
+      document.querySelectorAll('.editor-toolbar [data-md]').forEach(b => {
+        b.addEventListener('click', () => {
+          const k = b.getAttribute('data-md');
+          const map = {
+            h2: () => prefixLines('## '), h3: () => prefixLines('### '),
+            bold: () => wrapSelection('**', '**'), italic: () => wrapSelection('*', '*'),
+            code: () => wrapSelection('`', '`'), ul: () => prefixLines('- '),
+            ol: () => prefixLines('1. '), quote: () => prefixLines('> '),
+            hr: () => insertAtCursor('\n\n---\n\n'),
+            codeblock: () => insertAtCursor('\n```js\n\n```\n'),
+            link: () => { const u = prompt('Link URL (https://…):'); if (u) wrapSelection('[', '](' + u + ')'); },
+            img: () => { const u = prompt('Image URL (https://…):'); if (u) insertAtCursor('\n![' + ($('eContent').value.slice(0, 0) || 'image') + '](' + u + ')\n'); },
+          };
+          (map[k] || (() => {}))();
+          $('rtEstimate').textContent = UI.readingTime($('eContent').value);
+        });
+      });
+
+      // preview
+      $('btnPreview').addEventListener('click', () => {
+        const pane = $('previewPane');
+        pane.hidden = !pane.hidden;
+        if (!pane.hidden) {
+          $('pvTitle').textContent = $('eTitle').value || 'Untitled';
+          $('pvSubtitle').textContent = $('eSubtitle').value || '';
+          $('pvBody').innerHTML = AUMD.render($('eContent').value || '');
+          pane.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+
+      // cover upload interactions
+      const dz = $('coverDrop');
+      dz.addEventListener('click', () => $('coverFile').click());
+      dz.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('coverFile').click(); } });
+      ['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('drag'); }));
+      ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('drag'); }));
+      dz.addEventListener('drop', e => uploadCover(e.dataTransfer.files[0]));
+      $('coverFile').addEventListener('change', e => uploadCover(e.target.files[0]));
+
+      // save / submit / publish
+      $('btnSave').addEventListener('click', () => save('draft'));
+      $('btnSubmit').addEventListener('click', () => save('submitted'));
+      $('btnPublish').addEventListener('click', () => save('published'));
+    }
+
+    async function save(status) {
+      const title = $('eTitle').value.trim();
+      const slug = UI.slugify($('eSlug').value);
+      const content = $('eContent').value;
+      if (!title) { UI.err('Title is required.'); return; }
+      if (!slug) { UI.err('Slug is required.'); return; }
+      if (!content.trim()) { UI.err('Content is required.'); return; }
+
+      const payload = {
+        title,
+        slug,
+        subtitle: $('eSubtitle').value.trim() || null,
+        excerpt: $('eExcerpt').value.trim() || null,
+        category_id: $('eCategory').value ? Number($('eCategory').value) : null,
+        post_type: $('eType').value,
+        series_id: $('eSeries').value ? Number($('eSeries').value) : null,
+        related_project: $('eProject').value || null,
+        cover_image_url: coverUrl,
+        cover_image_alt: $('eCoverAlt').value.trim() || null,
+        content,
+        reading_time: UI.readingTime(content),
+        seo_title: $('eSeoTitle').value.trim() || null,
+        seo_description: $('eSeoDesc').value.trim() || null,
+        status,
+      };
+
+      $('saveState').textContent = 'saving…';
+      let res;
+      if (postId) {
+        res = await API.savePost(payload, postId);
+      } else {
+        payload.author_id = user.id;
+        res = await API.savePost(payload, null);
+        if (res) postId = res.id;
+      }
+      if (!res) {
+        $('saveState').textContent = '';
+        UI.err(window.API.lastError || 'Save failed.');
+        return;
+      }
+      // tags + project link
+      await API.setTags(res.id, $('eTags').value.split(',').map(s => s.trim()).filter(Boolean));
+      $('saveState').textContent = 'saved ✓ (' + status + ')';
+      UI.toast('Saved as ' + status + '.');
+      if (status !== 'draft') {
+        setTimeout(() => { window.location.href = '/blog/dashboard/?tab=' + (status === 'published' ? 'published' : 'submitted'); }, 700);
+      }
+    }
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

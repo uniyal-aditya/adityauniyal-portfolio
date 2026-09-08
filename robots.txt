@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /blog/dashboard/
+Disallow: /blog/admin/
+Disallow: /blog/login/
+Disallow: /netlify/
+
+Sitemap: https://adityauniyal.is-a.dev/blog/sitemap.xml

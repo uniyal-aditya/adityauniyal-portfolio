@@ -24,6 +24,7 @@
       <a href="work.html" class="active" data-index="02">Work</a>
       <a href="about.html" data-index="03">About</a>
       <a href="connect.html" data-index="04">Contact</a>
+      <a href="/blog/" data-index="05">Journal</a>
     </div>
     <button class="nav-hire" data-hire>Hire Me →</button>
     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
@@ -33,6 +34,7 @@
     <a href="work.html" class="active">Work</a>
     <a href="about.html">About</a>
     <a href="connect.html">Contact</a>
+    <a href="/blog/">Journal</a>
     <div class="mobile-nav-foot">
       <button class="btn-lime" data-hire>Hire Me →</button>
       <a href="assets/Aditya_Uniyal_Resume.pdf" download class="btn-ghost-line">CV ↓</a>
@@ -146,6 +148,20 @@
       </div>
     </section>
 
+    <!-- BUILD JOURNAL — related Journal articles per project (live from Supabase) -->
+    <section id="build-journal" hidden>
+      <div class="container">
+        <div class="work-header reveal">
+          <h2>Build<br><em>journal</em>.</h2>
+          <div class="work-header-meta">
+            <a href="/blog/" style="color:var(--lime); text-decoration:none; display:block; margin-bottom:6px;">AU_ / JOURNAL →</a>
+            The stories behind these builds.
+          </div>
+        </div>
+        <div id="buildJournalSlots"></div>
+      </div>
+    </section>
+
     <!-- CTA band -->
     <section class="cta-band">
       <div class="eyebrow"><span></span>Open to projects</div>
@@ -199,6 +215,11 @@
       </div>
     </div>
   </div>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/journal-ui.js"></script>
+  <script src="js/journal-api.js"></script>
+  <script src="js/journal-home.js" data-mode="work"></script>
   <script src="js/main.js"></script><!-- Vercel Web Analytics (visitors, page views, etc.) -->
   <script defer src="/_vercel/insights/script.js"></script>
 

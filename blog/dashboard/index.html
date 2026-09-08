@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard — AU_ Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/journal.css">
+</head>
+<body>
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <div class="scanline"></div>
+
+  <nav class="nav stuck journal-nav" id="mainNav">
+    <a href="/" class="journal-logo">AU<span class="dot">_</span><span class="slash">/</span><span class="jl">JOURNAL</span></a>
+    <div class="nav-links">
+      <a href="/" data-index="01">Home</a>
+      <a href="/blog/" data-index="02">Journal</a>
+      <a href="/blog/admin/" data-index="03" id="navAdminLink" hidden>Admin</a>
+    </div>
+    <div class="journal-nav-user" id="journalUser"></div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <main id="dashMain">
+    <div class="dash-layout container">
+      <aside class="dash-side" id="dashSide" hidden>
+        <div class="ds-label">// account</div>
+        <a href="/blog/dashboard/" class="active" data-tab="overview">Overview</a>
+        <a href="/blog/dashboard/?tab=bookmarks" data-tab="bookmarks">Bookmarks</a>
+        <a href="/blog/dashboard/?tab=likes" data-tab="likes">Likes</a>
+        <a href="/blog/dashboard/?tab=following" data-tab="following">Following</a>
+        <a href="/blog/dashboard/?tab=history" data-tab="history">Reading history</a>
+        <a href="/blog/dashboard/?tab=profile" data-tab="profile">Profile</a>
+        <a href="/blog/dashboard/editor/">+ New article</a>
+        <div id="sideContributor" hidden>
+          <div class="ds-label" style="margin-top:20px">// contributor</div>
+          <a href="/blog/dashboard/?tab=my-articles" data-tab="my-articles">My articles</a>
+          <a href="/blog/dashboard/?tab=drafts" data-tab="drafts">Drafts</a>
+          <a href="/blog/dashboard/?tab=submitted" data-tab="submitted">Submitted</a>
+          <a href="/blog/dashboard/?tab=published" data-tab="published">Published</a>
+          <a href="/blog/dashboard/?tab=analytics" data-tab="analytics">Analytics</a>
+          <a href="/blog/dashboard/?tab=media" data-tab="media">Media</a>
+        </div>
+        <div style="margin-top:28px">
+          <button class="btn-ghost-line" id="btnSignOut" style="font-size:10px; padding:9px 16px;">Sign out</button>
+        </div>
+      </aside>
+
+      <div id="dashContent" style="min-height:320px">
+        <div class="empty-state"><div class="es-glyph">…</div><div class="es-title">Loading session…</div></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/supabase-config.js"></script>
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/journal-ui.js"></script>
+  <script src="/js/journal-md.js"></script>
+  <script src="/js/journal-api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const UI = window.UI;
+
+    let user = null, profile = null;
+    const isContrib = () => profile && ['contributor', 'verified_author', 'admin', 'owner'].includes(profile.role);
+
+    const tab = UI.qs('tab') || 'overview';
+
+    async function boot() {
+      await window.AUJournalReady;
+      const s = await window.AUAuth.getSession();
+      user = s.user; profile = s.profile;
+      UI.renderNavUser(user, profile);
+      if (!user) { window.location.replace('/blog/login/'); return; }
+      if (profile && (profile.role === 'admin' || profile.role === 'owner')) $('navAdminLink').hidden = false;
+      if (isContrib()) $('sideContributor').hidden = false;
+      $('dashSide').hidden = false;
+      highlight(tab);
+      render(tab);
+    }
+
+    function highlight(t) {
+      document.querySelectorAll('.dash-side a[data-tab]').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('data-tab') === t);
+      });
+    }
+
+    async function render(t) {
+      const c = $('dashContent');
+      highlight(t);
+      try { await renderers[t](c); }
+      catch (e) {
+        c.innerHTML = UI.empty('Something went wrong.', e.message || String(e));
+      }
+    }
+
+    function statCards(rows) {
+      return '<div class="stat-cards" style="margin-bottom:32px">' + rows.map(r =>
+        '<div class="stat-card"><div class="sc-num">' + r[1] + '</div><div class="sc-label">' + r[0] + '</div></div>').join('') + '</div>';
+    }
+
+    function sectionHead(label, title, em) {
+      return '<div class="jsection-head" style="margin-bottom:28px"><div><div class="js-label">' + label + '</div>' +
+        '<h2 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">' + title + ' <em>' + (em || '') + '</em></h2></div></div>';
+    }
+
+    const renderers = {
+      /* ── OVERVIEW ── */
+      overview: async (c) => {
+        const [bookmarks, history] = await Promise.all([API.myBookmarks(), API.myHistory()]);
+        let cards = [
+          ['Bookmarks', bookmarks.length],
+          ['Continue reading', history.filter(h => h.progress > 2 && h.progress < 95).length],
+          ['Role', profile.role || 'reader'],
+        ];
+        let posts = [];
+        if (isContrib()) {
+          posts = await API.myPosts();
+          cards.push(['My articles', posts.length]);
+          cards.push(['Published', posts.filter(p => p.status === 'published').length]);
+          cards.push(['Views', UI.fmtNum(posts.reduce((a, p) => a + (p.view_count || 0), 0))]);
+        }
+        let html = sectionHead('~/au/dashboard', 'Welcome back,', (profile.display_name || profile.username).split(' ')[0] + '.');
+        html += statCards(cards);
+        if (isContrib()) {
+          html += '<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px">' +
+            '<a class="btn-lime" href="/blog/dashboard/editor/" style="font-size:11px; padding:12px 20px;">+ New article</a>' +
+            '<a class="btn-ghost-line" href="/blog/dashboard/?tab=analytics" style="font-size:11px; padding:12px 20px;">Analytics →</a></div>';
+        }
+        // continue reading
+        const cont = history.filter(h => h.progress > 2 && h.progress < 95).slice(0, 3);
+        html += sectionHead('pick up where you left off', 'Continue <em>reading</em>.');
+        html += cont.length
+          ? cont.map(h =>
+              '<a class="post-row" href="/blog/post/' + UI.escapeHtml(h.slug) + '/" style="grid-template-columns:1fr">' +
+              '<div><div class="meta" style="margin-bottom:6px"><span>' + Math.round(h.progress) + '% read</span></div>' +
+              '<h3>' + UI.escapeHtml(h.title) + '</h3></div></a>').join('')
+          : UI.empty('Nothing in progress.', 'Articles you open are tracked here so you can resume.', true);
+        c.innerHTML = html;
+      },
+
+      /* ── BOOKMARKS / LIKES ── */
+      bookmarks: async (c) => {
+        const posts = await API.myBookmarks();
+        c.innerHTML = sectionHead('saved for later', 'Your <em>bookmarks</em>.') +
+          (posts.length ? '<div class="post-grid">' + posts.map(p => UI.postCard(p)).join('') + '</div>'
+                        : UI.empty('No bookmarks yet.', 'Hit ⌘ Bookmark on any article.'));
+      },
+      likes: async (c) => {
+        const posts = await API.myLikedPosts();
+        c.innerHTML = sectionHead('things you enjoyed', 'Your <em>likes</em>.') +
+          (posts.length ? '<div class="post-grid">' + posts.map(p => UI.postCard(p)).join('') + '</div>'
+                        : UI.empty('No likes yet.', 'Hit ♥ Like on articles worth remembering.'));
+      },
+
+      /* ── FOLLOWING ── */
+      following: async (c) => {
+        const profiles = await API.myFollowing();
+        c.innerHTML = sectionHead('writers you follow', 'Your <em>people</em>.') +
+          (profiles.length ? '<div class="writers-grid">' + profiles.map(p => UI.writerCard(p)).join('') + '</div>'
+                           : UI.empty('Not following anyone yet.', 'Follow authors from their profile pages.'));
+      },
+
+      /* ── HISTORY ── */
+      history: async (c) => {
+        const rows = await API.myHistory();
+        c.innerHTML = sectionHead('recently read', 'Reading <em>history</em>.') +
+          (rows.length ? rows.map(h =>
+            '<a class="post-row" href="/blog/post/' + UI.escapeHtml(h.slug) + '/" style="grid-template-columns:1fr">' +
+            '<div><div class="meta" style="margin-bottom:6px"><span>' + Math.round(h.progress) + '% read · ' + UI.timeAgo(h.updated_at) + '</span></div>' +
+            '<h3>' + UI.escapeHtml(h.title) + '</h3></div></a>').join('')
+            : UI.empty('No reading history yet.', 'Progress is saved per account as you read.'));
+      },
+
+      /* ── PROFILE ── */
+      profile: async (c) => {
+        c.innerHTML = sectionHead('your public identity', 'Profile <em>settings</em>.') +
+          '<form class="dash-form" id="profileForm">' +
+          '<div class="dash-row">' +
+          '<div class="cf-group"><label class="cf-label" for="pfDisplay">Display name</label>' +
+          '<input id="pfDisplay" value="' + UI.escapeHtml(profile.display_name || '') + '"></div>' +
+          '<div class="cf-group"><label class="cf-label" for="pfUsername">Username (slug)</label>' +
+          '<input id="pfUsername" value="' + UI.escapeHtml(profile.username || '') + '" pattern="[a-z0-9_-]+" title="lowercase letters, numbers, dashes"></div>' +
+          '</div>' +
+          '<div class="cf-group"><label class="cf-label" for="pfBio">Bio</label><textarea id="pfBio">' + UI.escapeHtml(profile.bio || '') + '</textarea></div>' +
+          '<div class="cf-group"><label class="cf-label" for="pfAvatar">Avatar URL</label><input id="pfAvatar" value="' + UI.escapeHtml(profile.avatar_url || '') + '" placeholder="https://…"></div>' +
+          '<div class="dash-row">' +
+          '<div class="cf-group"><label class="cf-label" for="pfWebsite">Website</label><input id="pfWebsite" value="' + UI.escapeHtml(profile.website || '') + '"></div>' +
+          '<div class="cf-group"><label class="cf-label" for="pfGithub">GitHub</label><input id="pfGithub" value="' + UI.escapeHtml(profile.github_url || '') + '"></div>' +
+          '</div>' +
+          '<div class="cf-group"><label class="cf-label" for="pfLinkedin">LinkedIn</label><input id="pfLinkedin" value="' + UI.escapeHtml(profile.linkedin_url || '') + '"></div>' +
+          '<button class="btn-lime" type="submit" style="font-size:12px; padding:12px 24px;">Save profile →</button>' +
+          '<div class="meta" id="profileMsg" style="min-height:16px"></div>' +
+          '</form>' +
+          '<div style="margin-top:28px; border-top:1px solid var(--line); padding-top:20px;" class="meta">' +
+          'Email: ' + UI.escapeHtml(profile.email || user.email || '') + ' · Role: <span class="role-chip ' + profile.role + '">' + profile.role + '</span>' +
+          '</div>';
+        $('profileForm').addEventListener('submit', async e => {
+          e.preventDefault();
+          const payload = {
+            display_name: $('pfDisplay').value.trim(),
+            username: $('pfUsername').value.trim().toLowerCase(),
+            bio: $('pfBio').value.trim() || null,
+            avatar_url: $('pfAvatar').value.trim() || null,
+            website: $('pfWebsite').value.trim() || null,
+            github_url: $('pfGithub').value.trim() || null,
+            linkedin_url: $('pfLinkedin').value.trim() || null,
+          };
+          const { error } = await getSupabase().from('profiles').update(payload).eq('id', user.id);
+          $('profileMsg').textContent = error ? 'Save failed: ' + error.message : 'Profile saved ✓';
+          if (!error) UI.toast('Profile saved.');
+        });
+      },
+
+      /* ── MY ARTICLES ── */
+      'my-articles': async (c) => { c.innerHTML = await articlesTable(null); },
+      drafts: async (c) => { c.innerHTML = await articlesTable(['draft', 'rejected']); },
+      submitted: async (c) => { c.innerHTML = await articlesTable(['submitted', 'review', 'approved']); },
+      published: async (c) => { c.innerHTML = await articlesTable(['published']); },
+
+      /* ── ANALYTICS ── */
+      analytics: async (c) => {
+        const rows = await API.myAnalytics();
+        c.innerHTML = sectionHead('your numbers — real data only', 'Article <em>analytics</em>.') +
+          (rows.length
+            ? '<div class="table-wrap"><table class="data"><thead><tr>' +
+              '<th>Article</th><th>Status</th><th>Views</th><th>Likes</th><th>Bookmarks</th><th>Comments</th><th>Avg progress</th><th>Completion</th>' +
+              '</tr></thead><tbody>' +
+              rows.map(r =>
+                '<tr><td><a href="/blog/post/' + UI.escapeHtml(r.slug) + '/">' + UI.escapeHtml(r.title) + '</a></td>' +
+                '<td><span class="status-chip ' + r.status + '">' + r.status + '</span></td>' +
+                '<td>' + UI.fmtNum(r.views) + '</td><td>' + UI.fmtNum(r.likes) + '</td>' +
+                '<td>' + UI.fmtNum(r.bookmarks) + '</td><td>' + UI.fmtNum(r.comments) + '</td>' +
+                '<td>' + (r.avg_progress || 0) + '%</td><td>' + (r.completion_rate || 0) + '%</td></tr>').join('') +
+              '</tbody></table></div>'
+            : UI.empty('No data yet.', 'Analytics appear once your articles get reads.'));
+      },
+
+      /* ── MEDIA ── */
+      media: async (c) => {
+        const rows = await API.myMedia();
+        c.innerHTML = sectionHead('your uploads', 'Media <em>library</em>.') +
+          '<a class="btn-ghost-line" href="/blog/dashboard/editor/" style="font-size:11px; padding:11px 18px; margin-bottom:24px; display:inline-flex;">Upload via editor →</a>' +
+          (rows.length
+            ? '<div class="media-grid">' + rows.map(m =>
+                '<div class="media-item"><img src="' + UI.escapeHtml(m.public_url) + '" alt="' + UI.escapeHtml(m.alt_text || '') + '" loading="lazy">' +
+                '<div class="mi-meta">' + UI.escapeHtml(m.alt_text || m.storage_path) + '</div>' +
+                '<button class="mi-del" data-id="' + m.id + '" data-path="' + UI.escapeHtml(m.storage_path) + '" aria-label="Delete image">✕</button></div>').join('') + '</div>'
+            : UI.empty('No media yet.', 'Upload images from the article editor.'));
+        c.querySelectorAll('.mi-del').forEach(b => b.addEventListener('click', async () => {
+          if (!confirm('Delete this image?')) return;
+          const ok = await API.deleteMedia({ id: b.getAttribute('data-id'), storage_path: b.getAttribute('data-path') });
+          if (ok) { UI.toast('Image deleted.'); render('media'); }
+          else UI.err(window.API.lastError || 'Delete failed.');
+        }));
+      },
+    };
+
+    async function articlesTable(statuses) {
+      let posts = await API.myPosts();
+      if (statuses) posts = posts.filter(p => statuses.includes(p.status));
+      const head = sectionHead('contributor', statuses ? 'Filtered <em>articles</em>.' : 'All my <em>articles</em>.');
+      if (!posts.length) return head + UI.empty('No data yet.', 'Write your first article from the editor.');
+      return head +
+        '<div class="table-wrap"><table class="data"><thead><tr>' +
+        '<th>Title</th><th>Status</th><th>Type</th><th>Views</th><th>Likes</th><th>Updated</th><th></th>' +
+        '</tr></thead><tbody>' +
+        posts.map(p =>
+          '<tr><td style="max-width:280px"><a href="/blog/dashboard/editor/?id=' + p.id + '">' + UI.escapeHtml(p.title) + '</a></td>' +
+          '<td><span class="status-chip ' + p.status + '">' + p.status + '</span></td>' +
+          '<td class="meta">' + UI.typeLabel(p.post_type) + '</td>' +
+          '<td>' + UI.fmtNum(p.view_count) + '</td><td>' + UI.fmtNum(p.like_count) + '</td>' +
+          '<td class="meta">' + UI.timeAgo(p.updated_at) + '</td>' +
+          '<td><div style="display:flex; gap:6px">' +
+          (p.status === 'published' ? '<a class="mini-btn" href="/blog/post/' + UI.escapeHtml(p.slug) + '/">View</a>' : '') +
+          (['draft', 'rejected'].includes(p.status)
+            ? '<button class="mini-btn solid" data-submit="' + p.id + '">Submit</button>' : '') +
+          '<button class="mini-btn danger" data-del="' + p.id + '">Delete</button>' +
+          '</div></td></tr>').join('') +
+        '</tbody></table></div>' +
+        '<script-wire></' + 'script-wire>';
+    }
+
+    // table action wiring (event delegation on content)
+    $('dashContent').addEventListener('click', async e => {
+      const submitBtn = e.target.closest('[data-submit]');
+      const delBtn = e.target.closest('[data-del]');
+      if (submitBtn) {
+        const ok = await API.setPostStatus(submitBtn.getAttribute('data-submit'), 'submitted');
+        if (ok) { UI.toast('Submitted for review.'); render(tab); }
+        else UI.err(window.API.lastError || 'Submit failed.');
+      }
+      if (delBtn) {
+        if (!confirm('Delete this article permanently?')) return;
+        const ok = await API.deletePost(delBtn.getAttribute('data-del'));
+        if (ok) { UI.toast('Article deleted.'); render(tab); }
+        else UI.err(window.API.lastError || 'Delete failed.');
+      }
+    });
+
+    $('btnSignOut').addEventListener('click', async () => {
+      await window.AUAuth.signOut();
+      window.location.href = '/blog/';
+    });
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

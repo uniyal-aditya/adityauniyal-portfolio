@@ -350,6 +350,28 @@ export async function fetchFollowers(profileId: string, limit = 24): Promise<Pro
   return ((data ?? []) as unknown as { profiles: Profile }[]).map((r) => r.profiles).filter(Boolean)
 }
 
+/** How many authors the given profile follows. */
+export async function fetchFollowingCount(profileId: string): Promise<number> {
+  const { count } = await supabase
+    .from('follows')
+    .select('*', { count: 'exact', head: true })
+    .eq('follower_id', profileId)
+  return count ?? 0
+}
+
+/** Profiles the given author follows, newest first. */
+export async function fetchFollowing(profileId: string, limit = 24): Promise<Profile[]> {
+  if (!SUPABASE_CONFIGURED || !profileId) return []
+  const { data, error } = await supabase
+    .from('follows')
+    .select('profiles:following_id(id, username, display_name, avatar_url, bio, role, verified)')
+    .eq('follower_id', profileId)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+  if (error) return []
+  return ((data ?? []) as unknown as { profiles: Profile }[]).map((r) => r.profiles).filter(Boolean)
+}
+
 /** Visible comments with author profiles, oldest first. */
 export async function fetchComments(postId: string): Promise<Comment[]> {
   if (!SUPABASE_CONFIGURED) return []

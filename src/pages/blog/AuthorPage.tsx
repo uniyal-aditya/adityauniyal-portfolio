@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
-import { fetchAuthorPage, fetchFollowerCount, fetchFollowers, fetchIsFollowing, toggleFollow } from '@/lib/journal-api'
+import { fetchAuthorPage, fetchFollowerCount, fetchFollowers, fetchFollowing, fetchFollowingCount, fetchIsFollowing, toggleFollow } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
 import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons } from '@/components/journal/bits'
 import { useReveal } from '@/hooks/useReveal'
@@ -29,6 +29,16 @@ export default function AuthorPage() {
   const { data: followerList } = useQuery({
     queryKey: ['follower-list', data?.profile?.id],
     queryFn: () => fetchFollowers(data!.profile!.id),
+    enabled: Boolean(data?.profile),
+  })
+  const { data: followingCount } = useQuery({
+    queryKey: ['following-count', data?.profile?.id],
+    queryFn: () => fetchFollowingCount(data!.profile!.id),
+    enabled: Boolean(data?.profile),
+  })
+  const { data: followingList } = useQuery({
+    queryKey: ['following-list', data?.profile?.id],
+    queryFn: () => fetchFollowing(data!.profile!.id),
     enabled: Boolean(data?.profile),
   })
   const { data: followingThis } = useQuery({
@@ -86,6 +96,8 @@ export default function AuthorPage() {
           <div className="author-stats meta">
             <span>{followers ?? 0} followers</span>
             <span className="dot-sep">&middot;</span>
+            <span>{followingCount ?? 0} following</span>
+            <span className="dot-sep">&middot;</span>
             <span>{data.posts.length} articles</span>
           </div>
           <div className="author-socials meta">
@@ -125,6 +137,20 @@ export default function AuthorPage() {
               <div className="section-label reveal">Followed by</div>
               <div className="writers-grid reveal d1" style={{ marginBottom: 72 }}>
                 {followerList!.map((f) => (
+                  <Link key={f.id} to={'/blog/author/' + f.username} className="writer-card">
+                    <Avatar profile={f} size={56} />
+                    <h4>{f.display_name || f.username}</h4>
+                    <div className="meta">{f.role.replace('_', ' ')}{f.verified ? ' · verified' : ''}</div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+          {(followingList ?? []).length > 0 && (
+            <>
+              <div className="section-label reveal">Following</div>
+              <div className="writers-grid reveal d1" style={{ marginBottom: 72 }}>
+                {followingList!.map((f) => (
                   <Link key={f.id} to={'/blog/author/' + f.username} className="writer-card">
                     <Avatar profile={f} size={56} />
                     <h4>{f.display_name || f.username}</h4>

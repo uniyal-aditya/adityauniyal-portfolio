@@ -657,6 +657,41 @@ export async function fetchAdminAnalytics(): Promise<AdminAnalytics | null> {
   }
 }
 
+/* ---- Notifications (in-app bell) ---- */
+
+export interface NotificationItem {
+  id: number
+  kind: string
+  created_at: string
+  read_at: string | null
+  actor_name: string | null
+  actor_username: string | null
+  actor_avatar: string | null
+  actor_verified: boolean | null
+  post_title: string | null
+  post_slug: string | null
+}
+
+export async function fetchUnreadCount(): Promise<number> {
+  if (!SUPABASE_CONFIGURED) return 0
+  const { data, error } = await supabase.rpc('my_unread_notifications')
+  return error || data === null ? 0 : (data as number)
+}
+
+export async function fetchNotifications(limit = 20): Promise<NotificationItem[]> {
+  if (!SUPABASE_CONFIGURED) return []
+  const { data, error } = await supabase.rpc('my_notifications', { p_limit: limit })
+  return error ? [] : ((data ?? []) as unknown as NotificationItem[])
+}
+
+export async function markNotificationRead(id: number): Promise<void> {
+  await supabase.rpc('mark_notification_read', { p_id: id })
+}
+
+export async function markAllNotificationsRead(): Promise<void> {
+  await supabase.rpc('mark_all_notifications_read')
+}
+
 /* ---- Dashboard lists ---- */
 
 export async function fetchMyBookmarks(userId: string): Promise<Post[]> {

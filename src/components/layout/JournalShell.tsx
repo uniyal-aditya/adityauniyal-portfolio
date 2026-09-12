@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Cursor, Scanline } from '@/components/system/Effects'
 import { useAuth } from '@/hooks/useAuth'
 import { CommandPalette } from '@/components/layout/CommandPalette'
+import { NotificationBell } from '@/components/journal/NotificationBell'
 
 const JOURNAL_LINKS = [
   { to: '/blog', label: 'Home', end: true },
@@ -37,6 +38,7 @@ export function JournalNav() {
         <button className="nav-kbd" onClick={() => window.dispatchEvent(new CustomEvent('au:palette'))} aria-label="Open command palette">
           Ctrl K
         </button>
+        <NotificationBell />
         {user ? (
           <div className="jn-user" tabIndex={0} aria-haspopup="menu">
             <Link to="/blog/dashboard" className="journal-nav-user" title="Dashboard">
@@ -100,6 +102,9 @@ export function JournalNav() {
                 <Link to="/blog/dashboard?tab=profile" onClick={() => setOpen(false)}>
                   Edit profile
                 </Link>
+                <div className="jn-mobile-bell">
+                  <NotificationBell />
+                </div>
               </>
             )}
             <Link to="/blog/apply" onClick={() => setOpen(false)}>

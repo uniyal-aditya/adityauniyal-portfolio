@@ -1,8 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
-import { fetchAuthorPage, fetchFollowerCount } from '@/lib/journal-api'
+import { fetchAuthorPage, fetchFollowerCount, fetchIsFollowing, toggleFollow } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
 import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons } from '@/components/journal/bits'
 import { useReveal } from '@/hooks/useReveal'
@@ -11,6 +12,8 @@ export default function AuthorPage() {
   useReveal()
   const { username = '' } = useParams()
   const { user, profile } = useAuth()
+  const qc = useQueryClient()
+  const [followBusy, setFollowBusy] = useState(false)
   const isMe = Boolean(user && profile?.username === username)
   const enabled = SUPABASE_CONFIGURED && Boolean(username)
   const { data, isLoading } = useQuery({
@@ -23,6 +26,23 @@ export default function AuthorPage() {
     queryFn: () => fetchFollowerCount(data!.profile!.id),
     enabled: Boolean(data?.profile),
   })
+  const { data: followingThis } = useQuery({
+    queryKey: ['is-following', user?.id, data?.profile?.id],
+    queryFn: () => fetchIsFollowing(user!.id, data!.profile!.id),
+    enabled: Boolean(user && data?.profile) && !isMe,
+  })
+
+  async function onFollowClick() {
+    if (!user || !data?.profile) return
+    setFollowBusy(true)
+    try {
+      await toggleFollow(user.id, data.profile.id, Boolean(followingThis))
+      void qc.invalidateQueries({ queryKey: ['is-following', user.id, data.profile.id] })
+      void qc.invalidateQueries({ queryKey: ['followers', data.profile.id] })
+    } finally {
+      setFollowBusy(false)
+    }
+  }
 
   if (!enabled) {
     return <div className="container" style={{ paddingTop: 120 }}><EmptyState note="The journal backend is not connected yet." /></div>
@@ -71,6 +91,24 @@ export default function AuthorPage() {
           {isMe && (
             <div style={{ marginTop: 18 }}>
               <Link to="/blog/dashboard?tab=profile" className="btn-ghost-line btn-small">Edit profile &rarr;</Link>
+            </div>
+          )}
+          {!isMe && (
+            <div style={{ marginTop: 18 }}>
+              {user ? (
+                <button
+                  className={followingThis ? 'btn-ghost-line btn-small' : 'btn-lime btn-small'}
+                  disabled={followBusy}
+                  onClick={() => void onFollowClick()}
+                  aria-pressed={Boolean(followingThis)}
+                >
+                  {followingThis ? 'FOLLOWING \u2713 - CLICK TO UNFOLLOW' : 'FOLLOW AUTHOR +'}
+                </button>
+              ) : (
+                <Link to="/blog/login" className="btn-ghost-line btn-small" title="Sign in to follow">
+                  SIGN IN TO FOLLOW
+                </Link>
+              )}
             </div>
           )}
         </div>

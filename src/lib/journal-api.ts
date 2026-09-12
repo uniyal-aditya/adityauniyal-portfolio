@@ -25,7 +25,18 @@ type PostRow = Post & {
 /** Flatten the post_tags join into a plain Tag[] on post.tags. */
 function normalizePost(p: PostRow): Post {
   const flat = ((p.tags ?? []) as unknown as { tags: { id: string; name: string; slug: string } }[]).map((t) => t.tags).filter(Boolean)
-  return { ...p, tags: flat } as unknown as Post
+  // The content column is `text`, so Tiptap JSON round-trips as a serialized
+  // string. Parse it back to an object (falls through to legacy markdown on
+  // parse failure) so the editor and renderer receive a real document.
+  let content: unknown = (p as { content?: unknown }).content
+  if (typeof content === 'string' && content.trimStart().startsWith('{')) {
+    try {
+      content = JSON.parse(content)
+    } catch {
+      /* legacy markdown string - leave as-is */
+    }
+  }
+  return { ...p, content, tags: flat } as unknown as Post
 }
 
 function normalizePosts(rows: PostRow[] | null): Post[] {
@@ -434,7 +445,8 @@ export async function upsertPost(
     subtitle: input.subtitle,
     slug: input.slug,
     excerpt: input.excerpt,
-    content: input.content,
+    // content is a `text` column: store the document as an explicit JSON string
+    content: typeof input.content === 'string' ? input.content : JSON.stringify(input.content),
     cover_image_url: input.cover_image_url,
     cover_image_alt: input.cover_image_alt,
     post_type: input.post_type,

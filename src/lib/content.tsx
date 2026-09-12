@@ -103,6 +103,27 @@ function renderNode(node: TiptapNode, key: number): ReactNode {
         </figure>
       )
     }
+    case 'youtube': {
+      const src = String(node.attrs?.src ?? '')
+      const yt = youtubeId(src)
+      if (!yt) return null
+      return (
+        <figure key={key} className="embed-wrap">
+          <div className="embed-16x9">
+            <iframe
+              src={'https://www.youtube-nocookie.com/embed/' + yt}
+              title="YouTube video"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          {typeof node.attrs?.caption === 'string' && node.attrs.caption ? (
+            <figcaption>{node.attrs.caption}</figcaption>
+          ) : null}
+        </figure>
+      )
+    }
     case 'horizontalRule':
       return <hr key={key} />
     case 'hardBreak':

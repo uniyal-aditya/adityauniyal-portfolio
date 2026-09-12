@@ -1244,3 +1244,31 @@ table.data a:hover { color: var(--lime); }
   .post-aside { position: static; flex-direction: row; flex-wrap: wrap; }
   .toc, .aside-box { flex: 1 1 240px; }
 }
+
+/* ── NAV PROFILE BADGE + HOVER MENU ─────────────────────────────── */
+.jn-user { position: relative; }
+.journal-nav-user { display: inline-flex; align-items: center; gap: 8px; }
+.journal-nav-user .badge-verified { width: 12px; height: 12px; font-size: 8px; }
+.jn-user-menu {
+  position: absolute; top: calc(100% + 10px); right: 0; min-width: 190px; z-index: 60;
+  background: var(--ink); border: 1px solid var(--line); padding: 8px;
+  opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+}
+.jn-user:hover .jn-user-menu,
+.jn-user:focus-within .jn-user-menu {
+  opacity: 1; visibility: visible; transform: translateY(0);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.jn-user-menu a, .jn-user-menu button {
+  display: flex; width: 100%; text-align: left; align-items: center;
+  padding: 9px 10px; font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--bone);
+  background: none; border: 0; cursor: pointer; text-decoration: none;
+}
+.jn-user-menu a:hover, .jn-user-menu button:hover { background: var(--sand); color: var(--lime); }
+.jn-menu-role {
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em;
+  color: var(--lime); padding: 6px 10px 8px; border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}

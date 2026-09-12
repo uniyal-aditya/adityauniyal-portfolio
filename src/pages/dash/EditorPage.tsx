@@ -6,6 +6,9 @@ import StarterKit from '@tiptap/starter-kit'
 import LinkExt from '@tiptap/extension-link'
 import ImageExt from '@tiptap/extension-image'
 import PlaceholderExt from '@tiptap/extension-placeholder'
+import StrikeExt from '@tiptap/extension-strike'
+import TextStyleExt from '@tiptap/extension-text-style'
+import YoutubeExt from '@tiptap/extension-youtube'
 import { Table } from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
@@ -42,6 +45,9 @@ function useEditorSetup(initialJson: unknown) {
       LinkExt.configure({ openOnClick: false, autolink: true, HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' } }),
       ImageExt.configure({ inline: false, allowBase64: false }),
       PlaceholderExt.configure({ placeholder: 'Write the story. Type / for commands...' }),
+      StrikeExt,
+      TextStyleExt,
+      YoutubeExt.configure({ nocookie: true, controls: true }),
       Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
@@ -55,6 +61,7 @@ function useEditorSetup(initialJson: unknown) {
 function SlashMenu({ editor }: { editor: ReturnType<typeof useEditorSetup> }) {
   const [q, setQ] = useState('')
   const ref = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false)
   const items = useMemo<SlashItem[]>(() => {
     if (!editor) return []
     return [
@@ -73,6 +80,11 @@ function SlashMenu({ editor }: { editor: ReturnType<typeof useEditorSetup> }) {
       } },
       { label: '/table', hint: '3x3', run: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
       { label: '/callout', hint: 'info box', run: () => editor.chain().focus().setNode('blockquote').run() },
+      { label: '/youtube', hint: 'embed video', run: () => {
+        const url = window.prompt('YouTube URL')
+        if (!url) return
+        editor.chain().focus().setYoutubeVideo({ src: url }).run()
+      } },
       { label: '/embed', hint: 'youtube or link', run: () => {
         const url = window.prompt('Embed URL (YouTube or any link)')
         if (!url) return
@@ -85,15 +97,41 @@ function SlashMenu({ editor }: { editor: ReturnType<typeof useEditorSetup> }) {
           .insertContent(
             isYt
               ? { type: 'paragraph', content: [{ type: 'text', text: 'YouTube: ' + s }] }
-              : { type: 'paragraph', content: [{ type: 'text', text: s, marks: [{ type: 'link', attrs: { href: s } }] }] },
+              : { type: 'paragraph', content: [{ type: 'text', marks: [{ type: 'link', attrs: { href: s } }] }, { type: 'text', text: s }] },
           )
           .run()
       } },
       { label: '/divider', hint: 'hr', run: () => editor.chain().focus().setHorizontalRule().run() },
     ]
   }, [editor])
+
+  // open on a freshly typed "/", track the query, close otherwise
+  useEffect(() => {
+    if (!editor) return
+    const onUpdate = () => {
+      const { $from, empty } = editor.state.selection
+      if (!empty || !$from.parent.isTextblock) {
+        setOpen(false)
+        return
+      }
+      const before = $from.parent.textBetween(0, $from.parentOffset, undefined, '\ufffc')
+      const m = before.match(/(?:^|\s)\/(\S*)$/)
+      if (m) {
+        setOpen(true)
+        setQ(m[1])
+      } else {
+        setOpen(false)
+      }
+    }
+    editor.on('transaction', onUpdate)
+    return () => {
+      editor.off('transaction', onUpdate)
+    }
+  }, [editor])
+
   const filtered = items.filter((i) => i.label.toLowerCase().includes(q.toLowerCase()))
   if (!editor) return null
+  if (!open) return null
   return (
     <div className="slash-menu" ref={ref} role="menu">
       {filtered.map((i) => (
@@ -101,8 +139,22 @@ function SlashMenu({ editor }: { editor: ReturnType<typeof useEditorSetup> }) {
           key={i.label}
           role="menuitem"
           onClick={() => {
-            i.run()
+            // remove the typed "/command" text, then apply the block
+            const { state } = editor
+            const { $from } = state.selection
+            const node = $from.parent
+            const start = $from.parentOffset
+            let textBefore = ''
+            if (node.isTextblock) {
+              const found = node.textContent.slice(0, start).match(/\/(\S*)$/)
+              if (found) {
+                textBefore = found[0]
+                editor.chain().focus().deleteRange({ from: $from.pos - textBefore.length, to: $from.pos }).run()
+              }
+            }
+            setOpen(false)
             setQ('')
+            i.run()
           }}
         >
           <span>{i.label}</span>
@@ -315,6 +367,8 @@ export default function EditorPage() {
           <div className="editor-toolbar meta">
             <button onClick={() => editor?.chain().focus().toggleBold().run()} aria-label="Bold">B</button>
             <button onClick={() => editor?.chain().focus().toggleItalic().run()} aria-label="Italic"><em>I</em></button>
+            <button onClick={() => editor?.chain().focus().toggleStrike().run()} aria-label="Strikethrough"><s>S</s></button>
+            <button onClick={() => editor?.chain().focus().toggleCode().run()} aria-label="Inline code">&lt;&gt;</button>
             <button onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}>H2</button>
             <button onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}>H3</button>
             <button onClick={() => editor?.chain().focus().toggleBulletList().run()}>&bull; list</button>
@@ -322,6 +376,13 @@ export default function EditorPage() {
             <button onClick={() => editor?.chain().focus().toggleBlockquote().run()}>&ldquo; quote</button>
             <button onClick={() => editor?.chain().focus().toggleCodeBlock().run()}>&lt;/&gt; code</button>
             <button onClick={() => fileRef.current?.click()}>image</button>
+            <button
+              onClick={() => editor?.chain().focus().unsetAllMarks().clearNodes().run()}
+              aria-label="Clear formatting"
+              title="Clear formatting"
+            >
+              &times;fmt
+            </button>
             <input
               ref={fileRef}
               type="file"

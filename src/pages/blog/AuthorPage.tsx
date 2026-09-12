@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Seo } from '@/lib/seo'
+import { useAuth } from '@/hooks/useAuth'
 import { fetchAuthorPage, fetchFollowerCount } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
 import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons } from '@/components/journal/bits'
@@ -9,6 +10,8 @@ import { useReveal } from '@/hooks/useReveal'
 export default function AuthorPage() {
   useReveal()
   const { username = '' } = useParams()
+  const { user, profile } = useAuth()
+  const isMe = Boolean(user && profile?.username === username)
   const enabled = SUPABASE_CONFIGURED && Boolean(username)
   const { data, isLoading } = useQuery({
     queryKey: ['author', username],
@@ -65,6 +68,11 @@ export default function AuthorPage() {
             {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer">github &#8599;</a>}
             {p.linkedin_url && <a href={p.linkedin_url} target="_blank" rel="noopener noreferrer">linkedin &#8599;</a>}
           </div>
+          {isMe && (
+            <div style={{ marginTop: 18 }}>
+              <Link to="/blog/dashboard?tab=profile" className="btn-ghost-line btn-small">Edit profile &rarr;</Link>
+            </div>
+          )}
         </div>
       </header>
       <section>

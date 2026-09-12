@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useState, useRef } from 'react'
+import { Link, Navigate, useSearchParams } from 'react-router-dom'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
@@ -12,7 +12,9 @@ import {
   fetchMyPosts,
   fetchMyApplication,
   updateProfile,
+  uploadMedia,
 } from '@/lib/journal-api'
+import { slugify } from '@/lib/sanitize'
 import { Avatar, EmptyState, Skeletons } from '@/components/journal/bits'
 import { fmtNum, fmtDate } from '@/lib/sanitize'
 import type { Post } from '@/lib/types'
@@ -45,10 +47,21 @@ function PostListMini({ posts, empty }: { posts: Post[]; empty: string }) {
 }
 
 export default function Dashboard() {
-  const { user, profile, loading, configured, isAdmin } = useAuth()
-  const navigate = useNavigate()
+  const { user, profile, loading, configured, isAdmin, refreshProfile } = useAuth()
   const { toast } = useToast()
-  const [tab, setTab] = useState<'overview' | 'bookmarks' | 'likes' | 'following' | 'history' | 'articles' | 'profile'>('overview')
+  const qc = useQueryClient()
+  const [params, setParams] = useSearchParams()
+  const tabParam = params.get('tab')
+  const [tab, setTabState] = useState<'overview' | 'bookmarks' | 'likes' | 'following' | 'history' | 'articles' | 'profile'>(
+    tabParam === 'profile' ? 'profile' : 'overview',
+  )
+  const setTab = (t: typeof tab) => {
+    setTabState(t)
+    if (t === 'profile') params.set('tab', 'profile')
+    else params.delete('tab')
+    setParams(params, { replace: true })
+  }
+  const avatarRef = useRef<HTMLInputElement>(null)
   const uid = user?.id
 
   const { data: bookmarks } = useQuery({ queryKey: ['my-bookmarks', uid ?? ""], queryFn: () => fetchMyBookmarks(uid!), enabled: tab === 'bookmarks' })
@@ -208,23 +221,72 @@ export default function Dashboard() {
           )}
 
           {tab === 'profile' && profile && (
+            <>
+            <div className="dash-card" style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => avatarRef.current?.click()}
+                title="Change avatar"
+                style={{ background: 'none', border: 0, padding: 0, cursor: 'pointer', borderRadius: '50%' }}
+              >
+                <Avatar profile={profile} size={64} />
+              </button>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <div style={{ fontWeight: 500 }}>{profile.display_name || profile.username}</div>
+                <div className="meta">
+                  {profile.role.replace('_', ' ')}{profile.verified ? ' · verified' : ''} ·
+                  {' '}<Link to={'/blog/author/' + profile.username} style={{ color: 'var(--lime)' }}>view public profile &rarr;</Link>
+                </div>
+              </div>
+              <input
+                ref={avatarRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+                hidden
+                onChange={async (e) => {
+                  const f = e.target.files?.[0]
+                  e.target.value = ''
+                  if (!f || !uid) return
+                  const res = await uploadMedia(f, uid)
+                  if (res.error) return toast(res.error, true)
+                  if (res.url) {
+                    const err = await updateProfile(uid, { avatar_url: res.url })
+                    if (err) return toast(err, true)
+                    await refreshProfile()
+                    toast('Avatar updated.')
+                  }
+                }}
+              />
+            </div>
             <form
               className="cf" style={{ maxWidth: 560 }}
               onSubmit={async (e) => {
                 e.preventDefault()
                 const d = new FormData(e.currentTarget)
+                const uname = slugify(String(d.get('username') || ''))
+                if (!uname) return toast('Username cannot be empty.', true)
                 const err = await updateProfile(uid!, {
+                  username: uname,
                   display_name: String(d.get('display_name') || ''),
                   bio: String(d.get('bio') || ''),
                   website: String(d.get('website') || ''),
                   github_url: String(d.get('github') || ''),
                   linkedin_url: String(d.get('linkedin') || ''),
                 })
-                if (err) return toast(err, true)
+                if (err) {
+                  if (/unique|duplicate/i.test(err)) return toast('That username is taken - try another.', true)
+                  return toast(err, true)
+                }
+                await refreshProfile()
+                void qc.invalidateQueries({ queryKey: ['author', uname] })
                 toast('Profile saved.')
-                navigate(0)
               }}
             >
+              <div className="cf-group">
+                <label className="cf-label" htmlFor="pf-user">Username (your profile URL)</label>
+                <input className="cf-input" id="pf-user" name="username" defaultValue={profile.username} aria-describedby="pf-user-hint" />
+                <div className="meta" id="pf-user-hint" style={{ marginTop: 6 }}>/blog/author/{profile.username}</div>
+              </div>
               <div className="cf-group">
                 <label className="cf-label" htmlFor="pf-name">Display name</label>
                 <input className="cf-input" id="pf-name" name="display_name" defaultValue={profile.display_name ?? ''} />
@@ -249,6 +311,7 @@ export default function Dashboard() {
               </div>
               <button className="btn-lime" type="submit" style={{ justifyContent: 'center' }}>SAVE PROFILE &rarr;</button>
             </form>
+            </>
           )}
         </div>
       </div>

@@ -1,123 +1,19 @@
- INFO  Accepting connections at http://localhost:8123
- HTTP  8/9/2026 9:31:58 pm ::1 GET /
- HTTP  8/9/2026 9:31:58 pm ::1 Returned 200 in 47 ms
- HTTP  8/9/2026 9:31:58 pm ::1 GET /blog/
- HTTP  8/9/2026 9:31:58 pm ::1 Returned 200 in 3 ms
- HTTP  8/9/2026 9:32:02 pm ::1 GET /blog/
- HTTP  8/9/2026 9:32:02 pm ::1 Returned 200 in 5 ms
- HTTP  8/9/2026 9:32:03 pm ::1 GET /blog/
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:32:03 pm ::1 GET /css/style.css
- HTTP  8/9/2026 9:32:03 pm ::1 GET /js/supabase-config.js
- HTTP  8/9/2026 9:32:03 pm ::1 GET /css/journal.css
- HTTP  8/9/2026 9:32:03 pm ::1 GET /js/supabase-client.js
- HTTP  8/9/2026 9:32:03 pm ::1 GET /js/journal-ui.js
- HTTP  8/9/2026 9:32:03 pm ::1 GET /js/journal-api.js
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 8 ms
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 5 ms
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 7 ms
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:32:03 pm ::1 GET /js/main.js
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 7 ms
- HTTP  8/9/2026 9:32:03 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:32:24 pm ::1 GET /blog/
- HTTP  8/9/2026 9:32:24 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:32:25 pm ::1 GET /css/style.css
- HTTP  8/9/2026 9:32:25 pm ::1 GET /css/journal.css
- HTTP  8/9/2026 9:32:25 pm ::1 GET /js/supabase-config.js
- HTTP  8/9/2026 9:32:25 pm ::1 GET /js/supabase-client.js
- HTTP  8/9/2026 9:32:25 pm ::1 GET /js/journal-ui.js
- HTTP  8/9/2026 9:32:25 pm ::1 GET /js/journal-api.js
- HTTP  8/9/2026 9:32:25 pm ::1 Returned 304 in 15 ms
- HTTP  8/9/2026 9:32:25 pm ::1 Returned 304 in 16 ms
- HTTP  8/9/2026 9:32:25 pm ::1 Returned 304 in 16 ms
- HTTP  8/9/2026 9:32:25 pm ::1 Returned 304 in 15 ms
- HTTP  8/9/2026 9:32:25 pm ::1 Returned 304 in 16 ms
- HTTP  8/9/2026 9:32:25 pm ::1 Returned 304 in 18 ms
- HTTP  8/9/2026 9:32:25 pm ::1 GET /js/main.js
- HTTP  8/9/2026 9:32:25 pm ::1 Returned 304 in 5 ms
- HTTP  8/9/2026 9:33:48 pm ::1 GET /blog/
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 4 ms
- HTTP  8/9/2026 9:33:48 pm ::1 GET /css/style.css
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:33:48 pm ::1 GET /js/journal-api.js
- HTTP  8/9/2026 9:33:48 pm ::1 GET /css/journal.css
- HTTP  8/9/2026 9:33:48 pm ::1 GET /js/supabase-config.js
- HTTP  8/9/2026 9:33:48 pm ::1 GET /js/supabase-client.js
- HTTP  8/9/2026 9:33:48 pm ::1 GET /js/journal-ui.js
- HTTP  8/9/2026 9:33:48 pm ::1 GET /js/main.js
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 7 ms
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:33:48 pm ::1 Returned 304 in 15 ms
- HTTP  8/9/2026 9:34:36 pm ::1 GET /blog/
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:34:36 pm ::1 GET /css/style.css
- HTTP  8/9/2026 9:34:36 pm ::1 GET /css/journal.css
- HTTP  8/9/2026 9:34:36 pm ::1 GET /js/journal-ui.js
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:34:36 pm ::1 GET /js/supabase-config.js
- HTTP  8/9/2026 9:34:36 pm ::1 GET /js/supabase-client.js
- HTTP  8/9/2026 9:34:36 pm ::1 GET /js/journal-api.js
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 5 ms
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 4 ms
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 4 ms
- HTTP  8/9/2026 9:34:36 pm ::1 GET /js/main.js
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:34:36 pm ::1 Returned 304 in 1 ms
- HTTP  8/9/2026 9:35:11 pm ::1 GET /blog/
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:11 pm ::1 GET /css/style.css
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:35:11 pm ::1 GET /css/journal.css
- HTTP  8/9/2026 9:35:11 pm ::1 GET /js/supabase-config.js
- HTTP  8/9/2026 9:35:11 pm ::1 GET /js/supabase-client.js
- HTTP  8/9/2026 9:35:11 pm ::1 GET /js/journal-ui.js
- HTTP  8/9/2026 9:35:11 pm ::1 GET /js/journal-api.js
- HTTP  8/9/2026 9:35:11 pm ::1 GET /js/main.js
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 4 ms
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 4 ms
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:11 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:58 pm ::1 GET /
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:35:58 pm ::1 GET /css/style.css
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 304 in 1 ms
- HTTP  8/9/2026 9:35:58 pm ::1 GET /js/supabase-config.js
- HTTP  8/9/2026 9:35:58 pm ::1 GET /js/supabase-client.js
- HTTP  8/9/2026 9:35:58 pm ::1 GET /js/journal-ui.js
- HTTP  8/9/2026 9:35:58 pm ::1 GET /js/journal-api.js
- HTTP  8/9/2026 9:35:58 pm ::1 GET /js/journal-home.js
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 304 in 3 ms
- HTTP  8/9/2026 9:35:58 pm ::1 GET /js/main.js
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 304 in 4 ms
- HTTP  8/9/2026 9:35:58 pm ::1 GET /_vercel/insights/script.js
- HTTP  8/9/2026 9:35:58 pm ::1 GET /_vercel/insights/speed.js
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 200 in 19 ms
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 404 in 16 ms
- HTTP  8/9/2026 9:35:58 pm ::1 Returned 404 in 17 ms
- HTTP  8/9/2026 9:36:36 pm ::1 GET /blog/
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:36:36 pm ::1 GET /css/style.css
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 2 ms
- HTTP  8/9/2026 9:36:36 pm ::1 GET /js/journal-api.js
- HTTP  8/9/2026 9:36:36 pm ::1 GET /css/journal.css
- HTTP  8/9/2026 9:36:36 pm ::1 GET /js/supabase-config.js
- HTTP  8/9/2026 9:36:36 pm ::1 GET /js/supabase-client.js
- HTTP  8/9/2026 9:36:36 pm ::1 GET /js/journal-ui.js
- HTTP  8/9/2026 9:36:36 pm ::1 GET /js/main.js
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 5 ms
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 4 ms
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 5 ms
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 6 ms
- HTTP  8/9/2026 9:36:36 pm ::1 Returned 304 in 5 ms
+
+> aditya-uniyal-portfolio@4.0.0 dev
+> vite --port 5173 --strictPort
+
+
+  [32m[1mVITE[22m v6.4.3[39m  [2mready in [0m[1m1035[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m12:47:19 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\adity\Documents\aditya-uniyal-portfolio\src\components\layout\Chrome.tsx, /src/styles/index.css[22m
+[2m12:47:19 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [33mhmr invalidate [39m[2m/@fs/C:\Users\adity\Documents\aditya-uniyal-portfolio\src\components\layout\Chrome.tsx[22m Could not Fast Refresh ("NAV_LINKS" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m12:47:19 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/index.css, /src/App.tsx[22m
+[2m12:47:30 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\adity\Documents\aditya-uniyal-portfolio\src\components\layout\JournalShell.tsx, /src/styles/index.css[22m
+[2m12:47:44 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\adity\Documents\aditya-uniyal-portfolio\src\components\layout\JournalShell.tsx, /src/styles/index.css[22m
+[2m12:55:14 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/styles/index.css[22m
+[2m1:00:22 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mpackage.json[22m
+[2m1:01:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\adity\Documents\aditya-uniyal-portfolio\src\pages\dash\EditorPage.tsx, /src/styles/index.css[22m
+[2m1:01:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33m@tiptap/extension-table-row, @tiptap/extension-table-header, @tiptap/extension-table-cell[32m[39m
+[2m1:01:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m

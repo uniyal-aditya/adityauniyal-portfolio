@@ -1,44 +1,21 @@
 [build]
-  publish = "."
+  command = "npm run build"
+  publish = "dist"
   functions = "netlify/functions"
-  command = "echo 'static site — no build step'"
+
+[build.environment]
+  NODE_VERSION = "20"
 
 [dev]
+  framework = "#static"
+  targetPort = 5173
+  publish = "dist"
   functions = "netlify/functions"
 
-# ── Journal clean URLs (/blog/...) → static files in /blog ──
-# Directory index pages:
-#   /blog/            → blog/index.html
-#   /blog/search/     → blog/search/index.html
-#   /blog/login/      → blog/login/index.html
-#   /blog/dashboard/  → blog/dashboard/index.html (+ /editor/)
-#   /blog/admin/      → blog/admin/index.html
-# Dynamic segments are rewritten to their directory's index.html,
-# which reads the slug client-side from the URL path.
-
+# ── Legacy feedback function ──
 [[redirects]]
-  from = "/blog"
-  to = "/blog/"
-  status = 301
-
-[[redirects]]
-  from = "/blog/post/*"
-  to = "/blog/post/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/author/*"
-  to = "/blog/author/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/topic/*"
-  to = "/blog/topic/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/series/*"
-  to = "/blog/series/index.html"
+  from = "/sendFeedback"
+  to = "/.netlify/functions/sendFeedback"
   status = 200
 
 # ── SEO endpoints (server-generated from Supabase) ──
@@ -52,10 +29,10 @@
   to = "/.netlify/functions/journalRss"
   status = 200
 
-# ── Existing Netlify function (unchanged) ──
-# /sendFeedback is auto-exposed at /.netlify/functions/sendFeedback
-# and any legacy alias keeps working.
+# ── SPA catch-all ──
+# All routes are client-side (React Router). Must come last so the
+# function redirects above win.
 [[redirects]]
-  from = "/sendFeedback"
-  to = "/.netlify/functions/sendFeedback"
+  from = "/*"
+  to = "/index.html"
   status = 200

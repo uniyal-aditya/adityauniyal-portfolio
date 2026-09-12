@@ -1,46 +1,64 @@
-# Run doc — Aditya Uniyal Portfolio + AU_ Journal
+# Run doc — Aditya Uniyal Portfolio + AU_ / JOURNAL
 
-Static HTML/CSS/JS site (no build step). The "dev server" is any static file
-server serving the repository root. Netlify functions (sendFeedback, journal
-sitemap/RSS) only run under `netlify dev`; for visual preview a plain static
-server is sufficient — the journal pages detect the missing Supabase config and
-render graceful empty states.
+React 18 + TypeScript + Vite 6 + Tailwind v4 SPA (react-router). All routes —
+portfolio (`/`, `/work`, `/projects`, `/about`, `/skills`, `/connect`,
+`/feedback`, `/privacy`) and Journal (`/blog`, `/blog/post/:slug`, `/blog/login`,
+`/blog/dashboard`, `/blog/admin/:section`, …) — are client-side routes served by
+the Vite dev server or by the `dist/` build on Netlify.
 
 ## Reproduce artifacts
 
-Nothing to reproduce: there is no build step, no `.env` files in the repo, and
-frontend Supabase keys are intentionally left blank in `js/supabase-config.js`
-(see readme.md → "Setup" to configure the real backend).
+1. Install dependencies (needed for dev server and build):
 
-Install is optional (only needed for `netlify dev` with functions):
+   ```
+   npm install
+   ```
 
-```
-npm install
-```
+2. Optional — configure the Supabase backend: copy `.env.example` to `.env.local`
+   and fill `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` (public anon key
+   only; see readme.md → "Setup" and `supabase/*.sql` for the backend). Without
+   it every Journal page renders graceful "No data yet." empty states — the
+   portfolio is fully independent of it.
 
-## Run the server (static preview)
+No other artifacts are required; there are no secrets in the repo.
 
-```
-npx --yes serve . -l 8123 --no-clipboard
-```
-
-- Port: 8123 (project has no default port; 8123 avoids common dev ports)
-- Serve the repo ROOT so `/blog/...`, `/css/...`, `/assets/...` all resolve
-- Detached on Windows (PowerShell, stdout/stderr to separate files):
+## Run the dev server
 
 ```
-powershell -NoProfile -Command "(Start-Process -FilePath 'npx.cmd' -ArgumentList '--yes','serve','.','-l','8123','--no-clipboard' -RedirectStandardOutput '<log>' -RedirectStandardError '<log>.err' -WindowStyle Hidden -PassThru).Id"
+npm run dev
 ```
 
-## Optional: full Netlify emulation (functions + redirects)
+Vite defaults to port 5173. If it is taken, pass an explicit port:
 
 ```
-npm install
-npx netlify-cli dev --port 8888
+npm run dev -- --port 5173 --strictPort
 ```
 
-This is heavier; use it only when testing the sendFeedback function or the
-sitemap/RSS endpoints. Netlify-specific rewrites from netlify.toml (e.g.
-`/blog/post/<slug>/` → `blog/post/index.html`) do NOT apply on a plain static
-server — deep journal links 404 locally but work on Netlify. The directory
-index pages (`/blog/`, `/blog/search/`, `/blog/dashboard/`, etc.) serve fine.
+Detached on Windows (PowerShell; stdout/stderr MUST go to different files):
+
+```
+powershell -NoProfile -Command "(Start-Process -FilePath 'npm.cmd' -ArgumentList 'run','dev','--','--port','5173','--strictPort' -RedirectStandardOutput '<log>' -RedirectStandardError '<log>.err' -WindowStyle Hidden -PassThru).Id"
+```
+
+Then confirm the process survived and the URL answers:
+
+```
+powershell -NoProfile -Command "Get-Process -Id <pid>"
+curl -s -o /dev/null -w "%{http_code}" http://localhost:5173/
+```
+
+## Checks
+
+```
+npm run typecheck   # tsc -b
+npm run lint        # eslint .
+npm run build       # vite build -> dist/
+```
+
+## Deployment / Netlify notes
+
+- `netlify.toml` builds with `npm run build` and publishes `dist/`; SPA
+  fallback (`/* -> /index.html`) keeps deep journal routes working.
+- Netlify functions (`sendFeedback`, `journalSitemap`, `journalRss`) run under
+  `npx netlify-cli dev` if functions need local testing — heavier than
+  `npm run dev`, use only for function work.

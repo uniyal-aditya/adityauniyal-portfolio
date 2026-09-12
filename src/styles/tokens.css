@@ -1,0 +1,49 @@
+/* ==========================================================
+   AU_ DESIGN TOKENS
+   Source of truth: the legacy style.css :root block, ported
+   value-for-value. Tailwind v4 maps them to utility names.
+   ========================================================== */
+
+:root {
+  --ink: #0a0a08;
+  --bone: #f0ede6;
+  --dim: #b8b5ae;
+  --ghost: rgba(240, 237, 230, 0.06);
+  --lime: #c8f135;
+  --rust: #e8593a;
+  --sand: #1a1a17;
+  --line: rgba(240, 237, 230, 0.1);
+  --dim-2: #8a8880;
+  --dim-3: #6a6862;
+  --dim-4: #55534d;
+
+  --f-display: 'Bebas Neue', sans-serif;
+  --f-serif: 'Instrument Serif', serif;
+  --f-mono: 'JetBrains Mono', monospace;
+  --f-body: 'Outfit', sans-serif;
+
+  --nav-h: 68px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tailwind v4: utilities resolve to the :root vars above. */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-bone: var(--bone);
+  --color-dim: var(--dim);
+  --color-lime: var(--lime);
+  --color-rust: var(--rust);
+  --color-sand: var(--sand);
+  --color-ghost: var(--ghost);
+  --color-line: var(--line);
+  --color-dim-2: var(--dim-2);
+  --color-dim-3: var(--dim-3);
+  --color-dim-4: var(--dim-4);
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-serif-it: 'Instrument Serif', serif;
+  --font-mono-tech: 'JetBrains Mono', monospace;
+  --font-body: 'Outfit', sans-serif;
+
+  --ease-au: cubic-bezier(0.16, 1, 0.3, 1);
+}

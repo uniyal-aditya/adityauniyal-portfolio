@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /blog/dashboard
+Disallow: /blog/admin
+Disallow: /blog/login
+Disallow: /blog/signup
+Disallow: /blog/apply
+
+Sitemap: https://adityauniyal.is-a.dev/blog/sitemap.xml

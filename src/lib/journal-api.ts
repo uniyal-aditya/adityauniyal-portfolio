@@ -631,20 +631,29 @@ export interface AdminAnalytics {
     comments: number
     reports: number
     views: number
+    follows_total?: number
+    follows_7d?: number
   }
   traffic: { day: string; views: number }[]
+  followTrend?: { day: string; follows: number }[]
 }
 
 export async function fetchAdminAnalytics(): Promise<AdminAnalytics | null> {
   if (!SUPABASE_CONFIGURED) return null
-  const [totals, traffic] = await Promise.all([
+  const [totals, traffic, followTrend] = await Promise.all([
     supabase.rpc('admin_analytics'),
     supabase.rpc('traffic_trend', { p_days: 14 }),
+    // follow_trend is a newer migration - tolerate it not existing yet
+    supabase.rpc('follow_trend', { p_days: 14 }).then(
+      (r) => r,
+      () => ({ data: null, error: null }),
+    ),
   ])
   if (totals.error) return null
   return {
     totals: (totals.data ?? {}) as AdminAnalytics['totals'],
     traffic: (traffic.data ?? []) as AdminAnalytics['traffic'],
+    followTrend: ((followTrend.data as AdminAnalytics['followTrend']) ?? []) || [],
   }
 }
 

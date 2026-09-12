@@ -78,6 +78,7 @@ function Overview() {
   const { data: analytics } = useQuery({ queryKey: ['admin-analytics'], queryFn: fetchAdminAnalytics, enabled: SUPABASE_CONFIGURED })
   const t = analytics?.totals
   const maxViews = Math.max(1, ...(analytics?.traffic ?? []).map((d) => d.views))
+  const maxFollows = Math.max(1, ...(analytics?.followTrend ?? []).map((d) => d.follows))
   return (
     <>
       <div className="admin-grid">
@@ -92,15 +93,44 @@ function Overview() {
       </div>
 
       <div className="dash-card" style={{ marginTop: 24 }}>
-        <div className="toc-label">Traffic — last 14 days</div>
-        {(analytics?.traffic ?? []).length === 0 && <EmptyState compact title="No data yet." note="Views appear as readers visit articles." />}
-        {(analytics?.traffic ?? []).length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 120, paddingTop: 12 }}>
-            {analytics!.traffic.map((d) => (
-              <div key={d.day} title={d.day + ' — ' + d.views + ' views'} style={{ flex: 1, height: Math.max(3, (d.views / maxViews) * 100) + '%', background: 'linear-gradient(to top, rgba(200,241,53,0.65), rgba(200,241,53,0.15))', minHeight: 2 }} />
-            ))}
+        <div className="toc-label">Follow graph — all time &amp; last 7 days</div>
+        <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap', padding: '16px 0 4px' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--f-display)', fontSize: '2.2rem', lineHeight: 1 }}>{t?.follows_total ?? '—'}</div>
+            <div className="meta">total follows</div>
           </div>
-        )}
+          <div>
+            <div style={{ fontFamily: 'var(--f-display)', fontSize: '2.2rem', lineHeight: 1, color: 'var(--lime)' }}>{t?.follows_7d ?? '—'}</div>
+            <div className="meta">new this week</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginTop: 24 }}>
+        <div className="dash-card">
+          <div className="toc-label">Traffic — last 14 days</div>
+          {(analytics?.traffic ?? []).length === 0 && <EmptyState compact title="No data yet." note="Views appear as readers visit articles." />}
+          {(analytics?.traffic ?? []).length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 120, paddingTop: 12 }}>
+              {analytics!.traffic.map((d) => (
+                <div key={d.day} title={d.day + ' — ' + d.views + ' views'} style={{ flex: 1, height: Math.max(3, (d.views / maxViews) * 100) + '%', background: 'linear-gradient(to top, rgba(200,241,53,0.65), rgba(200,241,53,0.15))', minHeight: 2 }} />
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="dash-card">
+          <div className="toc-label">New follows — last 14 days</div>
+          {(analytics?.followTrend ?? []).every((d) => d.follows === 0) && (
+            <EmptyState compact title="No data yet." note="Follows appear as readers follow authors." />
+          )}
+          {(analytics?.followTrend ?? []).some((d) => d.follows > 0) && (
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 120, paddingTop: 12 }}>
+              {analytics!.followTrend!.map((d) => (
+                <div key={d.day} title={d.day + ' — ' + d.follows + ' follows'} style={{ flex: 1, height: Math.max(3, (d.follows / maxFollows) * 100) + '%', background: 'linear-gradient(to top, rgba(232,89,58,0.75), rgba(232,89,58,0.15))', minHeight: 2 }} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </>
   )

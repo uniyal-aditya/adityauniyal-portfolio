@@ -196,10 +196,14 @@ end $$;
 grant execute on function public.admin_set_user_role to authenticated;
 
 -- ── ADMIN ANALYTICS: site-wide counters (admin only) ───────────────
-create or replace function public.admin_analytics()
+-- drop first: return type changed when follow counters were added
+alter table public.follows enable row level security;
+drop function if exists public.admin_analytics();
+create function public.admin_analytics()
 returns table (
   published int, drafts int, review_queue int, authors int, users int,
-  views bigint, comments int, open_reports int
+  views bigint, comments int, open_reports int,
+  follows_total int, follows_7d int
 )
 language sql stable security definer set search_path = public as $$
   select
@@ -210,7 +214,9 @@ language sql stable security definer set search_path = public as $$
     (select count(*)::int from public.profiles),
     (select count(*)::bigint from public.post_views),
     (select count(*)::int from public.comments where status = 'visible'),
-    (select count(*)::int from public.reports where status = 'open');
+    (select count(*)::int from public.reports where status = 'open'),
+    (select count(*)::int from public.follows),
+    (select count(*)::int from public.follows where created_at >= now() - interval '7 days');
 $$;
 
 grant execute on function public.admin_analytics to authenticated;
@@ -256,3 +262,27 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 grant execute on function public.traffic_trend to authenticated;
+
+-- ── ADMIN: 14-day follow trend (new follows per day) ──────────────
+create or replace function public.follow_trend(p_days int default 14)
+returns table (day date, follows bigint)
+language sql stable security definer set search_path = public as $$
+  select
+    d::date,
+    (select count(*) from public.follows f where f.created_at::date = d::date)
+  from generate_series(current_date - (p_days - 1), current_date, interval '1 day') d;
+$$;
+
+grant execute on function public.follow_trend to authenticated;
+
+-- ── ADMIN: 14-day follow trend (new follows per day) ──────────────
+create or replace function public.follow_trend(p_days int default 14)
+returns table (day date, follows bigint)
+language sql stable security definer set search_path = public as $$
+  select
+    d::date,
+    (select count(*) from public.follows f where f.created_at::date = d::date)
+  from generate_series(current_date - (p_days - 1), current_date, interval '1 day') d;
+$$;
+
+grant execute on function public.follow_trend to authenticated;

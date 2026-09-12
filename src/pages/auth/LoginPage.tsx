@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/useToast'
 type Mode = 'signin' | 'signup' | 'reset'
 
 export default function LoginPage() {
-  const { configured, signInWithPassword, signUp, signInWithMagicLink, resetPassword, updatePassword } = useAuth()
+  const { configured, signInWithPassword, signUp, signInWithMagicLink, resetPassword, updatePassword, signInWithOAuth } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -44,6 +44,14 @@ export default function LoginPage() {
       toast(err ?? 'Reset link sent - check your inbox.')
       if (!err) setMode('signin')
     }
+  }
+
+  async function handleOAuth(provider: 'github' | 'google' | 'discord') {
+    setBusy(true)
+    const err = await signInWithOAuth(provider)
+    setBusy(false)
+    if (err) toast(err, true)
+    // On success the browser redirects to the provider; no local navigation.
   }
 
   if (!configured) {
@@ -103,6 +111,22 @@ export default function LoginPage() {
             {busy ? '...' : title.toUpperCase() + ' \u2192'}
           </button>
         </form>
+        {!isRecovery && mode !== 'reset' && (
+          <>
+            <div className="oauth-row" role="group" aria-label="Sign in with a provider">
+              <button type="button" className="btn-ghost-line btn-small" onClick={() => void handleOAuth('github')} disabled={busy}>
+                GitHub
+              </button>
+              <button type="button" className="btn-ghost-line btn-small" onClick={() => void handleOAuth('google')} disabled={busy}>
+                Google
+              </button>
+              <button type="button" className="btn-ghost-line btn-small" onClick={() => void handleOAuth('discord')} disabled={busy}>
+                Discord
+              </button>
+            </div>
+            <div className="oauth-divider meta"><span>or with email</span></div>
+          </>
+        )}
         {!isRecovery && (
           <div className="auth-alt meta">
             {mode === 'signin' ? (

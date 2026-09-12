@@ -113,15 +113,18 @@ where id = (select id from auth.users where email = 'YOUR_ADMIN_EMAIL');
 
 3. Sign in at `/blog/admin/` — the control room is now live.
 
-#### 5. (Optional) Netlify environment variables
-For the server-generated **sitemap** and **RSS**, set in Netlify → Site settings → Environment variables:
+#### 5. Deployment environment variables (Vercel)
+The site deploys on **Vercel** (`adityauniyal.vercel.app`). For the server-generated **sitemap** and **RSS** (`/blog/sitemap.xml`, `/blog/rss.xml` — served by the `api/` serverless routes), set in Vercel → Project → Settings → Environment Variables:
 
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
+- `SITE_URL` (optional — overrides the canonical origin, e.g. when you add a custom domain)
 
-(The existing `SENDGRID_API_KEY`, `TO_EMAIL`, `FROM_EMAIL` for the feedback function are unchanged.)
+Client-side vars (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) must also be set in Vercel for the journal to work in production — same values as your local `.env.local`.
 
-Also add your Supabase auth redirect: Supabase → Authentication → URL Configuration → add `https://adityauniyal.is-a.dev/blog/login/` to **Redirect URLs** (use `http://localhost:8888/blog/login/` for `netlify dev`).
+Legacy `netlify/functions/` (sendFeedback via SendGrid) still works if you also keep a Netlify mirror; Vercel ignores that folder.
+
+Also add your Supabase auth redirect: Supabase → Authentication → URL Configuration → add `https://adityauniyal.vercel.app/blog/login` to **Redirect URLs** (keep `http://localhost:5173/blog/login` for local dev).
 
 ### Contributor publishing flow
 

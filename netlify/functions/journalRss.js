@@ -2,7 +2,7 @@
 // Generates /blog/rss.xml from published journal posts (Supabase REST).
 // Uses only the anon key — never a service key — and only reads published posts.
 
-const SITE = 'https://adityauniyal.is-a.dev';
+const SITE = process.env.SITE_URL || 'https://adityauniyal.vercel.app';
 
 exports.handler = async () => {
   const SUPABASE_URL = process.env.SUPABASE_URL;

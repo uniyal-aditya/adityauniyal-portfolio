@@ -239,7 +239,7 @@ export default function PostPage() {
           path: '/blog/post/' + post.slug,
           image: post.cover_image_url,
           authorName: post.profiles?.display_name || post.profiles?.username || 'Aditya Uniyal',
-          authorUrl: 'https://adityauniyal.is-a.dev/blog/author/' + (post.profiles?.username ?? ''),
+          authorUrl: window.location.origin + '/blog/author/' + (post.profiles?.username ?? ''),
           publishedIso: post.published_at,
           modifiedIso: post.updated_at,
         })}

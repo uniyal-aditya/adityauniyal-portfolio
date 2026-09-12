@@ -12,7 +12,7 @@ const SECTIONS = [
 export default function Privacy() {
   return (
     <main>
-      <Seo title="Privacy Policy - Aditya Uniyal" description="Privacy policy for adityauniyal.is-a.dev - no tracking, no ads." path="/privacy" />
+      <Seo title="Privacy Policy - Aditya Uniyal" description="Privacy policy for adityauniyal.vercel.app - no tracking, no ads." path="/privacy" />
       <div className="page-top">
         <div className="container">
           <div className="pt-label">Legal</div>

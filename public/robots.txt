@@ -6,4 +6,4 @@ Disallow: /blog/login
 Disallow: /blog/signup
 Disallow: /blog/apply
 
-Sitemap: https://adityauniyal.is-a.dev/blog/sitemap.xml
+Sitemap: https://adityauniyal.vercel.app/blog/sitemap.xml

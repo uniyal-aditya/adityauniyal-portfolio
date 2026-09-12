@@ -22,6 +22,7 @@ interface AuthActions {
   updatePassword: (password: string) => Promise<string | null>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
+  signInWithOAuth: (provider: 'github' | 'google' | 'discord') => Promise<string | null>
 }
 
 const Ctx = createContext<(AuthState & AuthActions) | null>(null)
@@ -121,6 +122,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setProfile(null)
   }
 
+  async function signInWithOAuth(provider: 'github' | 'google' | 'discord') {
+    if (!SUPABASE_CONFIGURED) return 'Auth is not configured yet.'
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/blog/login`,
+        // Ask GitHub/Discord for the email scope so profiles get an email.
+        scopes: provider === 'google' ? undefined : 'read:user user:email',
+      },
+    })
+    return error ? friendly(error.message) : null
+  }
+
   async function refreshProfile() {
     const uid = session?.user?.id
     if (!uid) return
@@ -149,6 +163,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     updatePassword,
     signOut,
     refreshProfile,
+    signInWithOAuth,
   }
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

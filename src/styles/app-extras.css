@@ -379,3 +379,12 @@
   background: rgba(200,241,53,0.06); border: 1px solid rgba(200,241,53,0.18);
   border-radius: 3px; padding: 1px 6px;
 }
+
+/* ── OAuth buttons on the auth page ─────────────────────── */
+.oauth-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.oauth-row .btn-ghost-line { flex: 1; text-align: center; justify-content: center; }
+.oauth-divider {
+  display: flex; align-items: center; gap: 12px; margin: 16px 0 4px;
+  color: var(--dim-3); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+}
+.oauth-divider::before, .oauth-divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }

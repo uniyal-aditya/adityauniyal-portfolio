@@ -102,6 +102,7 @@ export default function PostPage() {
   const qc = useQueryClient()
   const pct = useReadingProgress()
   const lastSaved = useRef(0)
+  const [followBusy, setFollowBusy] = useState(false)
 
   const { data: post, isLoading } = useQuery({
     queryKey: ['post', slug],
@@ -267,6 +268,32 @@ export default function PostPage() {
                 {post.updated_at && post.updated_at !== post.published_at && <span> &middot; updated {fmtDate(post.updated_at)}</span>}
               </div>
             </div>
+            {post.profiles && (!user || user.id !== post.profiles.id) && (
+              <div className="pb-follow">
+                {user ? (
+                  <button
+                    className={'pb-follow-btn' + (following ? ' on' : '')}
+                    disabled={followBusy}
+                    aria-pressed={Boolean(following)}
+                    onClick={async () => {
+                      setFollowBusy(true)
+                      try {
+                        await toggleFollow(user.id, post.profiles!.id, Boolean(following))
+                        void qc.invalidateQueries({ queryKey: ['following-author', post.profiles!.id, user.id] })
+                      } finally {
+                        setFollowBusy(false)
+                      }
+                    }}
+                  >
+                    {following ? 'FOLLOWING \u2713' : '+ FOLLOW'}
+                  </button>
+                ) : (
+                  <Link className="pb-follow-btn" to="/blog/login" title="Sign in to follow">
+                    + FOLLOW
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
           {post.cover_image_url && (
             <figure className="post-cover">

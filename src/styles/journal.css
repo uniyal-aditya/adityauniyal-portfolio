@@ -1272,3 +1272,19 @@ table.data a:hover { color: var(--lime); }
   color: var(--lime); padding: 6px 10px 8px; border-bottom: 1px solid var(--line);
   margin-bottom: 6px;
 }
+
+/* ── BYLINE FOLLOW BUTTON (article page) ────────────────────────── */
+.pb-follow { margin-left: auto; }
+.pb-follow-btn {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+  padding: 7px 14px; border: 1px solid rgba(200,241,53,0.45);
+  color: var(--lime); background: transparent; cursor: pointer;
+  text-decoration: none; display: inline-block; border-radius: 2px;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.pb-follow-btn:hover, .pb-follow-btn:focus-visible { background: var(--lime); color: var(--ink); }
+.pb-follow-btn.on {
+  border-color: var(--line); color: var(--bone); background: transparent;
+}
+.pb-follow-btn.on:hover { background: var(--sand); color: var(--ink); }
+.pb-follow-btn:disabled { opacity: 0.55; cursor: wait; }

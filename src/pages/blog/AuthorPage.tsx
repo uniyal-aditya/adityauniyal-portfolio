@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
-import { fetchAuthorPage, fetchFollowerCount, fetchIsFollowing, toggleFollow } from '@/lib/journal-api'
+import { fetchAuthorPage, fetchFollowerCount, fetchFollowers, fetchIsFollowing, toggleFollow } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
 import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons } from '@/components/journal/bits'
 import { useReveal } from '@/hooks/useReveal'
@@ -24,6 +24,11 @@ export default function AuthorPage() {
   const { data: followers } = useQuery({
     queryKey: ['followers', data?.profile?.id],
     queryFn: () => fetchFollowerCount(data!.profile!.id),
+    enabled: Boolean(data?.profile),
+  })
+  const { data: followerList } = useQuery({
+    queryKey: ['follower-list', data?.profile?.id],
+    queryFn: () => fetchFollowers(data!.profile!.id),
     enabled: Boolean(data?.profile),
   })
   const { data: followingThis } = useQuery({
@@ -115,6 +120,20 @@ export default function AuthorPage() {
       </header>
       <section>
         <div className="container">
+          {(followerList ?? []).length > 0 && (
+            <>
+              <div className="section-label reveal">Followed by</div>
+              <div className="writers-grid reveal d1" style={{ marginBottom: 72 }}>
+                {followerList!.map((f) => (
+                  <Link key={f.id} to={'/blog/author/' + f.username} className="writer-card">
+                    <Avatar profile={f} size={56} />
+                    <h4>{f.display_name || f.username}</h4>
+                    <div className="meta">{f.role.replace('_', ' ')}{f.verified ? ' · verified' : ''}</div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
           <div className="section-label reveal">Latest articles</div>
           {data.posts.length === 0 ? (
             <EmptyState note="No published articles yet." />

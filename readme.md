@@ -82,22 +82,24 @@ Only the **public anon key** is used in frontend code. Service-role keys never b
 2. Note the **Project URL** and **anon public key** (Settings → API).
 
 #### 2. Run the SQL migrations
-Open **SQL Editor** in Supabase and run these three files **in order** (each is idempotent):
+Open **SQL Editor** in Supabase and run these four files **in order** (each is idempotent):
 
 1. `supabase/01-schema.sql` — tables, enums, indexes, triggers, seed categories
 2. `supabase/02-rls.sql` — Row Level Security policies + the `journal-media` storage bucket + storage policies
 3. `supabase/03-rpc.sql` — RPC functions: search, trending, admin analytics, moderation actions
+4. `supabase/04-applications.sql` — contributor applications table + RLS + review RPC
 
 #### 3. Configure the frontend keys
-Edit **`js/supabase-config.js`**:
+Copy `.env.example` to **`.env.local`** and fill it in:
 
-```js
-const SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJ...your-anon-key...';
+```ini
+VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ...your-anon-key...
 ```
 
 > ⚠️ Only the **anon** key goes here. It is safe to expose because RLS (step 2) restricts what it can do.
 > Never place the service-role key, SendGrid key, or any server secret in frontend JavaScript.
+> `.env.local` is git-ignored; Vite only exposes variables prefixed with `VITE_`.
 
 #### 4. Claim the owner account
 1. Visit `/blog/login/` → **Create account** using your admin email (or use a magic link).

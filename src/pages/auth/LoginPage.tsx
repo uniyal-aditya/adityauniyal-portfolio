@@ -3,7 +3,6 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
-import { EmptyState } from '@/components/journal/bits'
 
 type Mode = 'signin' | 'signup' | 'reset'
 
@@ -49,9 +48,28 @@ export default function LoginPage() {
 
   if (!configured) {
     return (
-      <div className="container" style={{ paddingTop: 120, maxWidth: 560 }}>
+      <div className="container" style={{ paddingTop: 120, maxWidth: 640 }}>
         <Seo title="Sign in - AU_ / JOURNAL" path="/blog/login" noindex />
-        <EmptyState title="Auth is not configured yet." note="Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to enable accounts." />
+        <div className="dash-card">
+          <div className="toc-label">Backend not connected</div>
+          <h2 style={{ fontFamily: 'var(--f-display)', fontSize: '2rem', margin: '10px 0 16px' }}>
+            Accounts unlock in 3 steps<span style={{ color: 'var(--lime)' }}>_</span>
+          </h2>
+          <ol className="setup-steps meta">
+            <li>
+              Create a free project at <a className="text-link" href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer">supabase.com/dashboard</a>
+            </li>
+            <li>
+              Run <code>supabase/01…04-*.sql</code> from this repo in the SQL Editor
+            </li>
+            <li>
+              Copy <code>.env.example</code> → <code>.env.local</code>, paste the project URL + anon key, restart <code>npm run dev</code>
+            </li>
+          </ol>
+          <p className="meta" style={{ marginTop: 14 }}>
+            Full walkthrough in <code>readme.md</code> → "Setup — 15 minutes".
+          </p>
+        </div>
         <div style={{ textAlign: 'center', marginTop: 24 }}>
           <Link to="/blog" className="btn-ghost-line">Back to the journal</Link>
         </div>

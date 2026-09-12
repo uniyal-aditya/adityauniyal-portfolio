@@ -19,7 +19,7 @@ export function Reveal({
   useReveal()
   const d = delay ? ` d${delay}` : ''
   return (
-    <div data-reveal className={`reveal${d} ${className}`} style={style}>
+    <div className={`reveal${d} ${className}`} style={style}>
       {children}
     </div>
   )

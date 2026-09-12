@@ -63,7 +63,7 @@ function Gate({ kind }: { kind: 'noconfig' | 'denied' }) {
         </h1>
         <p className="meta" style={{ marginTop: 14 }}>
           {kind === 'noconfig'
-            ? 'Configure Supabase in js/.env — see README. This console unlocks once the backend answers.'
+            ? 'Configure Supabase in .env.local — see README. This console unlocks once the backend answers.'
             : 'This console is restricted to admin and owner roles. Log in with an elevated account.'}
         </p>
         <Link to="/blog/login" className="btn-lime" style={{ marginTop: 26, display: 'inline-block' }}>Go to login →</Link>

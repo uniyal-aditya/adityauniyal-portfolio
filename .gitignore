@@ -5,7 +5,7 @@ dist-ssr
 .env
 .env.local
 .env.*.local
-.freebuff/*.log
+.freebuff/
 serve.log
 *.tsbuildinfo
 

@@ -62,7 +62,7 @@ export default function Dashboard() {
   if (!configured) {
     return (
       <div className="container" style={{ paddingTop: 140 }}>
-        <EmptyState title="The dashboard needs Supabase." note="Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY, then sign in." />
+        <EmptyState title="The dashboard needs Supabase." note="Create a free project (supabase.com/dashboard), run the supabase/*.sql files, then add VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY to .env.local and restart the dev server. Full steps: readme.md → Setup." />
       </div>
     )
   }

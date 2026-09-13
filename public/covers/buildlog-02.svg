@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="A bell with one lime notification dot among muted bells, terminal styled">
+  <defs>
+    <pattern id="grid3" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#f0ede6" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="#0a0a08"/>
+  <rect width="1600" height="900" fill="url(#grid3)"/>
+  <!-- muted background bells -->
+  <g stroke="#f0ede6" stroke-opacity="0.14" stroke-width="4" fill="none">
+    <path d="M 300 300 a 60 60 0 0 1 120 0 c 0 70 -30 90 -30 90 h -60 s -30 -20 -30 -90"/>
+    <path d="M 470 340 a 45 45 0 0 1 90 0 c 0 52 -22 68 -22 68 h -46 s -22 -16 -22 -68"/>
+    <path d="M 1140 320 a 52 52 0 0 1 104 0 c 0 60 -26 78 -26 78 h -52 s -26 -18 -26 -78"/>
+    <path d="M 1300 360 a 40 40 0 0 1 80 0 c 0 46 -20 60 -20 60 h -40 s -20 -14 -20 -60"/>
+  </g>
+  <!-- hero bell -->
+  <g transform="translate(800 430)">
+    <path d="M -95 -60 a 95 95 0 0 1 190 0 c 0 112 -48 144 -48 144 h -94 s -48 -32 -48 -144" fill="#1a1a17" stroke="#c8f135" stroke-width="7"/>
+    <path d="M -30 112 a 30 30 0 0 0 60 0" fill="none" stroke="#c8f135" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="98" cy="-92" r="26" fill="#c8f135"/>
+  </g>
+  <!-- radiating tick marks from the dot -->
+  <g stroke="#c8f135" stroke-width="4" stroke-linecap="round">
+    <line x1="940" y1="300" x2="968" y2="272"/>
+    <line x1="968" y1="338" x2="1002" y2="326"/>
+    <line x1="902" y1="290" x2="912" y2="254"/>
+  </g>
+  <!-- side annotation -->
+  <text x="180" y="470" font-family="Menlo, Consolas, monospace" font-size="24" fill="#6a6862">&gt; follower pings:</text>
+  <text x="180" y="506" font-family="Menlo, Consolas, monospace" font-size="24" fill="#c8f135">1 unread</text>
+  <text x="120" y="790" font-family="Impact, 'Arial Narrow', sans-serif" font-size="64" letter-spacing="3" fill="#f0ede6">ONE TRIGGER<tspan fill="#c8f135">_</tspan><tspan fill="#6a6862">EVERY FOLLOWER</tspan></text>
+  <path d="M 40 60 h 60 M 40 60 v 60" stroke="#c8f135" stroke-width="3" fill="none"/>
+  <path d="M 1560 840 h -60 M 1560 840 v -60" stroke="#c8f135" stroke-width="3" fill="none"/>
+</svg>

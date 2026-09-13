@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Git graph showing a main line and a side branch merging back, themed on the journal">
+  <defs>
+    <pattern id="grid2" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#f0ede6" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="#0a0a08"/>
+  <rect width="1600" height="900" fill="url(#grid2)"/>
+  <!-- rails -->
+  <line x1="120" y1="450" x2="1480" y2="450" stroke="#f0ede6" stroke-opacity="0.22" stroke-width="3"/>
+  <line x1="260" y1="260" x2="260" y2="640" stroke="#f0ede6" stroke-opacity="0.10" stroke-width="2"/>
+  <line x1="620" y1="260" x2="620" y2="640" stroke="#f0ede6" stroke-opacity="0.10" stroke-width="2"/>
+  <!-- side branch: fork, drift, merge back -->
+  <path d="M 260 450 C 380 450 420 260 560 260 L 1020 260 C 1160 260 1200 450 1330 450" fill="none" stroke="#e8593a" stroke-width="5" stroke-linecap="round"/>
+  <!-- main-line commits -->
+  <circle cx="260" cy="450" r="17" fill="#0a0a08" stroke="#f0ede6" stroke-width="4"/>
+  <circle cx="620" cy="450" r="17" fill="#0a0a08" stroke="#f0ede6" stroke-width="4"/>
+  <circle cx="1330" cy="450" r="21" fill="#c8f135"/>
+  <!-- branch commits -->
+  <circle cx="560" cy="260" r="15" fill="#0a0a08" stroke="#e8593a" stroke-width="4"/>
+  <circle cx="1020" cy="260" r="15" fill="#0a0a08" stroke="#e8593a" stroke-width="4"/>
+  <!-- commit labels -->
+  <text x="260" y="510" font-family="Menlo, Consolas, monospace" font-size="22" fill="#6a6862" text-anchor="middle">init</text>
+  <text x="560" y="216" font-family="Menlo, Consolas, monospace" font-size="22" fill="#e8593a" text-anchor="middle">idea</text>
+  <text x="1020" y="216" font-family="Menlo, Consolas, monospace" font-size="22" fill="#e8593a" text-anchor="middle">build in public</text>
+  <text x="1330" y="512" font-family="Menlo, Consolas, monospace" font-size="22" fill="#c8f135" text-anchor="middle">merge → journal</text>
+  <!-- wordmark -->
+  <text x="120" y="790" font-family="Impact, 'Arial Narrow', sans-serif" font-size="64" letter-spacing="3" fill="#f0ede6">BRANCHING<tspan fill="#c8f135">_</tspan><tspan fill="#6a6862">INTO A JOURNAL</tspan></text>
+  <path d="M 40 60 h 60 M 40 60 v 60" stroke="#c8f135" stroke-width="3" fill="none"/>
+  <path d="M 1560 840 h -60 M 1560 840 v -60" stroke="#c8f135" stroke-width="3" fill="none"/>
+</svg>

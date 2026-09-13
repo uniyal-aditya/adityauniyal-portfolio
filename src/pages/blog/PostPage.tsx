@@ -46,12 +46,14 @@ function CommentItem({ c, postId, all }: { c: Comment; postId: string; all: Comm
   const [replyOpen, setReplyOpen] = useState(false)
   const [body, setBody] = useState('')
   const replies = all.filter((x) => x.parent_id === c.id)
+  const qc = useQueryClient()
   async function sendReply() {
     if (!user || !body.trim()) return
     await addComment(postId, user.id, body.trim(), c.id)
     setBody('')
     setReplyOpen(false)
     toast('Reply posted.')
+    void qc.invalidateQueries({ queryKey: ['comments', postId] })
   }
   return (
     <div className="comment">

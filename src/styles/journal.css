@@ -1268,6 +1268,16 @@ table.data a:hover { color: var(--lime); }
 .comment-actions button { background: none; border: none; color: var(--dim-3); font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 0; cursor: pointer; }
 .comment-actions button:hover { color: var(--lime); }
 .comment-actions button + button { margin-left: 6px; }
+.comment.pinned { border-color: rgba(200,241,53,0.35); }
+.comment.pinned::before {
+  content: '';
+  display: block;
+  width: 32px; height: 2px;
+  background: var(--lime);
+  margin-bottom: 12px;
+}
+.pin-badge { color: var(--lime); font-weight: 700; }
+.mod-stamp { color: var(--dim-3); text-transform: none; letter-spacing: 0.04em; }
 .reply-box { margin-top: 12px; display: flex; gap: 10px; align-items: flex-start; }
 .reply-box textarea { flex: 1; background: var(--ink); border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; color: var(--bone); font-family: var(--f-body); font-size: 13.5px; outline: none; resize: vertical; }
 .comment-replies { margin-top: 14px; padding-left: 22px; border-left: 2px solid var(--ghost); }

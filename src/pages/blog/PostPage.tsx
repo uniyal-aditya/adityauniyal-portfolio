@@ -56,13 +56,17 @@ function CommentItem({ c, postId, all }: { c: Comment; postId: string; all: Comm
     void qc.invalidateQueries({ queryKey: ['comments', postId] })
   }
   return (
-    <div className="comment">
+    <div className={'comment' + (c.pinned ? ' pinned' : '')}>
       <div className="comment-head">
         <Avatar profile={c.profiles} />
         <strong>{c.profiles?.display_name || c.profiles?.username || 'reader'}</strong>
         {c.profiles?.verified && <VerifiedBadge />}
         <span className="dot-sep">&middot;</span>
-        <span className="meta">{timeAgo(c.created_at)}</span>
+        <span className="meta">
+          {timeAgo(c.created_at)}
+          {c.pinned && <span className="pin-badge" title={c.pinned_at ? 'Pinned ' + timeAgo(c.pinned_at) : 'Pinned by moderator'}> · PINNED</span>}
+          {(c as any).moderated_at && <span className="mod-stamp" title={'Moderated ' + timeAgo((c as any).moderated_at)}> · mod. {timeAgo((c as any).moderated_at)}</span>}
+        </span>
       </div>
       <p className="comment-body">{c.body}</p>
       <div className="comment-actions meta">

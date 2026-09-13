@@ -372,16 +372,26 @@ export async function fetchFollowing(profileId: string, limit = 24): Promise<Pro
   return ((data ?? []) as unknown as { profiles: Profile }[]).map((r) => r.profiles).filter(Boolean)
 }
 
-/** Visible comments with author profiles, oldest first. */
+/** Visible comments with author profiles — pinned first, then oldest first. */
 export async function fetchComments(postId: string): Promise<Comment[]> {
   if (!SUPABASE_CONFIGURED) return []
-  const { data, error } = await supabase
-    .from('comments')
-    .select('*, profiles(id, username, display_name, avatar_url, verified, role)')
-    .eq('post_id', postId)
-    .eq('status', 'visible')
-    .order('created_at', { ascending: true })
-  return error ? [] : (data as Comment[])
+  const base = () =>
+    supabase
+      .from('comments')
+      .select('*, profiles(id, username, display_name, avatar_url, verified, role)')
+      .eq('post_id', postId)
+      .eq('status', 'visible')
+  // Migration 07 ordering (pinned first); falls back cleanly pre-migration.
+  const pinned = await base().order('pinned', { ascending: false }).order('created_at', { ascending: true })
+  if (!pinned.error) return pinned.data as Comment[]
+  const legacy = await base().order('created_at', { ascending: true })
+  return legacy.error ? [] : (legacy.data as Comment[])
+}
+
+/** Pin or unpin a comment (admin only, enforced by the RPC). */
+export async function setCommentPinned(commentId: string, pinned: boolean): Promise<string | null> {
+  const { error } = await supabase.rpc('admin_toggle_pin_comment', { p_comment: commentId, p_pinned: pinned })
+  return error?.message ?? null
 }
 
 export async function addComment(postId: string, userId: string, body: string, parentId: string | null): Promise<void> {

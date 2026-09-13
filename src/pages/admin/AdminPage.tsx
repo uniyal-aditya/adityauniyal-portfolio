@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase, SUPABASE_CONFIGURED } from '@/lib/supabase'
 import type { Category, Comment, ContributorApplication, Post, Profile, Report, Tag, Media, NewsletterSubscriber, PostStatus, Role } from '@/lib/types'
 import {
-  fetchAdminAnalytics, fetchPostAnalytics,
+  fetchAdminAnalytics, fetchPostAnalytics, setCommentPinned,
 } from '@/lib/journal-api'
 import { EmptyState, Avatar, VerifiedBadge } from '@/components/journal/bits'
 
@@ -339,7 +339,8 @@ function CommentsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
     queryFn: async (): Promise<Comment[]> => {
       let req = supabase
         .from('comments')
-        .select('id, post_id, body, status, created_at, user:profiles!comments_user_id_fkey(username, display_name), posts(slug, title)')
+        .select('id, post_id, body, status, created_at, pinned, pinned_at, moderated_at, user:profiles!comments_user_id_fkey(username, display_name), moderator:profiles!comments_moderated_by_fkey(display_name), posts(slug, title)')
+        .order('pinned', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(100)
       if (filter) req = req.eq('status', filter)
@@ -351,6 +352,11 @@ function CommentsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
   const setSt = async (id: string, status: Comment['status']) => {
     const { error } = await supabase.rpc('admin_set_comment_status', { p_comment: id, p_status: status })
     if (error) return err(error)
+    void qc.invalidateQueries({ queryKey: ['admin-comments'] })
+  }
+  const setPin = async (id: string, pinned: boolean) => {
+    const error = await setCommentPinned(id, pinned)
+    if (error) return err(new Error(error))
     void qc.invalidateQueries({ queryKey: ['admin-comments'] })
   }
   return (
@@ -369,8 +375,17 @@ function CommentsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
             {q.data.map((c) => (
               <tr key={c.id}>
                 <td style={{ maxWidth: 380 }}>
-                  <div>{(c as any).user?.display_name ?? '—'} <span className="meta">· {fmt(c.created_at)}</span></div>
+                  <div>
+                    {(c as any).user?.display_name ?? '—'}
+                    <span className="meta"> · {fmt(c.created_at)}</span>
+                    {(c as any).pinned && <span className="pin-badge meta" style={{ marginLeft: 6 }}> · PINNED</span>}
+                  </div>
                   <div className="meta" style={{ color: 'var(--bone)', marginTop: 2 }}>{c.body.slice(0, 120)}{c.body.length > 120 ? '…' : ''}</div>
+                  {(c as any).moderated_at && (
+                    <div className="meta" style={{ marginTop: 4, color: 'var(--dim-3)' }}>
+                      mod. {fmt((c as any).moderated_at)}{((c as any).moderator?.display_name) ? ' by ' + (c as any).moderator.display_name : ''}
+                    </div>
+                  )}
                 </td>
                 <td><Link to={'/blog/post/' + ((c as any).posts?.slug ?? '')}>{((c as any).posts?.title ?? '—').slice(0, 40)}</Link></td>
                 <td><Pill s={c.status} /></td>
@@ -378,6 +393,7 @@ function CommentsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                     {c.status !== 'visible' && <button className="mini-btn" onClick={() => setSt(c.id, 'visible')}>show</button>}
                     {c.status === 'visible' && <button className="mini-btn" onClick={() => setSt(c.id, 'hidden')}>hide</button>}
+                    <button className="mini-btn" onClick={() => setPin(c.id, !(c as any).pinned)}>{(c as any).pinned ? 'unpin' : 'pin'}</button>
                     <button className="mini-btn danger" onClick={() => setSt(c.id, 'deleted')}>delete</button>
                   </div>
                 </td>

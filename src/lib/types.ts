@@ -88,6 +88,10 @@ export interface Comment {
   body: string
   status: CommentStatus
   created_at: string
+  pinned?: boolean
+  pinned_at?: string | null
+  moderated_at?: string | null
+  moderated_by?: string | null
   profiles?: Profile | null
 }
 

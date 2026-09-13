@@ -302,7 +302,7 @@ export default function Home() {
               <em>journal</em>.
             </h2>
             <div className="work-header-meta">
-              <Link to="/blog" style={{ color: 'var(--lime)', display: 'block', marginBottom: 6 }}>
+              <Link to="/blog" className="text-link" style={{ color: 'var(--lime)', display: 'inline-block', marginBottom: 6, padding: '8px 0' }}>
                 AU_ / JOURNAL &rarr;
               </Link>
               Ideas. Experiments.

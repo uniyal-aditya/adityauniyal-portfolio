@@ -713,7 +713,7 @@ export default function AdminPage() {
         <div className="admin-bar" style={{ justifyContent: 'space-between' }}>
           <span className="ab-title">~/au/journal/admin — {profile.display_name || profile.username}</span>
           <span className="ab-actions meta">
-            <Link to="/blog" style={{ color: 'var(--dim)' }}>← journal</Link>
+            <Link to="/blog" className="text-link" style={{ color: 'var(--dim)', padding: '8px 2px' }}>← journal</Link>
             <Link to="/blog/dashboard" style={{ color: 'var(--dim)' }}>dashboard</Link>
           </span>
         </div>

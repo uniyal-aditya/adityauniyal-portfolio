@@ -770,6 +770,13 @@ table.data a:hover { color: var(--lime); }
 .admin-tabs a:hover { color: var(--bone); }
 .admin-tabs a.active { color: var(--lime); border-bottom-color: var(--lime); }
 .admin-table-compact table.data td, .admin-table-compact table.data th { padding: 9px 12px; }
+.admin-table-compact { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.admin-table-compact table.data { min-width: 560px; }
+.admin-table-compact .mini-btn { padding: 8px 12px; }
+
+@media (max-width: 768px) {
+  .admin-grid { grid-template-columns: repeat(2, 1fr); }
+}
 .mini-btn {
   font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
   padding: 6px 10px; border: 1px solid var(--line); border-radius: 3px; color: var(--dim);
@@ -859,6 +866,20 @@ table.data a:hover { color: var(--lime); }
 }
 .toast.error { border-left-color: var(--rust); }
 @keyframes toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* mobile tap targets — meta links & footer links get reachable hit areas */
+@media (max-width: 768px) {
+  .meta a { padding: 8px 2px; }
+  .footer-right a { padding: 10px 0; }
+  .auth-foot a { padding: 10px 2px; }
+  .auth-note a { padding: 8px 2px; }
+  .auth-note .text-link { padding: 10px 2px; }
+  .auth-alt .text-link { padding: 12px 4px; }
+  .js-link { padding: 10px 0; }
+  .jn-right .btn-ghost-line { padding: 10px 14px; }
+  .nav-logo { padding: 10px 0; }
+  .status-live, .status-dev { padding: 6px 0; }
+}
 
 /* ── SHARE / LINK HELPERS ────────────────────────────────────────── */
 .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 32px; }
@@ -1135,10 +1156,21 @@ table.data a:hover { color: var(--lime); }
   z-index: 490;
   background: var(--ink);
   padding: 32px 24px;
-}
-@media (max-width: 768px) {
+}@media (max-width: 768px) {
+  .jn-right { gap: 4px; }
+  .journal-nav .nav-links { display: none; }
+  .jn-right .hamburger { display: flex; padding: 12px 8px; }
   .jn-right .nav-kbd { display: none; }
   .jn-user .jn-name { display: none; }
+  .jn-mobile a { font-family: var(--f-display); font-size: 2rem; padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--dim); }
+  .jn-mobile a:hover, .jn-mobile a.active { color: var(--bone); }
+  .jn-mobile-bell { padding: 16px 0; }
+} 
+@media (max-width: 480px) {
+  .jn-right { gap: 2px; }
+  .jn-sep { display: none; }
+  .journal-nav { padding: 0 16px; }
+  .jn-user .ac-fallback { width: 24px; height: 24px; }
 }
 
 /* ---- Post page layout ---- */
@@ -1233,8 +1265,9 @@ table.data a:hover { color: var(--lime); }
 .comment-head strong { font-size: 14px; }
 .comment-body { font-size: 14.5px; color: var(--bone); line-height: 1.65; }
 .comment-actions { margin-top: 10px; display: flex; gap: 14px; }
-.comment-actions button { background: none; border: none; color: var(--dim-3); font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 0; cursor: pointer; }
+.comment-actions button { background: none; border: none; color: var(--dim-3); font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 0; cursor: pointer; }
 .comment-actions button:hover { color: var(--lime); }
+.comment-actions button + button { margin-left: 6px; }
 .reply-box { margin-top: 12px; display: flex; gap: 10px; align-items: flex-start; }
 .reply-box textarea { flex: 1; background: var(--ink); border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; color: var(--bone); font-family: var(--f-body); font-size: 13.5px; outline: none; resize: vertical; }
 .comment-replies { margin-top: 14px; padding-left: 22px; border-left: 2px solid var(--ghost); }

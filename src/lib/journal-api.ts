@@ -375,16 +375,23 @@ export async function fetchFollowing(profileId: string, limit = 24): Promise<Pro
 /** Visible comments with author profiles — pinned first, then oldest first. */
 export async function fetchComments(postId: string): Promise<Comment[]> {
   if (!SUPABASE_CONFIGURED) return []
-  const base = () =>
-    supabase
-      .from('comments')
-      .select('*, profiles(id, username, display_name, avatar_url, verified, role)')
-      .eq('post_id', postId)
-      .eq('status', 'visible')
-  // Migration 07 ordering (pinned first); falls back cleanly pre-migration.
-  const pinned = await base().order('pinned', { ascending: false }).order('created_at', { ascending: true })
-  if (!pinned.error) return pinned.data as Comment[]
-  const legacy = await base().order('created_at', { ascending: true })
+  // Migration 07 added a second comments→profiles FK (moderated_by), so the
+  // embed MUST be disambiguated or PostgREST answers 300 Multiple Choices.
+  const { data, error } = await supabase
+    .from('comments')
+    .select('*, profiles!comments_user_id_fkey(id, username, display_name, avatar_url, verified, role)')
+    .eq('post_id', postId)
+    .eq('status', 'visible')
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: true })
+  if (!error) return data as Comment[]
+  // Pre-migration fallback: no pinned column / FK hint yet.
+  const legacy = await supabase
+    .from('comments')
+    .select('*, profiles!comments_user_id_fkey(id, username, display_name, avatar_url, verified, role)')
+    .eq('post_id', postId)
+    .eq('status', 'visible')
+    .order('created_at', { ascending: true })
   return legacy.error ? [] : (legacy.data as Comment[])
 }
 

@@ -650,8 +650,10 @@ export async function fetchAdminAnalytics(): Promise<AdminAnalytics | null> {
     ),
   ])
   if (totals.error) return null
+  // PostgREST returns scalar/row RPCs as an array - unwrap the single row
+  const totalsRow = (Array.isArray(totals.data) ? totals.data[0] : totals.data) ?? {}
   return {
-    totals: (totals.data ?? {}) as AdminAnalytics['totals'],
+    totals: totalsRow as AdminAnalytics['totals'],
     traffic: (traffic.data ?? []) as AdminAnalytics['traffic'],
     followTrend: ((followTrend.data as AdminAnalytics['followTrend']) ?? []) || [],
   }

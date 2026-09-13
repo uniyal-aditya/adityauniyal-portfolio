@@ -33,14 +33,20 @@ create policy notifications_own_update on public.notifications
 -- rows are only created by the trigger (security definer) — no client insert
 
 -- ── trigger: notify followers when a post becomes published ────────
+-- NOTE: never reference old.* on INSERT (it is unassigned) and never
+-- coalesce an enum to '' (cast of '' explodes). Guard with tg_op.
 create or replace function public.notify_followers_on_publish()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
+declare
+  prev_status text;
 begin
-  -- only when transitioning INTO published
-  if new.status = 'published' and coalesce(old.status, '') is distinct from 'published' then
+  if tg_op = 'UPDATE' then
+    prev_status := old.status::text;
+  end if;
+  if new.status::text = 'published' and prev_status is distinct from 'published' then
     insert into public.notifications (user_id, actor_id, post_id, kind)
     select f.follower_id, new.author_id, new.id, 'new_post'
     from public.follows f

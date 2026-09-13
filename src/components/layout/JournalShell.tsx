@@ -42,7 +42,7 @@ export function JournalNav() {
         {user ? (
           <div className="jn-user" tabIndex={0} aria-haspopup="menu">
             <Link to="/blog/dashboard" className="journal-nav-user" title="Dashboard">
-              <span className="ac-fallback" style={{ width: 28, height: 28 }}>
+              <span className="ac-fallback" style={{ width: 28, height: 28, fontSize: 11 }}>
                 {(profile?.display_name || profile?.username || user.email || '?').charAt(0).toUpperCase()}
               </span>
               <span className="jn-name">{profile?.display_name || profile?.username || 'you'}</span>

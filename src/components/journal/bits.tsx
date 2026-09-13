@@ -21,7 +21,15 @@ export function Avatar({ profile, size = 22 }: { profile?: Profile | null; size?
     )
   }
   return (
-    <span className="ac-fallback" style={{ width: size, height: size }}>
+    <span
+      className="ac-fallback"
+      style={{
+        width: size,
+        height: size,
+        flexShrink: 0,
+        fontSize: Math.max(9, Math.round(size * 0.38)),
+      }}
+    >
       {name.trim().charAt(0).toUpperCase()}
     </span>
   )

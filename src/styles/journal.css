@@ -231,15 +231,19 @@
   color: var(--rust); border: 1px solid rgba(232,89,58,0.3);
   background: rgba(232,89,58,0.06);
 }
+/* base avatar fallback — sized inline by the Avatar component */
+.ac-fallback {
+  border-radius: 50%; background: var(--sand);
+  border: 1px solid var(--line); display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--f-mono); color: var(--lime); overflow: hidden; user-select: none;
+}
 .author-chip { display: inline-flex; align-items: center; gap: 8px; }
 .author-chip img {
   width: 22px; height: 22px; border-radius: 50%; object-fit: cover;
   border: 1px solid var(--line); background: var(--sand);
 }
 .author-chip .ac-fallback {
-  width: 22px; height: 22px; border-radius: 50%; background: var(--sand);
-  border: 1px solid var(--line); display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--f-mono); font-size: 9px; color: var(--lime);
+  width: 22px; height: 22px; font-size: 9px;
 }
 .author-chip:hover { color: var(--bone); }
 .badge-verified {
@@ -879,6 +883,8 @@ table.data a:hover { color: var(--lime); }
   .jn-right .btn-ghost-line { padding: 10px 14px; }
   .nav-logo { padding: 10px 0; }
   .status-live, .status-dev { padding: 6px 0; }
+  /* admin/filter inputs: inline fixed widths would overflow 375px */
+  .filterbar { width: 100% !important; max-width: 100% !important; }
 }
 
 /* ── SHARE / LINK HELPERS ────────────────────────────────────────── */

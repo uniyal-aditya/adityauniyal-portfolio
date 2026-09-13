@@ -680,3 +680,16 @@ section { padding: 120px 0; }
   .pf-side { flex-direction: column; }
   .hero-h1 { font-size: clamp(3.8rem, 13vw, 5.5rem); }
 }
+
+/* ── Inline form validation errors (RHF + Zod) ─────────────────── */
+.cf-error {
+  margin-top: 6px;
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--rust);
+}
+.cf-input[aria-invalid='true'],
+.cf-textarea[aria-invalid='true'] {
+  border-color: var(--rust);
+}

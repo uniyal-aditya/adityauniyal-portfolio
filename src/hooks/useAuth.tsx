@@ -128,8 +128,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       provider,
       options: {
         redirectTo: `${window.location.origin}/blog/login`,
-        // Ask GitHub/Discord for the email scope so profiles get an email.
-        scopes: provider === 'google' ? undefined : 'read:user user:email',
+        // Scopes are provider-specific. Supabase appends these to the
+        // provider's own defaults, so only name scopes that provider
+        // actually understands - Discord rejects unknown ones (it 400s
+        // GitHub-style scopes with a cryptic {"scope":["2"]}).
+        scopes: provider === 'github' ? 'read:user user:email' : undefined,
       },
     })
     return error ? friendly(error.message) : null

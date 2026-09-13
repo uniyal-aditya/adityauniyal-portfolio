@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useTypewriter } from '@/hooks/useTypewriter'
 import { useReveal } from '@/hooks/useReveal'
-import { fetchLatestPosts } from '@/lib/journal-api'
+import { fetchLatestPosts, fetchSeriesPage } from '@/lib/journal-api'
 import { Seo } from '@/lib/seo'
 import { fmtDate } from '@/lib/sanitize'
 import type { Post } from '@/lib/types'
@@ -108,6 +108,37 @@ function JournalTeaser() {
         </article>
       ))}
     </div>
+  )
+}
+
+/** 'Building AU_ / JOURNAL' series callout - hidden until the series exists. */
+const SERIES_SLUG = 'building-au-journal'
+function SeriesCallout() {
+  const { data } = useQuery({
+    queryKey: ['home-series-callout'],
+    queryFn: () => fetchSeriesPage(SERIES_SLUG),
+    enabled: SUPABASE_CONFIGURED,
+  })
+  if (!SUPABASE_CONFIGURED || !data?.series || !data.chapters.length) return null
+  const start = data.chapters[0]
+  return (
+    <Link to={'/blog/series/' + SERIES_SLUG} className="dash-card reveal d2" style={{ display: 'block', marginTop: 28, textDecoration: 'none' }}>
+      <div className="toc-label">SERIES</div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, flexWrap: 'wrap', padding: '10px 0 4px' }}>
+        <span style={{ fontFamily: 'var(--f-display)', fontSize: '1.7rem', letterSpacing: '0.01em' }}>
+          Building AU_<span style={{ color: 'var(--lime)' }}>_</span> / JOURNAL
+        </span>
+        <span className="meta" style={{ color: 'var(--lime)' }}>{data.chapters.length} CHAPTERS</span>
+      </div>
+      <div className="meta" style={{ marginBottom: 14 }}>{data.series.description}</div>
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span className="btn-ghost-line btn-small">START READING · 01 &rarr;</span>
+        <span className="meta">
+          {String(data.chapters.length).padStart(2, '0')}/{String(data.chapters.length).padStart(2, '0')} published
+        </span>
+      </div>
+      <span className="sr-only">First chapter: {start?.title}</span>
+    </Link>
   )
 }
 
@@ -282,6 +313,7 @@ export default function Home() {
           <div className="reveal d1">
             <JournalTeaser />
           </div>
+          <SeriesCallout />
           <div style={{ marginTop: 36 }} className="reveal d3">
             <Link to="/blog" className="btn-ghost-line">
               Read the journal &rarr;

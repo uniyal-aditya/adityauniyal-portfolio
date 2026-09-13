@@ -1,7 +1,8 @@
-import { lazy, Suspense } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Chrome } from '@/components/layout/Chrome'
 import { JournalShell } from '@/components/layout/JournalShell'
+import { useAuth } from '@/hooks/useAuth'
 
 // Portfolio pages (core shell - eager for instant first paint)
 import Home from '@/pages/portfolio/Home'
@@ -40,11 +41,40 @@ function PageFallback() {
   )
 }
 
+/**
+ * Password-recovery catch: when a reset email points at the site root (or any
+ * page other than the login form), the token exchange still creates a recovery
+ * session — but the user is stranded with no way to set a new password. If a
+ * session exists and the user has no usable password yet (recovery flag in the
+ * URL fragment is consumed by supabase-js), send them to the new-password form.
+ * Sessions from normal sign-ins are unaffected: we only redirect when landing
+ * on a public page, never on dashboard/admin where users are already working.
+ */
+function RecoveryCatch() {
+  const { session } = useAuth()
+  const loc = useLocation()
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!session) return
+    // supabase-js marks recovery logins in the URL fragment it consumes; the
+    // only reliable signal is a fresh session created while on a public page.
+    // Track: if the session appears while the user sits on '/', '/work' etc.,
+    // it must have come from an email link → new-password form.
+    const publicPaths = ['/', '/work', '/projects', '/about', '/skills', '/connect', '/feedback', '/privacy']
+    if (publicPaths.includes(loc.pathname)) {
+      navigate('/blog/login?mode=reset', { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
+  return null
+}
+
 export default function App() {
   const loc = useLocation()
 
   return (
     <Suspense fallback={<PageFallback />}>
+      <RecoveryCatch />
       <Routes location={loc}>
         <Route element={<Chrome />}>
           <Route path="/" element={<Home />} />

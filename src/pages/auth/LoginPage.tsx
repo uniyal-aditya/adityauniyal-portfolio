@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/useToast'
 type Mode = 'signin' | 'signup' | 'reset'
 
 export default function LoginPage() {
-  const { configured, signInWithPassword, signUp, signInWithMagicLink, resetPassword, updatePassword, signInWithOAuth } = useAuth()
+  const { configured, signInWithPassword, signUp, signInWithMagicLink, resetPassword, updatePassword, signInWithOAuth, session } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -17,10 +17,21 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
 
+  // Recovery links may land here with the query already stripped (Supabase's
+  // client cleans the URL during the token exchange), or from the home page if
+  // the email template points at the site root with a #access_token fragment.
+  // Trust the recovered SESSION, not the URL: while on the login page with a
+  // fresh recovery session, show the new-password form.
+  const [recovered, setRecovered] = useState(false)
+  useEffect(() => {
+    if (session) setRecovered(true)
+  }, [session])
+  const showNewPasswordForm = isRecovery || recovered
+
   async function submit(e: FormEvent) {
     e.preventDefault()
     setBusy(true)
-    if (isRecovery) {
+    if (showNewPasswordForm) {
       const err = await updatePassword(password)
       setBusy(false)
       if (err) return toast(err, true)
@@ -85,7 +96,7 @@ export default function LoginPage() {
     )
   }
 
-  const title = isRecovery ? 'New password' : mode === 'signup' ? 'Create account' : mode === 'reset' ? 'Reset password' : 'Sign in'
+  const title = showNewPasswordForm ? 'New password' : mode === 'signup' ? 'Create account' : mode === 'reset' ? 'Reset password' : 'Sign in'
   return (
     <div className="auth-page">
       <Seo title="Sign in - AU_ / JOURNAL" path="/blog/login" noindex />
@@ -95,15 +106,15 @@ export default function LoginPage() {
           <h1 style={{ fontFamily: 'var(--f-display)', fontSize: 'clamp(2.4rem,6vw,3.6rem)', lineHeight: 1 }}>{title}</h1>
         </div>
         <form className="cf" onSubmit={submit}>
-          {!isRecovery && mode !== 'reset' && (
+          {!showNewPasswordForm && mode !== 'reset' && (
             <div className="cf-group">
               <label className="cf-label" htmlFor="auth-email">Email</label>
               <input className="cf-input" id="auth-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
             </div>
           )}
-          {!(isRecovery && password) && (mode !== 'reset' || isRecovery) && (
+          {!(showNewPasswordForm && password) && (mode !== 'reset' || showNewPasswordForm) && (
             <div className="cf-group">
-              <label className="cf-label" htmlFor="auth-pass">{isRecovery ? 'New password' : 'Password'}</label>
+              <label className="cf-label" htmlFor="auth-pass">{showNewPasswordForm ? 'New password' : 'Password'}</label>
               <input className="cf-input" id="auth-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} />
             </div>
           )}
@@ -111,7 +122,7 @@ export default function LoginPage() {
             {busy ? '...' : title.toUpperCase() + ' \u2192'}
           </button>
         </form>
-        {!isRecovery && mode !== 'reset' && (
+        {!showNewPasswordForm && mode !== 'reset' && (
           <>
             <div className="oauth-row" role="group" aria-label="Sign in with a provider">
               <button type="button" className="btn-ghost-line btn-small" onClick={() => void handleOAuth('github')} disabled={busy}>
@@ -127,7 +138,7 @@ export default function LoginPage() {
             <div className="oauth-divider meta"><span>or with email</span></div>
           </>
         )}
-        {!isRecovery && (
+        {!showNewPasswordForm && (
           <div className="auth-alt meta">
             {mode === 'signin' ? (
               <>

@@ -3,7 +3,7 @@
 // Uses only the anon key — never a service key.
 // /blog/rss.xml is rewritten to this route in vercel.json.
 
-const SITE = process.env.SITE_URL || 'https://adityauniyal.vercel.app'
+const SITE = process.env.SITE_URL || 'https://adityauniyal.is-a.dev'
 
 export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/rss+xml; charset=utf-8')

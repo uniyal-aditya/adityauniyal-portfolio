@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 
 // Canonical site origin. Override per-environment with VITE_SITE_URL;
-// defaults to the Vercel deployment URL.
-const SITE = import.meta.env.VITE_SITE_URL || 'https://adityauniyal.vercel.app'
+// defaults to the production subdomain.
+const SITE = import.meta.env.VITE_SITE_URL || 'https://adityauniyal.is-a.dev'
 
 interface SeoProps {
   title: string

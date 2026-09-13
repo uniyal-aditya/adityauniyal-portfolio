@@ -2,7 +2,7 @@
 // Generates /blog/sitemap.xml from published journal posts (Supabase REST).
 // Uses only the anon key — never a service key — and only reads published posts.
 
-const SITE = process.env.SITE_URL || 'https://adityauniyal.vercel.app';
+const SITE = process.env.SITE_URL || 'https://adityauniyal.is-a.dev';
 
 exports.handler = async () => {
   const SUPABASE_URL = process.env.SUPABASE_URL;

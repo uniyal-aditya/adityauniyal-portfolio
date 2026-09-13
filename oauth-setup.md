@@ -15,7 +15,7 @@ Supabase rejects OAuth callbacks from unlisted URLs.
 
    ```
    http://localhost:5173/blog/login
-   https://adityauniyal.vercel.app/blog/login
+   https://adityauniyal.is-a.dev/blog/login
    ```
 
 4. **Save**
@@ -33,7 +33,7 @@ turn **OFF "Confirm email"** (your owner account is currently locked by it).
 2. **New OAuth App** (or "OAuth Apps → New OAuth App")
 3. Fill in:
    - **Application name:** `AU Journal`
-   - **Homepage URL:** `https://adityauniyal.vercel.app`
+   - **Homepage URL:** `https://adityauniyal.is-a.dev`
    - **Authorization callback URL:**
      ```
      https://qnuegizjakzwgxfvihbd.supabase.co/auth/v1/callback
@@ -138,7 +138,7 @@ Google needs a GCP project and a consent screen first.
 | "Provider could not perform request" / provider error page | Wrong Client ID/Secret — re-paste them |
 | `redirect_uri_mismatch` (Google) or callback 404 | The callback URL in the provider console doesn't exactly match `https://qnuegizjakzwgxfvihbd.supabase.co/auth/v1/callback` |
 | "Redirect URL not allowed" from Supabase | The redirect URL from Step 0 is missing or mistyped |
-| Logins work locally but not on production | `https://adityauniyal.vercel.app/blog/login` missing from Redirect URLs (Step 0) |
+| Logins work locally but not on production | `https://adityauniyal.is-a.dev/blog/login` missing from Redirect URLs (Step 0) |
 | Signed in but no profile row | Run `supabase/01-schema.sql` (contains the profile trigger) |
 
 ---

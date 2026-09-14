@@ -42,7 +42,7 @@ function BuildingPreview() {
             <em>building</em>.
           </h2>
           <div className="work-header-meta">
-            <Link to="/building" style={{ color: 'var(--lime)', textDecoration: 'none' }}>AU_ / BUILDING &rarr;</Link>
+            <Link to="/building" style={{ color: 'var(--lime)', textDecoration: 'none', display: 'inline-block', padding: '6px 0' }}>AU_ / BUILDING &rarr;</Link>
             <span>A live snapshot of what I'm building.</span>
           </div>
         </div>
@@ -69,7 +69,7 @@ function BuildingPreview() {
                 ),
               )}
             </ol>
-            <Link to="/building" className="meta" style={{ display: 'inline-block', marginTop: 12, color: 'var(--lime)', textDecoration: 'none', fontFamily: 'var(--f-mono)' }}>
+            <Link to="/building" className="meta" style={{ display: 'inline-block', marginTop: 10, padding: '8px 0', color: 'var(--lime)', textDecoration: 'none', fontFamily: 'var(--f-mono)' }}>
               VIEW BUILDING &rarr;
             </Link>
           </div>

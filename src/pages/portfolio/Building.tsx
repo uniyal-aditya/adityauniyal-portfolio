@@ -124,24 +124,28 @@ export default function Building() {
       <Seo title="Building - Aditya Uniyal" path="/building" description="A live snapshot of what Aditya is building, coding and contributing to." />
 
       {/* ── HERO ── */}
-      <header className="container work-header reveal" style={{ paddingTop: 40 }}>
-        <p className="terminal-line" style={{ color: 'var(--dim-3)', fontFamily: 'var(--f-mono)', fontSize: 13 }} aria-hidden="true">
-          ~/au/building $
-        </p>
-        <h1 style={{ fontSize: 'clamp(3rem, 8vw, 6.5rem)', lineHeight: 0.95, margin: '10px 0 18px' }}>
-          CURRENTLY<br />BUILDING<span style={{ color: 'var(--lime)' }}>.</span>
-        </h1>
-        <div className="work-header-meta">
-          <span>
-            {q.data ? (
-              <>Last updated {timeAgo(q.data.cachedAt)} · live from GitHub</>
-            ) : (
-              <>A live snapshot of what I'm building and learning.</>
-            )}
-          </span>
-          <a href={'https://github.com/' + GITHUB_USERNAME} target="_blank" rel="noreferrer" style={{ color: 'var(--lime)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <GithubIcon size={14} /> VIEW GITHUB <ArrowUpRight size={13} aria-hidden />
-          </a>
+      <header className="container" style={{ paddingTop: 40 }}>
+        <div className="work-header reveal">
+          <div>
+            <p className="terminal-line" style={{ color: 'var(--dim-3)', fontFamily: 'var(--f-mono)', fontSize: 13 }} aria-hidden="true">
+              ~/au/building $
+            </p>
+            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 6.5rem)', lineHeight: 0.95, margin: '10px 0 18px' }}>
+              CURRENTLY<br />BUILDING<span style={{ color: 'var(--lime)' }}>.</span>
+            </h1>
+          </div>
+          <div className="work-header-meta">
+            <span>
+              {q.data ? (
+                <>Last updated {timeAgo(q.data.cachedAt)} · live from GitHub</>
+              ) : (
+                <>A live snapshot of what I'm building and learning.</>
+              )}
+            </span>
+            <a href={'https://github.com/' + GITHUB_USERNAME} target="_blank" rel="noreferrer" style={{ color: 'var(--lime)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 0' }}>
+              <GithubIcon size={14} /> VIEW GITHUB <ArrowUpRight size={13} aria-hidden />
+            </a>
+          </div>
         </div>
       </header>
 
@@ -203,7 +207,7 @@ export default function Building() {
 
       {/* ── TIMELINE + STATS ── */}
       {q.data && (
-        <section className="container" style={{ paddingTop: 70, display: 'grid', gridTemplateColumns: 'minmax(0,1.5fr) minmax(0,1fr)', gap: 40 }}>
+        <section className="container" style={{ paddingTop: 70, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: 40 }}>
           <Reveal>
             <div className="toc-label" style={{ marginBottom: 14 }}>Recent activity</div>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 18 }}>

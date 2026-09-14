@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Cursor, Scanline } from '@/components/system/Effects'
 import { useAuth } from '@/hooks/useAuth'
 import { CommandPalette } from '@/components/layout/CommandPalette'
+import { AccountCluster } from '@/components/layout/AccountCluster'
 import { NotificationBell } from '@/components/journal/NotificationBell'
 
 const JOURNAL_LINKS = [
@@ -14,7 +15,7 @@ const JOURNAL_LINKS = [
 
 /** AU_ / JOURNAL navigation bar. */
 export function JournalNav() {
-  const { user, profile, isAdmin, signOut } = useAuth()
+  const { user, profile, signOut } = useAuth()
   const [open, setOpen] = useState(false)
   const loc = useLocation()
 
@@ -38,42 +39,7 @@ export function JournalNav() {
         <button className="nav-kbd" onClick={() => window.dispatchEvent(new CustomEvent('au:palette'))} aria-label="Open command palette">
           Ctrl K
         </button>
-        <NotificationBell />
-        {user ? (
-          <div className="jn-user" tabIndex={0} aria-haspopup="menu">
-            <Link to="/blog/dashboard" className="journal-nav-user" title="Dashboard">
-              <span className="ac-fallback" style={{ width: 28, height: 28, fontSize: 11 }}>
-                {(profile?.display_name || profile?.username || user.email || '?').charAt(0).toUpperCase()}
-              </span>
-              <span className="jn-name">{profile?.display_name || profile?.username || 'you'}</span>
-              {profile?.verified && <span className="badge-verified" title="Verified author">&#10003;</span>}
-            </Link>
-            <div className="jn-user-menu" role="menu" aria-label="Account menu">
-              <div className="jn-menu-role">{profile ? profile.role.replace('_', ' ').toUpperCase() : 'MEMBER'}</div>
-              <Link role="menuitem" to={profile?.username ? '/blog/author/' + profile.username : '/blog/dashboard'} onClick={() => setOpen(false)}>
-                My profile &rarr;
-              </Link>
-              <Link role="menuitem" to="/blog/dashboard" onClick={() => setOpen(false)}>
-                Dashboard
-              </Link>
-              <Link role="menuitem" to="/blog/dashboard?tab=profile" onClick={() => setOpen(false)}>
-                Edit profile
-              </Link>
-              {isAdmin && (
-                <Link role="menuitem" to="/blog/admin" onClick={() => setOpen(false)}>
-                  Admin console
-                </Link>
-              )}
-              <button role="menuitem" onClick={() => { setOpen(false); void signOut() }}>
-                Sign out
-              </button>
-            </div>
-          </div>
-        ) : (
-          <Link to="/blog/login" className="btn-ghost-line btn-small">
-            Sign in
-          </Link>
-        )}
+        <AccountCluster />
         <button className={'hamburger' + (open ? ' open' : '')} aria-label="Menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
           <span></span>
           <span></span>

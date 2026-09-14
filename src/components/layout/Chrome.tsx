@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Magnetic } from '@/components/ui/primitives'
 import { Cursor, Scanline } from '@/components/system/Effects'
 import { CommandPalette } from '@/components/layout/CommandPalette'
+import { AccountCluster } from '@/components/layout/AccountCluster'
 
 export const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -61,6 +62,7 @@ export function PortfolioNav({ onHire }: { onHire: () => void }) {
           <button className="nav-kbd" onClick={() => window.dispatchEvent(new CustomEvent('au:palette'))} aria-label="Open command palette">
             Ctrl K
           </button>
+          <AccountCluster />
           <Magnetic>
             <button className="nav-hire" onClick={onHire}>
               Hire Me &rarr;

@@ -6,6 +6,8 @@ import type { Profile } from '@/lib/types'
 interface AuthState {
   session: Session | null
   user: User | null
+  /** True only for sessions created by a password-recovery email link. */
+  isRecovery: boolean
   profile: Profile | null
   loading: boolean
   configured: boolean
@@ -38,6 +40,7 @@ function friendly(msg: string): string {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
+  const [isRecovery, setIsRecovery] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -51,7 +54,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!cancelled) setSession(data.session)
       if (!cancelled) setLoading(false)
     })
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
+      // supabase-js consumes the recovery token from the URL and fires this
+      // dedicated event — the only reliable signal of a reset-email arrival.
+      if (event === 'PASSWORD_RECOVERY') setIsRecovery(true)
       setSession(s)
     })
     return () => {
@@ -153,6 +159,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value: AuthState & AuthActions = {
     session,
     user: session?.user ?? null,
+    isRecovery,
     profile,
     loading,
     configured: SUPABASE_CONFIGURED,

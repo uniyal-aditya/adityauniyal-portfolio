@@ -52,21 +52,16 @@ function PageFallback() {
  * on a public page, never on dashboard/admin where users are already working.
  */
 function RecoveryCatch() {
-  const { session } = useAuth()
-  const loc = useLocation()
+  const { session, isRecovery } = useAuth()
   const navigate = useNavigate()
   useEffect(() => {
-    if (!session) return
-    // supabase-js marks recovery logins in the URL fragment it consumes; the
-    // only reliable signal is a fresh session created while on a public page.
-    // Track: if the session appears while the user sits on '/', '/work' etc.,
-    // it must have come from an email link → new-password form.
-    const publicPaths = ['/', '/work', '/projects', '/about', '/skills', '/connect', '/feedback', '/privacy']
-    if (publicPaths.includes(loc.pathname)) {
-      navigate('/blog/login?mode=reset', { replace: true })
-    }
+    // Only genuine recovery arrivals (PASSWORD_RECOVERY event) are caught.
+    // Normal sign-ins on public pages are never touched — signed-in users
+    // can browse /, /work etc. freely.
+    if (!session || !isRecovery) return
+    navigate('/blog/login?mode=reset', { replace: true })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session])
+  }, [session, isRecovery])
   return null
 }
 

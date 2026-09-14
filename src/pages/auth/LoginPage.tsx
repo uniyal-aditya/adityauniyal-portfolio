@@ -1,5 +1,5 @@
-import { useState, useEffect, type FormEvent } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useEffect, useState, type FormEvent } from 'react'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
@@ -7,26 +7,42 @@ import { useToast } from '@/hooks/useToast'
 type Mode = 'signin' | 'signup' | 'reset'
 
 export default function LoginPage() {
-  const { configured, signInWithPassword, signUp, signInWithMagicLink, resetPassword, updatePassword, signInWithOAuth, session } = useAuth()
+  const { configured, session, loading: authLoading, signInWithPassword, signUp, signInWithMagicLink, resetPassword, updatePassword, signInWithOAuth, isRecovery, setIsRecovery } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
+  const location = useLocation()
   const [params] = useSearchParams()
-  const isRecovery = params.get('mode') === 'reset'
+  const urlWantsReset = params.get('mode') === 'reset'
   const [mode, setMode] = useState<Mode>(params.get('mode') === 'signup' ? 'signup' : 'signin')
+
+  // /blog/signup must open in sign-up mode regardless of render order.
+  useEffect(() => {
+    if (params.get('mode') === 'signup') setMode('signup')
+     
+  }, [params])
+  // The bare /blog/signup route has no query param — derive sign-up from the path.
+  useEffect(() => {
+    if (location.pathname === '/blog/signup') setMode('signup')
+     
+  }, [location.pathname])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
 
   // Recovery links may land here with the query already stripped (Supabase's
-  // client cleans the URL during the token exchange), or from the home page if
-  // the email template points at the site root with a #access_token fragment.
-  // Trust the recovered SESSION, not the URL: while on the login page with a
-  // fresh recovery session, show the new-password form.
-  const [recovered, setRecovered] = useState(false)
+  // client cleans the URL during the token exchange). Trust the auth event,
+  // not the URL: isRecovery flips true only when supabase-js fires the
+  // dedicated PASSWORD_RECOVERY event — never for normal sign-ins.
+  const showNewPasswordForm = isRecovery || urlWantsReset
+
+  // Signed-in users never see the auth forms again: OAuth and magic-link
+  // returns land on /blog/login with a live session and go straight to the
+  // dashboard. Recovery arrivals (showNewPasswordForm) are exempt — they
+  // must set a new password first.
   useEffect(() => {
-    if (session) setRecovered(true)
-  }, [session])
-  const showNewPasswordForm = isRecovery || recovered
+    if (authLoading || !session || showNewPasswordForm) return
+    navigate('/blog/dashboard', { replace: true })
+  }, [authLoading, session, showNewPasswordForm, navigate])
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -34,9 +50,18 @@ export default function LoginPage() {
     if (showNewPasswordForm) {
       const err = await updatePassword(password)
       setBusy(false)
-      if (err) return toast(err, true)
+      if (err) {
+        // Stale/already-used reset link: no recovery session exists, so the
+        // new-password form cannot succeed — return to sign-in instead.
+        if (/expired or was already used/.test(err)) {
+          setIsRecovery(false)
+          setMode('signin')
+        }
+        return toast(err, true)
+      }
       toast('Password updated.')
       navigate('/blog/dashboard')
+      setIsRecovery(false)
       return
     }
     if (mode === 'signin') {
@@ -106,17 +131,28 @@ export default function LoginPage() {
           <h1 style={{ fontFamily: 'var(--f-display)', fontSize: 'clamp(2.4rem,6vw,3.6rem)', lineHeight: 1 }}>{title}</h1>
         </div>
         <form className="cf" onSubmit={submit}>
-          {!showNewPasswordForm && mode !== 'reset' && (
+          {showNewPasswordForm ? (
+            <div className="cf-group">
+              <label className="cf-label" htmlFor="auth-pass">New password</label>
+              <input className="cf-input" id="auth-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} autoComplete="new-password" />
+            </div>
+          ) : mode === 'reset' ? (
             <div className="cf-group">
               <label className="cf-label" htmlFor="auth-email">Email</label>
               <input className="cf-input" id="auth-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
+              <p className="meta" style={{ marginTop: 8, color: 'var(--ink-dim, var(--bone-dim, #999))' }}>We&apos;ll send a reset link to this address.</p>
             </div>
-          )}
-          {!(showNewPasswordForm && password) && (mode !== 'reset' || showNewPasswordForm) && (
-            <div className="cf-group">
-              <label className="cf-label" htmlFor="auth-pass">{showNewPasswordForm ? 'New password' : 'Password'}</label>
-              <input className="cf-input" id="auth-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} />
-            </div>
+          ) : (
+            <>
+              <div className="cf-group">
+                <label className="cf-label" htmlFor="auth-email">Email</label>
+                <input className="cf-input" id="auth-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
+              </div>
+              <div className="cf-group">
+                <label className="cf-label" htmlFor="auth-pass">Password</label>
+                <input className="cf-input" id="auth-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} />
+              </div>
+            </>
           )}
           <button className="btn-lime" type="submit" disabled={busy} style={{ justifyContent: 'center' }}>
             {busy ? '...' : title.toUpperCase() + ' \u2192'}

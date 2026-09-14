@@ -17,6 +17,8 @@ interface AuthState {
 }
 
 interface AuthActions {
+  /** Clears the PASSWORD_RECOVERY flag after the new password is saved. */
+  setIsRecovery: (v: boolean) => void
   signInWithPassword: (email: string, password: string) => Promise<string | null>
   signUp: (email: string, password: string) => Promise<string | null>
   signInWithMagicLink: (email: string) => Promise<string | null>
@@ -35,6 +37,7 @@ function friendly(msg: string): string {
   if (/already registered/i.test(msg)) return 'User already registered - try signing in.'
   if (/rate limit/i.test(msg)) return 'Too many attempts. Wait a minute and retry.'
   if (/failed to fetch/i.test(msg)) return 'Auth service unreachable. Is Supabase configured?'
+  if (/session missing/i.test(msg)) return 'This reset link has expired or was already used - request a new one.'
   return msg
 }
 
@@ -174,6 +177,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signOut,
     refreshProfile,
     signInWithOAuth,
+    setIsRecovery,
   }
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

@@ -49,6 +49,7 @@ export function CommandPalette() {
     const base: Cmd[] = [
       { id: 'home', label: 'Home', hint: 'page', action: go('/') },
       { id: 'work', label: 'Work', hint: 'page', action: go('/work') },
+      { id: 'building', label: 'AU_ / Building', hint: 'page', action: go('/building') },
       { id: 'projects', label: 'Projects', hint: 'page', action: go('/projects') },
       { id: 'about', label: 'About', hint: 'page', action: go('/about') },
       { id: 'skills', label: 'Skills', hint: 'page', action: go('/skills') },

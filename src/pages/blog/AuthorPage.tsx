@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
@@ -7,6 +7,54 @@ import { fetchAuthorPage, fetchFollowerCount, fetchFollowers, fetchFollowing, fe
 import { SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
 import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons } from '@/components/journal/bits'
 import { useReveal } from '@/hooks/useReveal'
+import { useQuery } from '@tanstack/react-query'
+import { CURRENT_PROJECT, GITHUB_USERNAME } from '@/data/building'
+import { fetchBuilding } from '@/lib/github'
+import { GithubIcon } from '@/components/icons/GithubIcon'
+
+/** Owner-only: CURRENTLY BUILDING + live GitHub snapshot (tasks #42/#72). */
+function OwnerBuildingBlock() {
+  const { data } = useQuery({ queryKey: ['github-building'], queryFn: fetchBuilding, staleTime: 10 * 60_000, retry: 1 })
+  const last = data?.events?.[0]
+  const latestBuildLog = CURRENT_PROJECT.journalSlugs[0]
+  return (
+    <div className="dash-card reveal" style={{ marginBottom: 64, padding: '24px 28px' }}>
+      <div className="toc-label">Currently building</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16, flexWrap: 'wrap' }}>
+        <h3 style={{ fontFamily: 'var(--f-display)', fontSize: '1.8rem', margin: '6px 0 0' }}>{CURRENT_PROJECT.name}</h3>
+        <span style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--lime)', display: 'inline-flex', alignItems: 'center', gap: 7 }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--lime)', display: 'inline-block' }} aria-hidden />
+          {CURRENT_PROJECT.status}
+        </span>
+      </div>
+      <p className="meta" style={{ margin: '8px 0 16px', maxWidth: 620 }}>{CURRENT_PROJECT.description}</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, borderTop: '1px solid var(--line)', paddingTop: 14 }}>
+        <div>
+          <div className="toc-label" style={{ fontSize: 10 }}>Latest activity</div>
+          <div className="meta" style={{ marginTop: 4 }}>
+            {last ? last.type === 'PushEvent' ? 'Commit' : last.type.replace('Event', '') : '—'}
+            {last ? ' · ' + new Date(last.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' }) : ''}
+          </div>
+        </div>
+        <div>
+          <div className="toc-label" style={{ fontSize: 10 }}>Latest build log</div>
+          <Link to={'/blog/post/' + latestBuildLog} className="meta" style={{ color: 'var(--lime)', textDecoration: 'none', display: 'inline-block', marginTop: 4 }}>
+            READ BUILD LOG &rarr;
+          </Link>
+        </div>
+        <div>
+          <div className="toc-label" style={{ fontSize: 10 }}>GitHub</div>
+          <div style={{ display: 'flex', gap: 14, marginTop: 4 }}>
+            <a href={'https://github.com/' + GITHUB_USERNAME + '/' + CURRENT_PROJECT.repo} target="_blank" rel="noreferrer" className="meta" style={{ color: 'var(--bone)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+              <GithubIcon size={12} /> VIEW GITHUB
+            </a>
+            <Link to="/building" className="meta" style={{ color: 'var(--lime)', textDecoration: 'none' }}>VIEW BUILDING &rarr;</Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function AuthorPage() {
   useReveal()
@@ -93,6 +141,7 @@ export default function AuthorPage() {
           {isOwner && <div className="meta" style={{ color: 'var(--lime)' }}>OWNER - ADITYA UNIYAL</div>}
           {!isOwner && p.role !== 'reader' && <div className="meta" style={{ color: 'var(--lime)' }}>{p.role.replace('_', ' ').toUpperCase()}</div>}
           {p.bio && <p className="author-bio">{p.bio}</p>}
+          {p.location && <div className="meta" style={{ fontFamily: 'var(--f-mono)', fontSize: 12, marginTop: 4 }}>{p.location}</div>}
           <div className="author-stats meta">
             <span>{followers ?? 0} followers</span>
             <span className="dot-sep">&middot;</span>
@@ -105,6 +154,13 @@ export default function AuthorPage() {
             {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer">github &#8599;</a>}
             {p.linkedin_url && <a href={p.linkedin_url} target="_blank" rel="noopener noreferrer">linkedin &#8599;</a>}
           </div>
+          {p.interests && (
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
+              {p.interests.split(',').map((s) => s.trim()).filter(Boolean).map((tag) => (
+                <span key={tag} style={{ fontFamily: 'var(--f-mono)', fontSize: 11, padding: '4px 9px', border: '1px solid var(--line)', color: 'var(--dim-2)' }}>{tag}</span>
+              ))}
+            </div>
+          )}
           {isMe && (
             <div style={{ marginTop: 18 }}>
               <Link to="/blog/dashboard?tab=profile" className="btn-ghost-line btn-small">Edit profile &rarr;</Link>
@@ -160,6 +216,7 @@ export default function AuthorPage() {
               </div>
             </>
           )}
+          {isOwner && <OwnerBuildingBlock />}
           <div className="section-label reveal">Latest articles</div>
           {data.posts.length === 0 ? (
             <EmptyState note="No published articles yet." />

@@ -7,6 +7,8 @@ import { Seo } from '@/lib/seo'
 import { fmtDate } from '@/lib/sanitize'
 import type { Post } from '@/lib/types'
 import { supabase, SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
+import { CURRENT_PROJECT } from '@/data/building'
+import { fetchBuilding } from '@/lib/github'
 
 const PROJECTS = [
   { num: '01', title: 'Numexa', desc: 'Scientific Discord calculator bot - advanced math parsing, sub-ms response', tags: ['Python', 'discord.py', 'Bot'] },
@@ -23,6 +25,59 @@ const TICKER = [
   ['India', 'Remote Worldwide'],
   ['24h', 'Response Time'],
 ]
+
+/** ~/au/building $ — restrained live preview of the Building page (task #67). */
+function BuildingPreview() {
+  const { data } = useQuery({ queryKey: ['github-building'], queryFn: fetchBuilding, staleTime: 10 * 60_000, retry: 1 })
+  const last = data?.events?.[0]
+  const second = data?.events?.[1]
+  return (
+    <section style={{ borderTop: '1px solid var(--line)', padding: '90px 0' }} id="building-preview">
+      <div className="container">
+        <p className="terminal-line" style={{ color: 'var(--dim-3)', fontFamily: 'var(--f-mono)', fontSize: 13 }} aria-hidden="true">~/au/building $</p>
+        <div className="work-header" style={{ marginBottom: 34 }}>
+          <h2>
+            Currently
+            <br />
+            <em>building</em>.
+          </h2>
+          <div className="work-header-meta">
+            <Link to="/building" style={{ color: 'var(--lime)', textDecoration: 'none' }}>AU_ / BUILDING &rarr;</Link>
+            <span>A live snapshot of what I'm building.</span>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+          <div className="dash-card" style={{ padding: '22px 24px' }}>
+            <div className="toc-label">Now</div>
+            <div style={{ fontFamily: 'var(--f-display)', fontSize: '1.7rem', margin: '6px 0 2px' }}>{CURRENT_PROJECT.name}</div>
+            <div className="meta" style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--lime)', display: 'inline-flex', alignItems: 'center', gap: 7 }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--lime)', display: 'inline-block' }} aria-hidden />
+              {CURRENT_PROJECT.status}
+            </div>
+            {last && <div className="meta" style={{ marginTop: 12 }}>Latest: {last.payload?.commits?.[0]?.message?.split('\n')[0]?.slice(0, 40) || last.type.replace('Event', '')} · {new Date(last.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}</div>}
+          </div>
+          <div className="dash-card" style={{ padding: '22px 24px' }}>
+            <div className="toc-label">Recent activity</div>
+            <ol style={{ listStyle: 'none', margin: '10px 0 0', padding: 0 }}>
+              {[last, second].map((e, i) =>
+                e ? (
+                  <li key={e.id} className="meta" style={{ fontFamily: 'var(--f-mono)', fontSize: 12, padding: '5px 0', borderBottom: i === 0 ? '1px solid var(--line)' : 'none' }}>
+                    {e.type === 'PushEvent' ? 'Commit' : e.type === 'PullRequestEvent' ? 'Pull Request' : e.type.replace('Event', '')} · {e.repo} · {new Date(e.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                  </li>
+                ) : (
+                  <li key={'ph' + i} className="meta" style={{ padding: '5px 0', color: 'var(--dim-3)' }}>No further recent activity</li>
+                ),
+              )}
+            </ol>
+            <Link to="/building" className="meta" style={{ display: 'inline-block', marginTop: 12, color: 'var(--lime)', textDecoration: 'none', fontFamily: 'var(--f-mono)' }}>
+              VIEW BUILDING &rarr;
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
 function TickerRow() {
   return (
@@ -291,6 +346,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ~/au/building $ — restrained live preview */}
+      <BuildingPreview />
 
       {/* FROM THE JOURNAL */}
       <section id="from-the-journal" style={{ borderTop: '1px solid var(--line)', padding: '100px 0' }}>

@@ -29,6 +29,8 @@ export interface Profile {
   website: string | null
   github_url: string | null
   linkedin_url: string | null
+  location: string | null
+  interests: string | null
   role: Role
   verified: boolean
   created_at: string

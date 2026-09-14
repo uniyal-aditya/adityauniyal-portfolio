@@ -272,6 +272,8 @@ export default function Dashboard() {
                   website: String(d.get('website') || ''),
                   github_url: String(d.get('github') || ''),
                   linkedin_url: String(d.get('linkedin') || ''),
+                  location: String(d.get('location') || ''),
+                  interests: String(d.get('interests') || ''),
                 })
                 if (err) {
                   if (/unique|duplicate/i.test(err)) return toast('That username is taken - try another.', true)
@@ -294,6 +296,15 @@ export default function Dashboard() {
               <div className="cf-group">
                 <label className="cf-label" htmlFor="pf-bio">Bio</label>
                 <textarea className="cf-textarea" id="pf-bio" name="bio" defaultValue={profile.bio ?? ''} rows={3} />
+              </div>
+              <div className="cf-group">
+                <label className="cf-label" htmlFor="pf-location">Location (optional)</label>
+                <input className="cf-input" id="pf-location" name="location" defaultValue={profile.location ?? ''} placeholder="India · Remote worldwide" />
+              </div>
+              <div className="cf-group">
+                <label className="cf-label" htmlFor="pf-interests">Interests (comma-separated)</label>
+                <input className="cf-input" id="pf-interests" name="interests" defaultValue={profile.interests ?? ''} placeholder="systems, ai, dev tools" aria-describedby="pf-int-hint" />
+                <div className="meta" id="pf-int-hint" style={{ marginTop: 6 }}>Shown as tags on your profile.</div>
               </div>
               <div className="cf-group">
                 <label className="cf-label" htmlFor="pf-web">Website</label>

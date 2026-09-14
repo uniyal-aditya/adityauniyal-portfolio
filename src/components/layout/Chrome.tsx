@@ -8,6 +8,7 @@ import { CommandPalette } from '@/components/layout/CommandPalette'
 export const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/work', label: 'Work' },
+  { to: '/building', label: 'Building' },
   { to: '/about', label: 'About' },
   { to: '/connect', label: 'Contact' },
   { to: '/blog', label: 'Journal' },
@@ -103,6 +104,7 @@ export function Footer() {
       <div className="footer-right">
         <Link to="/privacy">Privacy</Link>
         <Link to="/work">Work</Link>
+        <Link to="/building">Building</Link>
         <Link to="/connect">Contact</Link>
         <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener noreferrer">
           Fiverr

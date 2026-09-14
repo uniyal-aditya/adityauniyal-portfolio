@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth'
 // Portfolio pages (core shell - eager for instant first paint)
 import Home from '@/pages/portfolio/Home'
 import Work from '@/pages/portfolio/Work'
+const Building = lazy(() => import('@/pages/portfolio/Building'))
 
 // Everything below is code-split
 const Projects = lazy(() => import('@/pages/portfolio/Projects'))
@@ -79,6 +80,7 @@ export default function App() {
         <Route element={<Chrome />}>
           <Route path="/" element={<Home />} />
           <Route path="/work" element={<Work />} />
+          <Route path="/building" element={<Building />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/skills" element={<Skills />} />

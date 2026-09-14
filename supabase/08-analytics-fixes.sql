@@ -31,7 +31,9 @@ create trigger post_views_count
   for each row execute function public.bump_view_count();
 
 -- ── B. post_analytics: add uniques (distinct signed-in viewers) ────
--- New column appended at the end (create-or-replace safe).
+-- Return type changes (new column appended) → create or replace alone
+-- cannot alter it: drop first, then recreate (grants re-applied below).
+drop function if exists public.post_analytics(integer);
 create or replace function public.post_analytics(p_limit int default 50)
 returns table (
   id uuid, title text, slug text, status post_status,

@@ -270,9 +270,13 @@ export async function fetchFeaturedWriters(limit = 6): Promise<Profile[]> {
 
 /* ---- Reader social actions ---- */
 
-export async function recordView(postId: string): Promise<void> {
+export async function recordView(postId: string, viewerId?: string | null): Promise<void> {
   if (!SUPABASE_CONFIGURED) return
-  await supabase.from('post_views').insert({ post_id: postId })
+  // viewer_id stays null for anonymous visitors — uniques counts distinct
+  // signed-in readers, which is the honest limit of the data we can collect.
+  await supabase
+    .from('post_views')
+    .insert(viewerId ? { post_id: postId, viewer_id: viewerId } : { post_id: postId })
 }
 
 export async function fetchLikeState(postId: string, userId: string): Promise<boolean> {

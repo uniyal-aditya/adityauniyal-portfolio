@@ -147,7 +147,7 @@ export default function PostPage() {
   // View + reading history
   useEffect(() => {
     if (!post || !SUPABASE_CONFIGURED) return
-    void recordView(post.id)
+    void recordView(post.id, user?.id)
     // eslint-disable-next-line react-hooks/exhaustive-deps -- record once per loaded post, not on every object identity change
   }, [post?.id])
 

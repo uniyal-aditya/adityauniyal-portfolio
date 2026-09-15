@@ -46,6 +46,7 @@ export default function LoginPage() {
 
   async function submit(e: FormEvent) {
     e.preventDefault()
+    if (busy) return // Enter + click can both fire before the first await resolves
     setBusy(true)
     if (showNewPasswordForm) {
       const err = await updatePassword(password)

@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase, SUPABASE_CONFIGURED } from '@/lib/supabase'
+import { confirmDialog, infoDialog } from '@/hooks/dialog-bus'
 import type { Category, Comment, ContributorApplication, Post, Profile, Report, Tag, Media, NewsletterSubscriber, PostStatus, Role } from '@/lib/types'
 import {
   fetchAdminAnalytics, fetchPostAnalytics, setCommentPinned,
@@ -40,7 +41,7 @@ function SectionHead({ title, note, right }: { title: string; note?: string; rig
   )
 }
 
-const err = (e: unknown) => { console.error(e); alert(e instanceof Error ? e.message : String(e)) }
+const err = (e: unknown) => { console.error(e); infoDialog({ title: 'Something went wrong', body: e instanceof Error ? e.message : String(e), confirmLabel: 'Dismiss' }) }
 const fmt = (d?: string | null) => (d ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '—')
 const STATUS_PILL: Record<string, string> = {
   published: 'var(--lime)', approved: 'var(--lime)', visible: 'var(--lime)',
@@ -179,7 +180,7 @@ function ReviewQueue({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                     {p.status !== 'approved' && <button className="mini-btn" disabled={busy === p.id} onClick={() => setStatus(p.id, 'approved')}>approve</button>}
                     <button className="mini-btn" disabled={busy === p.id} onClick={() => setStatus(p.id, 'published')}>publish</button>
-                    <button className="mini-btn danger" disabled={busy === p.id} onClick={() => { if (confirm('Reject "' + p.title + '" back to draft?')) setStatus(p.id, 'rejected') }}>reject</button>
+                    <button className="mini-btn danger" disabled={busy === p.id} onClick={async () => { if (!(await confirmDialog({ title: 'Reject this submission?', body: '“' + p.title + '” goes back to the author as rejected.', confirmLabel: 'Reject', tone: 'rust' }))) return; setStatus(p.id, 'rejected') }}>reject</button>
                   </div>
                 </td>
               </tr>
@@ -248,7 +249,7 @@ function PostsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
                     <button className="mini-btn" onClick={() => act(() => supabase.rpc('admin_set_post_status', { p_post: p.id, p_status: 'published' }))}>publish</button>
                     <button className="mini-btn" onClick={() => act(() => supabase.rpc('admin_set_post_status', { p_post: p.id, p_status: 'archived' }))}>archive</button>
                     <button className="mini-btn" onClick={() => act(() => supabase.from('posts').update({ featured: !p.featured }).eq('id', p.id))}>{p.featured ? 'unfeature' : 'feature'}</button>
-                    <button className="mini-btn danger" onClick={() => { if (confirm('Delete "' + p.title + '" permanently?')) act(() => supabase.from('posts').delete().eq('id', p.id)) }}>delete</button>
+                    <button className="mini-btn danger" onClick={async () => { if (!(await confirmDialog({ title: 'Delete this post?', body: '“' + p.title + '” is removed permanently. This cannot be undone.', confirmLabel: 'Delete', tone: 'rust' }))) return; act(() => supabase.from('posts').delete().eq('id', p.id)) }}>delete</button>
                   </div>
                 </td>
               </tr>
@@ -480,7 +481,7 @@ function TaxonomyAdmin({ kind, qc }: { kind: 'categories' | 'tags'; qc: ReturnTy
     void qc.invalidateQueries({ queryKey: ['admin-tax'] })
   }
   const remove = async (id: string, label: string) => {
-    if (!confirm('Delete ' + label + '? Existing articles keep their references but lose this label.')) return
+    if (!(await confirmDialog({ title: 'Delete ' + label + '?', body: 'Existing articles keep their references but lose this label.', confirmLabel: 'Delete', tone: 'rust' }))) return
     const { error } = await supabase.from(kind).delete().eq('id', id)
     if (error) return err(error)
     void qc.invalidateQueries({ queryKey: ['admin-tax'] })
@@ -609,7 +610,7 @@ function ApplicationsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
     },
   })
   const decide = async (a: ContributorApplication, status: 'approved' | 'rejected') => {
-    if (status === 'approved' && !confirm('Approve ' + a.name + ' as a contributor? They get the contributor role on their next login.')) return
+    if (status === 'approved' && !(await confirmDialog({ title: 'Approve ' + a.name + '?', body: 'They get the contributor role on their next login.', confirmLabel: 'Approve' }))) return
     const { error } = await supabase.from('contributor_applications').update({ status }).eq('id', a.id)
     if (error) return err(error)
     if (status === 'approved' && a.user_id) {

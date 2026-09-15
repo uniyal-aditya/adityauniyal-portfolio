@@ -314,6 +314,7 @@ export default function PostPage() {
                 if (!user) return toast('Sign in to like articles.', true)
                 await toggleLike(post.id, user.id, Boolean(liked))
                 void qc.invalidateQueries({ queryKey: ['liked', post.id, user.id] })
+                void qc.invalidateQueries({ queryKey: ['post', slug] })
               }}
               className={liked ? 'on' : ''}
               aria-pressed={Boolean(liked)}
@@ -325,6 +326,7 @@ export default function PostPage() {
                 if (!user) return toast('Sign in to bookmark articles.', true)
                 await toggleBookmark(post.id, user.id, Boolean(marked))
                 void qc.invalidateQueries({ queryKey: ['marked', post.id, user.id] })
+                void qc.invalidateQueries({ queryKey: ['post', slug] })
               }}
               className={marked ? 'on' : ''}
               aria-pressed={Boolean(marked)}

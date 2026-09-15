@@ -7,6 +7,7 @@ import App from './App'
 import './styles/index.css'
 import { AuthProvider } from '@/hooks/useAuth'
 import { ToastProvider } from '@/hooks/useToast'
+import { DialogHost } from '@/hooks/useDialog'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
           <ToastProvider>
             <BrowserRouter>
               <App />
+              <DialogHost />
             </BrowserRouter>
           </ToastProvider>
         </AuthProvider>

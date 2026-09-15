@@ -16,6 +16,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
+import { promptDialog } from '@/hooks/dialog-bus'
 import { fetchPostForEdit, fetchCategories, uploadMedia, upsertPost } from '@/lib/journal-api'
 import { supabase, SUPABASE_CONFIGURED } from '@/lib/supabase'
 import { slugify, readingTime, mdToText, safeUrl } from '@/lib/sanitize'
@@ -62,6 +63,7 @@ function SlashMenu({ editor }: { editor: ReturnType<typeof useEditorSetup> }) {
   const [q, setQ] = useState('')
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
+  const { toast } = useToast()
   const items = useMemo<SlashItem[]>(() => {
     if (!editor) return []
     return [
@@ -70,26 +72,25 @@ function SlashMenu({ editor }: { editor: ReturnType<typeof useEditorSetup> }) {
       { label: '/image', hint: 'upload', run: () => window.dispatchEvent(new CustomEvent('au:editor-image')) },
       { label: '/code', hint: 'block', run: () => editor.chain().focus().toggleCodeBlock().run() },
       { label: '/quote', hint: 'blockquote', run: () => editor.chain().focus().toggleBlockquote().run() },
-      { label: '/link', hint: 'url', run: () => {
-        const url = window.prompt('Link URL (https://...)')
-        if (url) {
-          const s = safeUrl(url)
-          if (s) editor.chain().focus().setLink({ href: s }).run()
-          else window.alert('Invalid URL - only http(s) links are allowed.')
-        }
+      { label: '/link', hint: 'url', run: async () => {
+        const url = await promptDialog({ title: 'Link URL', inputLabel: 'URL', placeholder: 'https://…', confirmLabel: 'Insert link' })
+        if (!url) return
+        const s = safeUrl(url)
+        if (s) editor.chain().focus().setLink({ href: s }).run()
+        else toast('Invalid URL — only http(s) links are allowed.', true)
       } },
       { label: '/table', hint: '3x3', run: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
       { label: '/callout', hint: 'info box', run: () => editor.chain().focus().setNode('blockquote').run() },
-      { label: '/youtube', hint: 'embed video', run: () => {
-        const url = window.prompt('YouTube URL')
+      { label: '/youtube', hint: 'embed video', run: async () => {
+        const url = await promptDialog({ title: 'YouTube video', inputLabel: 'YouTube URL', placeholder: 'https://youtube.com/watch?v=…', confirmLabel: 'Embed' })
         if (!url) return
         editor.chain().focus().setYoutubeVideo({ src: url }).run()
       } },
-      { label: '/embed', hint: 'youtube or link', run: () => {
-        const url = window.prompt('Embed URL (YouTube or any link)')
+      { label: '/embed', hint: 'youtube or link', run: async () => {
+        const url = await promptDialog({ title: 'Embed URL', inputLabel: 'URL', placeholder: 'https://…', confirmLabel: 'Embed' })
         if (!url) return
         const s = safeUrl(url)
-        if (!s) return window.alert('Invalid URL.')
+        if (!s) return toast('Invalid URL.', true)
         const isYt = /youtu\.?be/.test(s)
         editor
           .chain()
@@ -103,7 +104,7 @@ function SlashMenu({ editor }: { editor: ReturnType<typeof useEditorSetup> }) {
       } },
       { label: '/divider', hint: 'hr', run: () => editor.chain().focus().setHorizontalRule().run() },
     ]
-  }, [editor])
+  }, [editor, toast])
 
   // open on a freshly typed "/", track the query, close otherwise
   useEffect(() => {

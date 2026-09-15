@@ -13,12 +13,11 @@ export default function LoginPage() {
   const location = useLocation()
   const [params] = useSearchParams()
   const urlWantsReset = params.get('mode') === 'reset'
-  const [mode, setMode] = useState<Mode>(params.get('mode') === 'signup' ? 'signup' : 'signin')
+  const [mode, setMode] = useState<Mode>(params.get('mode') === 'signup' ? 'signup' : urlWantsReset ? 'reset' : 'signin')
 
   // /blog/signup must open in sign-up mode regardless of render order.
   useEffect(() => {
     if (params.get('mode') === 'signup') setMode('signup')
-     
   }, [params])
   // The bare /blog/signup route has no query param — derive sign-up from the path.
   useEffect(() => {
@@ -32,8 +31,10 @@ export default function LoginPage() {
   // Recovery links may land here with the query already stripped (Supabase's
   // client cleans the URL during the token exchange). Trust the auth event,
   // not the URL: isRecovery flips true only when supabase-js fires the
-  // dedicated PASSWORD_RECOVERY event — never for normal sign-ins.
-  const showNewPasswordForm = isRecovery || urlWantsReset
+  // dedicated PASSWORD_RECOVERY event — never for normal sign-ins. A bare
+  // ?mode=reset URL means "I want to REQUEST a reset" (the email form), so
+  // stale/used links always leave the user a working path forward.
+  const showNewPasswordForm = isRecovery
 
   // Signed-in users never see the auth forms again: OAuth and magic-link
   // returns land on /blog/login with a live session and go straight to the

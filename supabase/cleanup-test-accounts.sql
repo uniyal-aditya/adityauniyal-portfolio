@@ -52,3 +52,26 @@ select count(*) as leftover_uploads    from storage.objects where bucket_id = 'j
   select id from public.profiles
   where email in ('au.dashboard.sweep@gmail.com', 'au.matrix.two@gmail.com', 'auresetproof@uberip.com')
 );
+
+-- ═══════════════════════════════════════════════════════════════════
+-- v2 ADDENDUM — two additional QA accounts found during the post-cleanup
+-- probe (both created during automated bug-probe sessions):
+--   • moddycorner   — posted the deleted "Test Comment", liked post #2,
+--                     follows the owner (all cascade away with the user)
+--   • bugprobe-check — zero footprint (sign-up flow probe only)
+-- Deleting the auth.users rows cascades their profiles/likes/follows;
+-- the bump_like_count trigger self-corrects the post's like_count.
+-- Safe to re-run: if they're already gone, every statement is a no-op.
+-- ═══════════════════════════════════════════════════════════════════
+
+delete from auth.users
+where id in (
+  select id from public.profiles
+  where username in ('moddycorner', 'bugprobe-check')
+    and role = 'reader'   -- defensive: never touch staff accounts
+);
+
+-- ── v2 verification receipts (each must return 0) ──────────────────
+select count(*) as v2_leftover_profiles from public.profiles where username in ('moddycorner', 'bugprobe-check');
+select count(*) as v2_orphan_follows    from public.follows where following_id not in (select id from public.profiles) or follower_id not in (select id from public.profiles);
+select count(*) as v2_orphan_likes      from public.likes   where user_id       not in (select id from public.profiles) or post_id not in (select id from public.posts);

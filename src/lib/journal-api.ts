@@ -136,7 +136,7 @@ export async function searchJournal(args: SearchArgs): Promise<Post[]> {
     const { data, error } = await req
     return error ? [] : normalizePosts(data as PostRow[])
   }
-  const { data, error } = await supabase.rpc('search_journal', { p_query: q, p_limit: args.limit ?? 30 })
+  const { data, error } = await supabase.rpc('search_journal', { q, p_limit: args.limit ?? 30 })
   if (error) return []
   let posts = normalizePosts(data as PostRow[])
   if (args.type) posts = posts.filter((p) => p.post_type === args.type)

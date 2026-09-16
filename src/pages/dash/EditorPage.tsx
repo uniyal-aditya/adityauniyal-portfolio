@@ -25,7 +25,7 @@ import { EmptyState } from '@/components/journal/bits'
 import type { PostType } from '@/lib/types'
 
 /** Portfolio projects a post can be linked to (manual list; validated on save). */
-const KNOWN_PROJECTS = ['adityauniyal-portfolio', CURRENT_PROJECT.repo]
+const KNOWN_PROJECTS = [...new Set(['adityauniyal-portfolio', CURRENT_PROJECT.repo])]
 
 const TYPES: [PostType, string][] = [
   ['article', 'Article'],

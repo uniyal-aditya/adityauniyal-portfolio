@@ -8,26 +8,28 @@ import { SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
 import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons } from '@/components/journal/bits'
 import { useReveal } from '@/hooks/useReveal'
 import { useQuery } from '@tanstack/react-query'
-import { CURRENT_PROJECT, GITHUB_USERNAME } from '@/data/building'
+import { GITHUB_USERNAME } from '@/data/building'
+import { useCurrentProject } from '@/hooks/useCurrentProject'
 import { fetchBuilding } from '@/lib/github'
 import { GithubIcon } from '@/components/icons/GithubIcon'
 
 /** Owner-only: CURRENTLY BUILDING + live GitHub snapshot (tasks #42/#72). */
 function OwnerBuildingBlock() {
   const { data } = useQuery({ queryKey: ['github-building'], queryFn: fetchBuilding, staleTime: 10 * 60_000, retry: 1 })
+  const project = useCurrentProject()
   const last = data?.events?.[0]
-  const latestBuildLog = CURRENT_PROJECT.journalSlugs[0]
+  const latestBuildLog = project.journalSlugs[0]
   return (
     <div className="dash-card reveal" style={{ marginBottom: 64, padding: '24px 28px' }}>
       <div className="toc-label">Currently building</div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16, flexWrap: 'wrap' }}>
-        <h3 style={{ fontFamily: 'var(--f-display)', fontSize: '1.8rem', margin: '6px 0 0' }}>{CURRENT_PROJECT.name}</h3>
+        <h3 style={{ fontFamily: 'var(--f-display)', fontSize: '1.8rem', margin: '6px 0 0' }}>{project.name}</h3>
         <span style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--lime)', display: 'inline-flex', alignItems: 'center', gap: 7 }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--lime)', display: 'inline-block' }} aria-hidden />
-          {CURRENT_PROJECT.status}
+          {project.status}
         </span>
       </div>
-      <p className="meta" style={{ margin: '8px 0 16px', maxWidth: 620 }}>{CURRENT_PROJECT.description}</p>
+      <p className="meta" style={{ margin: '8px 0 16px', maxWidth: 620 }}>{project.description}</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, borderTop: '1px solid var(--line)', paddingTop: 14 }}>
         <div>
           <div className="toc-label" style={{ fontSize: 10 }}>Latest activity</div>
@@ -45,7 +47,7 @@ function OwnerBuildingBlock() {
         <div>
           <div className="toc-label" style={{ fontSize: 10 }}>GitHub</div>
           <div style={{ display: 'flex', gap: 14, marginTop: 4 }}>
-            <a href={'https://github.com/' + GITHUB_USERNAME + '/' + CURRENT_PROJECT.repo} target="_blank" rel="noreferrer" className="meta" style={{ color: 'var(--bone)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <a href={'https://github.com/' + GITHUB_USERNAME + '/' + project.repo} target="_blank" rel="noreferrer" className="meta" style={{ color: 'var(--bone)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
               <GithubIcon size={12} /> VIEW GITHUB
             </a>
             <Link to="/building" className="meta" style={{ color: 'var(--lime)', textDecoration: 'none' }}>VIEW BUILDING &rarr;</Link>

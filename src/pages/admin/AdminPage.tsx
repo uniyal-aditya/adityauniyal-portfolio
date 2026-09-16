@@ -8,6 +8,7 @@ import { confirmDialog, infoDialog } from '@/hooks/dialog-bus'
 import type { Category, Comment, ContributorApplication, Post, Profile, Report, Tag, Media, NewsletterSubscriber, PostStatus, Role } from '@/lib/types'
 import {
   fetchAdminAnalytics, fetchPostAnalytics, setCommentPinned,
+  fetchCurrentProject, saveCurrentProject, type CurrentProjectConfig,
 } from '@/lib/journal-api'
 import { EmptyState, Avatar, VerifiedBadge } from '@/components/journal/bits'
 
@@ -657,19 +658,108 @@ function ApplicationsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
   )
 }
 
-/* ── Settings (read-only system status) ────────────────────────── */
+/* ── Settings ─────────────────────────────────────────────────── */
+
+const PROJECT_STATUSES: CurrentProjectConfig['status'][] = ['ACTIVE', 'RECENTLY ACTIVE', 'PAUSED']
 
 function SettingsAdmin() {
+  const { profile } = useAuth()
+  const qc = useQueryClient()
   const { data: cats } = useQuery({ queryKey: ['admin-tax', 'categories'], enabled: SUPABASE_CONFIGURED, queryFn: async () => (await supabase.from('categories').select('id')).data ?? [] })
+  const { data: saved, isLoading } = useQuery({
+    queryKey: ['current-project'],
+    queryFn: fetchCurrentProject,
+    enabled: SUPABASE_CONFIGURED,
+  })
+  const [form, setForm] = useState<CurrentProjectConfig | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  // Sync the editable form once the saved config (or fallback) arrives.
+  if (saved && !form) setForm(saved)
+
+  if (isLoading || !form) {
+    return (
+      <div>
+        <SectionHead title="Settings" note="Owner-editable site configuration. Secrets stay in environment variables, never in the client." />
+        <EmptyState title="Loading settings…" />
+      </div>
+    )
+  }
+
+  const set = (patch: Partial<CurrentProjectConfig>) => setForm({ ...form, ...patch })
+
+  async function save() {
+    if (!profile || busy || !form) return
+    if (!form.name.trim()) return void infoDialog({ title: 'Project name required', body: 'Give the currently-building project a name before saving.' })
+    setBusy(true)
+    const cfg: CurrentProjectConfig = {
+      ...form,
+      name: form.name.trim(),
+      description: form.description.trim(),
+      repo: form.repo.trim().replace(/^https:\/\/github\.com\//i, '').replace(/^.*github\.com\//i, '').replace(/\.git$/, ''),
+      stack: form.stack.map((s) => s.trim()).filter(Boolean),
+      journalSlugs: form.journalSlugs.map((s) => s.trim().replace(/^.*\/blog\/post\//, '')).filter(Boolean),
+    }
+    const err = await saveCurrentProject(cfg, profile.id)
+    setBusy(false)
+    if (err) return void infoDialog({ title: 'Save failed', body: err })
+    setForm(cfg)
+    void qc.invalidateQueries({ queryKey: ['current-project'] })
+    void infoDialog({ title: 'Settings saved', body: 'The building page, author page and journal teasers now use this project.' })
+  }
+
   return (
     <div>
-      <SectionHead title="Settings" note="System status — secrets stay in environment variables, never in the client." />
+      <SectionHead title="Settings" note="Owner-editable site configuration. Secrets stay in environment variables, never in the client." />
+
+      <div className="dash-card" style={{ maxWidth: 760, marginBottom: 28 }}>
+        <div className="toc-label">Currently building</div>
+        <div className="meta" style={{ marginBottom: 16 }}>
+          Shown on the Building page, your author page and the owner building block. Leave a field as-is to keep it.
+        </div>
+
+        <label className="toc-label" style={{ fontSize: 10, display: 'block' }} htmlFor="cp-name">Project name</label>
+        <input id="cp-name" className="cf-input" value={form.name} onChange={(e) => set({ name: e.target.value })} />
+
+        <label className="toc-label" style={{ fontSize: 10, display: 'block', marginTop: 14 }} htmlFor="cp-desc">Description</label>
+        <textarea id="cp-desc" className="cf-textarea" style={{ minHeight: 70 }} value={form.description} onChange={(e) => set({ description: e.target.value })} />
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14, marginTop: 14 }}>
+          <div>
+            <label className="toc-label" style={{ fontSize: 10, display: 'block' }} htmlFor="cp-status">Status</label>
+            <select id="cp-status" className="cf-input" value={form.status} onChange={(e) => set({ status: e.target.value as CurrentProjectConfig['status'] })}>
+              {PROJECT_STATUSES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="toc-label" style={{ fontSize: 10, display: 'block' }} htmlFor="cp-repo">GitHub repo</label>
+            <input id="cp-repo" className="cf-input" value={form.repo} onChange={(e) => set({ repo: e.target.value })} placeholder="owner/repo" />
+          </div>
+        </div>
+
+        <label className="toc-label" style={{ fontSize: 10, display: 'block', marginTop: 14 }} htmlFor="cp-stack">Stack (comma separated)</label>
+        <input id="cp-stack" className="cf-input" value={form.stack.join(', ')} onChange={(e) => set({ stack: e.target.value.split(',') })} />
+
+        <label className="toc-label" style={{ fontSize: 10, display: 'block', marginTop: 14 }} htmlFor="cp-slugs">Latest build-log slugs (newest first, comma separated)</label>
+        <input id="cp-slugs" className="cf-input" value={form.journalSlugs.join(', ')} onChange={(e) => set({ journalSlugs: e.target.value.split(',') })} />
+        <div className="meta" style={{ marginTop: 6 }}>
+          Full URLs are fine — they are trimmed to the slug. The first entry is the “Latest build log” link.
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+          <button className="btn-lime btn-small" disabled={busy} onClick={() => void save()}>{busy ? 'Saving…' : 'Save settings'}</button>
+          <button className="btn-ghost-line btn-small" disabled={busy} onClick={() => setForm(saved!)}>Reset</button>
+        </div>
+      </div>
+
       <div className="dash-grid">
         <div className="dash-card">
           <div className="toc-label">Backend</div>
           <div className="mini-row" style={{ display: 'block' }}>
             <div>Supabase: <span style={{ color: SUPABASE_CONFIGURED ? 'var(--lime)' : 'var(--rust)' }}>{SUPABASE_CONFIGURED ? 'connected' : 'not configured'}</span></div>
-            <div className="meta" style={{ marginTop: 4 }}>Anon key only on the client. Service role key lives in Netlify env vars for sitemap/RSS functions.</div>
+            <div className="meta" style={{ marginTop: 4 }}>Anon key only on the client. Server keys live in Vercel env vars for the sitemap/RSS routes.</div>
           </div>
         </div>
         <div className="dash-card">
@@ -682,8 +772,8 @@ function SettingsAdmin() {
         <div className="dash-card">
           <div className="toc-label">Deployment</div>
           <div className="mini-row" style={{ display: 'block' }}>
-            <div>Netlify + Vite</div>
-            <div className="meta" style={{ marginTop: 4 }}>Sitemap and RSS are server functions at /blog/sitemap.xml and /blog/rss.xml.</div>
+            <div>Vercel + Vite</div>
+            <div className="meta" style={{ marginTop: 4 }}>Sitemap and RSS are server routes at /blog/sitemap.xml and /blog/rss.xml.</div>
           </div>
         </div>
       </div>

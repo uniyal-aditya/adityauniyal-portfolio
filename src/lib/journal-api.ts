@@ -1,4 +1,5 @@
 import { supabase, SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
+import { CURRENT_PROJECT } from '@/data/building'
 import type {
   Post,
   Profile,
@@ -202,6 +203,49 @@ export async function fetchAuthorPage(username: string): Promise<{ profile: Prof
 }
 
 /** All categories for topic pills. */
+/* ---- Site settings (owner-editable config, fallback = code constants) ---- */
+
+export interface CurrentProjectConfig {
+  name: string
+  description: string
+  status: 'ACTIVE' | 'RECENTLY ACTIVE' | 'PAUSED'
+  stack: string[]
+  repo: string
+  journalSlugs: string[]
+}
+
+const REQUIRED_PROJECT_KEYS = ['name', 'description', 'status', 'stack', 'repo', 'journalSlugs'] as const
+
+/** Read the current-project config; merge DB over the code fallback per key. */
+export async function fetchCurrentProject(): Promise<CurrentProjectConfig> {
+  const fallback = CURRENT_PROJECT
+  if (!SUPABASE_CONFIGURED) return fallback
+  try {
+    const { data } = await supabase.from('site_settings').select('value').eq('key', 'current_project').maybeSingle()
+    const v = (data as { value: Partial<CurrentProjectConfig> } | null)?.value
+    if (!v || typeof v !== 'object') return fallback
+    const merged = { ...fallback }
+    for (const k of REQUIRED_PROJECT_KEYS) {
+      const val = (v as Record<string, unknown>)[k]
+      if (val !== undefined && val !== null && val !== '') {
+        (merged as Record<string, unknown>)[k] = val
+      }
+    }
+    return merged
+  } catch {
+    return fallback
+  }
+}
+
+/** Admin save for the current-project config. */
+export async function saveCurrentProject(cfg: CurrentProjectConfig, adminId: string): Promise<string | null> {
+  if (!SUPABASE_CONFIGURED) return 'Supabase is not configured.'
+  const { error } = await supabase
+    .from('site_settings')
+    .upsert({ key: 'current_project', value: cfg, updated_by: adminId }, { onConflict: 'key' })
+  return error ? error.message : null
+}
+
 export async function fetchCategories(): Promise<Category[]> {
   if (!SUPABASE_CONFIGURED) return []
   const { data, error } = await supabase.from('categories').select('*').order('name')

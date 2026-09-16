@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import { Seo } from '@/lib/seo'
 import { Reveal } from '@/components/system/Reveal'
 import { fetchBuilding } from '@/lib/github'
-import { CURRENT_PROJECT, GITHUB_USERNAME } from '@/data/building'
+import { GITHUB_USERNAME } from '@/data/building'
+import { useCurrentProject } from '@/hooks/useCurrentProject'
 import type { BuildingEvent } from '@/types/building'
 import {
   GitCommitHorizontal, GitPullRequest, CircleDot, Tag, FolderGit2, Star,
@@ -107,6 +108,7 @@ function Heatmap({ days, total }: { days: Record<string, number>; total: number 
 
 /* ---- page -------------------------------------------------------- */
 export default function Building() {
+  const project = useCurrentProject()
   const [filter, setFilter] = useState<Filter>('all')
   const q = useQuery({ queryKey: ['github-building'], queryFn: fetchBuilding, staleTime: 10 * 60_000, retry: 1 })
 
@@ -157,9 +159,9 @@ export default function Building() {
               <div>
                 <div className="toc-label">Currently building</div>
                 <h2 style={{ fontFamily: 'var(--f-display)', fontSize: '2.4rem', margin: '6px 0 4px' }}>
-                  {CURRENT_PROJECT.name}
+                  {project.name}
                 </h2>
-                <p style={{ color: 'var(--dim-2)', maxWidth: 560 }}>{CURRENT_PROJECT.description}</p>
+                <p style={{ color: 'var(--dim-2)', maxWidth: 560 }}>{project.description}</p>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div className="toc-label">Development status</div>
@@ -173,14 +175,14 @@ export default function Building() {
             <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', marginTop: 22, borderTop: '1px solid var(--line)', paddingTop: 18 }}>
               <div>
                 <div className="toc-label">Stack</div>
-                <div className="meta" style={{ fontFamily: 'var(--f-mono)' }}>{CURRENT_PROJECT.stack.join(' · ')}</div>
+                <div className="meta" style={{ fontFamily: 'var(--f-mono)' }}>{project.stack.join(' · ')}</div>
               </div>
               <div>
                 <div className="toc-label">Last update</div>
                 <div className="meta">{lastUpdate ? describeEvent(lastUpdate).title.slice(0, 44) + ' · ' + timeAgo(lastUpdate.createdAt) : 'no public activity yet'}</div>
               </div>
               <div style={{ display: 'flex', gap: 10, marginLeft: 'auto', alignItems: 'flex-end' }}>
-                <a className="btn btn-sm" style={{ padding: '9px 16px' }} href={'https://github.com/' + GITHUB_USERNAME + '/' + CURRENT_PROJECT.repo} target="_blank" rel="noreferrer">
+                <a className="btn btn-sm" style={{ padding: '9px 16px' }} href={'https://github.com/' + GITHUB_USERNAME + '/' + project.repo} target="_blank" rel="noreferrer">
                   VIEW GITHUB
                 </a>
                 <Link className="btn btn-sm" style={{ padding: '9px 16px' }} to="/blog">VIEW JOURNAL</Link>

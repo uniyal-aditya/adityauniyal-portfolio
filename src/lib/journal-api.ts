@@ -233,6 +233,13 @@ export interface SeriesChapter {
   position: number
 }
 
+/** All series for editor pickers. */
+export async function fetchSeriesList(): Promise<Series[]> {
+  if (!SUPABASE_CONFIGURED) return []
+  const { data } = await supabase.from('series').select('*').order('created_at', { ascending: true })
+  return (data ?? []) as unknown as Series[]
+}
+
 /** Series by slug with its ordered chapters. */
 export async function fetchSeriesPage(slug: string): Promise<{ series: Series | null; chapters: SeriesChapter[] }> {
   if (!SUPABASE_CONFIGURED || !slug) return { series: null, chapters: [] }

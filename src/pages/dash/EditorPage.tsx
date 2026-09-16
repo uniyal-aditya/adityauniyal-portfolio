@@ -17,11 +17,15 @@ import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
 import { promptDialog } from '@/hooks/dialog-bus'
-import { fetchPostForEdit, fetchCategories, uploadMedia, upsertPost } from '@/lib/journal-api'
+import { fetchPostForEdit, fetchCategories, fetchSeriesList, uploadMedia, upsertPost } from '@/lib/journal-api'
+import { CURRENT_PROJECT, GITHUB_USERNAME } from '@/data/building'
 import { supabase, SUPABASE_CONFIGURED } from '@/lib/supabase'
 import { slugify, readingTime, mdToText, safeUrl } from '@/lib/sanitize'
 import { EmptyState } from '@/components/journal/bits'
 import type { PostType } from '@/lib/types'
+
+/** Portfolio projects a post can be linked to (manual list; validated on save). */
+const KNOWN_PROJECTS = ['adityauniyal-portfolio', CURRENT_PROJECT.repo]
 
 const TYPES: [PostType, string][] = [
   ['article', 'Article'],
@@ -187,6 +191,10 @@ export default function EditorPage() {
   const [tagNames, setTagNames] = useState('')
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDesc, setSeoDesc] = useState('')
+  const [seriesId, setSeriesId] = useState('')
+  const [seriesPos, setSeriesPos] = useState('')
+  const [projectName, setProjectName] = useState('')
+  const [projectUrl, setProjectUrl] = useState('')
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(0)
   const [showMeta, setShowMeta] = useState(true)
@@ -194,6 +202,7 @@ export default function EditorPage() {
   const loadedRef = useRef(false)
 
   const { data: cats } = useQuery({ queryKey: ['categories'], queryFn: fetchCategories, enabled: SUPABASE_CONFIGURED })
+  const { data: seriesList } = useQuery({ queryKey: ['series-list'], queryFn: fetchSeriesList, enabled: SUPABASE_CONFIGURED })
   const { data: existing } = useQuery({
     queryKey: ['post-edit', editId],
     queryFn: () => fetchPostForEdit(editId!),
@@ -216,6 +225,16 @@ export default function EditorPage() {
     setTagNames((existing.tags ?? []).map((t) => t.name).join(', '))
     setSeoTitle(existing.seo_title ?? '')
     setSeoDesc(existing.seo_description ?? '')
+    const sp = existing.series_posts?.[0]
+    if (sp?.series) {
+      setSeriesId(String(sp.series.id))
+      setSeriesPos(String(sp.position ?? 1))
+    }
+    const pl = existing.project_links?.[0]
+    if (pl) {
+      setProjectName(pl.project_name)
+      setProjectUrl(pl.project_url ?? '')
+    }
     if (existing.content) editor.commands.setContent(existing.content as never)
   }, [existing, editor])
 
@@ -285,10 +304,10 @@ export default function EditorPage() {
         seo_description: seoDesc || null,
         reading_time: readingTime(text),
         tag_ids: tagIds,
-        series_id: null,
-        series_position: null,
-        project_name: null,
-        project_url: null,
+        series_id: seriesId || null,
+        series_position: seriesId ? Number(seriesPos) || 1 : null,
+        project_name: projectName.trim() || null,
+        project_url: safeUrl(projectUrl) || null,
       },
       user.id,
       editId,
@@ -453,6 +472,55 @@ export default function EditorPage() {
             <div className="aside-box">
               <div className="toc-label">Tags</div>
               <input className="cf-input" value={tagNames} onChange={(e) => setTagNames(e.target.value)} placeholder="comma, separated" aria-label="Tags" />
+            </div>
+            <div className="aside-box">
+              <div className="toc-label">Series</div>
+              <select className="cf-input" value={seriesId} onChange={(e) => setSeriesId(e.target.value)} aria-label="Series">
+                <option value="">- none -</option>
+                {(seriesList ?? []).map((s) => (
+                  <option key={s.id} value={String(s.id)}>{s.title}</option>
+                ))}
+              </select>
+              {seriesId && (
+                <input
+                  className="cf-input"
+                  style={{ marginTop: 8 }}
+                  value={seriesPos}
+                  onChange={(e) => setSeriesPos(e.target.value.replace(/[^0-9]/g, ''))}
+                  placeholder="Position in series"
+                  aria-label="Position in series"
+                />
+              )}
+            </div>
+            <div className="aside-box">
+              <div className="toc-label">Related project</div>
+              <input
+                className="cf-input"
+                list="au-project-names"
+                value={projectName}
+                onChange={(e) => {
+                  setProjectName(e.target.value)
+                  const pick = (e.target.value || '').trim().toLowerCase()
+                  if (!pick) return setProjectUrl('')
+                  const known = KNOWN_PROJECTS.find((p) => p.toLowerCase() === pick)
+                  if (known) setProjectUrl('https://github.com/' + GITHUB_USERNAME + '/' + known)
+                }}
+                placeholder="e.g. Numexa"
+                aria-label="Related project name"
+              />
+              <datalist id="au-project-names">
+                {KNOWN_PROJECTS.map((p) => (
+                  <option key={p} value={p} />
+                ))}
+              </datalist>
+              <input
+                className="cf-input"
+                style={{ marginTop: 8 }}
+                value={projectUrl}
+                onChange={(e) => setProjectUrl(e.target.value)}
+                placeholder="Project URL (optional)"
+                aria-label="Related project URL"
+              />
             </div>
             <div className="aside-box">
               <div className="toc-label">SEO</div>

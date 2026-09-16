@@ -1,6 +1,13 @@
 -- ═══════════════════════════════════════════════════════════════════
 -- AU_ / JOURNAL — RPC functions (callable via supabase.rpc())
--- Run after 02-rls.sql.
+-- ═══════════════════════════════════════════════════════════════════
+-- ⚠ DO NOT RE-RUN THIS FILE WHOLESALE.
+-- Parts of it are SUPERSEDED by 05-follow-analytics.sql and
+-- 08-analytics-fixes.sql (post_analytics / traffic_trend / follow_trend
+-- were later redefined with richer return types). Re-running will fail
+-- with "cannot change return type of existing function" — that is
+-- Postgres protecting the newer versions. Only search_journal,
+-- get_trending_posts and the admin_set_* helpers here are canonical.
 -- ═══════════════════════════════════════════════════════════════════
 
 -- ── SEARCH: posts, authors, tags in one call ───────────────────────

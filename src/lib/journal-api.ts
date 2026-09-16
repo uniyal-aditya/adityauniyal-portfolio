@@ -305,7 +305,7 @@ export async function fetchFeaturedWriters(limit = 6): Promise<Profile[]> {
   if (!SUPABASE_CONFIGURED) return []
   const { data, error } = await supabase
     .from('posts')
-    .select('profiles!inner(id, username, display_name, avatar_url, bio, website, github_url, linkedin_url, role, verified)')
+    .select('profiles!posts_author_id_fkey!inner(id, username, display_name, avatar_url, bio, website, github_url, linkedin_url, role, verified)')
     .eq('status', 'published')
     .limit(50)
   if (error) return []

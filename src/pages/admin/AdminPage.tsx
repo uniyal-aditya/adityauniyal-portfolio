@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Star } from 'lucide-react'
 import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase, SUPABASE_CONFIGURED } from '@/lib/supabase'
@@ -240,7 +241,7 @@ function PostsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
               <tr key={p.id}>
                 <td>
                   <Link to={'/blog/post/' + p.slug}>{p.title}</Link>
-                  {p.featured && <span style={{ color: 'var(--lime)', marginLeft: 8 }} title="Featured">★</span>}
+                  {p.featured && <Star size={13} aria-label="Featured" fill="var(--lime)" color="var(--lime)" style={{ marginLeft: 8, verticalAlign: '-2px' }} />}
                 </td>
                 <td>{(p as any).author?.display_name ?? '—'}</td>
                 <td><Pill s={p.status} /></td>

@@ -90,11 +90,7 @@ function FeaturedArticle({ post }: { post: Post }) {
             </div>
             <div className="fc-body">
               <div className="meta">
-                {cat && (
-                  <Link className="cat-chip" to={'/blog/topic/' + cat.slug}>
-                    {cat.name}
-                  </Link>
-                )}
+                {cat && <span className="cat-chip">{cat.name}</span>}
                 {post.post_type && <span className="type-chip">{post.post_type.replace('_', ' ')}</span>}
               </div>
               <h2>{post.title}</h2>

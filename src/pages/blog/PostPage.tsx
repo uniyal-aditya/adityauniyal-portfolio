@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Heart, Bookmark } from 'lucide-react'
 import { Seo, articleJsonLd } from '@/lib/seo'
 import { ArticleContent } from '@/lib/content'
 import {
@@ -319,7 +320,7 @@ export default function PostPage() {
               className={liked ? 'on' : ''}
               aria-pressed={Boolean(liked)}
             >
-              &#9825; {fmtNum(post.like_count)} {liked ? 'liked' : 'like'}
+              <Heart size={14} aria-hidden="true" className="btn-ico" fill={liked ? 'currentColor' : 'none'} /> {fmtNum(post.like_count)} {liked ? 'liked' : 'like'}
             </button>
             <button
               onClick={async () => {
@@ -331,7 +332,7 @@ export default function PostPage() {
               className={marked ? 'on' : ''}
               aria-pressed={Boolean(marked)}
             >
-              &#9825; {marked ? 'bookmarked' : 'bookmark'}
+              <Bookmark size={14} aria-hidden="true" className="btn-ico" fill={marked ? 'currentColor' : 'none'} /> {marked ? 'bookmarked' : 'bookmark'}
             </button>
             <button onClick={() => void copyLink()}>copy link</button>
             <button

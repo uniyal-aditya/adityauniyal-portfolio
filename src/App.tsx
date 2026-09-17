@@ -1,38 +1,40 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Chrome } from '@/components/layout/Chrome'
 import { JournalShell } from '@/components/layout/JournalShell'
 import { useAuth } from '@/hooks/useAuth'
+import ErrorBoundary from '@/components/system/ErrorBoundary'
+import { lazyPage } from '@/lib/lazyPage'
 
 // Portfolio pages (core shell - eager for instant first paint)
 import Home from '@/pages/portfolio/Home'
 import Work from '@/pages/portfolio/Work'
-const Building = lazy(() => import('@/pages/portfolio/Building'))
+const Building = lazyPage(() => import('@/pages/portfolio/Building'))
 
-// Everything below is code-split
-const Projects = lazy(() => import('@/pages/portfolio/Projects'))
-const About = lazy(() => import('@/pages/portfolio/About'))
-const Skills = lazy(() => import('@/pages/portfolio/Skills'))
-const Connect = lazy(() => import('@/pages/portfolio/Connect'))
-const Feedback = lazy(() => import('@/pages/portfolio/Feedback'))
-const Privacy = lazy(() => import('@/pages/portfolio/Privacy'))
-const NotFound = lazy(() => import('@/pages/portfolio/NotFound'))
+// Everything below is code-split (lazyPage = deploy-safe auto-recovery)
+const Projects = lazyPage(() => import('@/pages/portfolio/Projects'))
+const About = lazyPage(() => import('@/pages/portfolio/About'))
+const Skills = lazyPage(() => import('@/pages/portfolio/Skills'))
+const Connect = lazyPage(() => import('@/pages/portfolio/Connect'))
+const Feedback = lazyPage(() => import('@/pages/portfolio/Feedback'))
+const Privacy = lazyPage(() => import('@/pages/portfolio/Privacy'))
+const NotFound = lazyPage(() => import('@/pages/portfolio/NotFound'))
 
-const BlogHome = lazy(() => import('@/pages/blog/BlogHome'))
-const PostPage = lazy(() => import('@/pages/blog/PostPage'))
-const AuthorPage = lazy(() => import('@/pages/blog/AuthorPage'))
-const TopicPage = lazy(() => import('@/pages/blog/TopicPage'))
-const SeriesPage = lazy(() => import('@/pages/blog/SeriesPage'))
-const SeriesIndex = lazy(() => import('@/pages/blog/SeriesIndex'))
-const SearchPage = lazy(() => import('@/pages/blog/SearchPage'))
+const BlogHome = lazyPage(() => import('@/pages/blog/BlogHome'))
+const PostPage = lazyPage(() => import('@/pages/blog/PostPage'))
+const AuthorPage = lazyPage(() => import('@/pages/blog/AuthorPage'))
+const TopicPage = lazyPage(() => import('@/pages/blog/TopicPage'))
+const SeriesPage = lazyPage(() => import('@/pages/blog/SeriesPage'))
+const SeriesIndex = lazyPage(() => import('@/pages/blog/SeriesIndex'))
+const SearchPage = lazyPage(() => import('@/pages/blog/SearchPage'))
 
-const LoginPage = lazy(() => import('@/pages/auth/LoginPage'))
-const ApplyPage = lazy(() => import('@/pages/auth/ApplyPage'))
+const LoginPage = lazyPage(() => import('@/pages/auth/LoginPage'))
+const ApplyPage = lazyPage(() => import('@/pages/auth/ApplyPage'))
 
-const Dashboard = lazy(() => import('@/pages/dash/Dashboard'))
-const EditorPage = lazy(() => import('@/pages/dash/EditorPage'))
+const Dashboard = lazyPage(() => import('@/pages/dash/Dashboard'))
+const EditorPage = lazyPage(() => import('@/pages/dash/EditorPage'))
 
-const AdminPage = lazy(() => import('@/pages/admin/AdminPage'))
+const AdminPage = lazyPage(() => import('@/pages/admin/AdminPage'))
 
 function PageFallback() {
   return (
@@ -69,9 +71,10 @@ export default function App() {
   const loc = useLocation()
 
   return (
-    <Suspense fallback={<PageFallback />}>
-      <RecoveryCatch />
-      <Routes location={loc}>
+    <ErrorBoundary>
+      <Suspense fallback={<PageFallback />}>
+        <RecoveryCatch />
+        <Routes location={loc}>
         <Route element={<Chrome />}>
           <Route path="/" element={<Home />} />
           <Route path="/work" element={<Work />} />
@@ -105,6 +108,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </Suspense>
+      </Suspense>
+    </ErrorBoundary>
   )
 }

@@ -1,10 +1,14 @@
 /** Validation + sanitization helpers shared by the editor, embeds and renderers. */
 
-/** http(s) URL only; blocks javascript:, data:, vbscript: etc. Returns null when invalid. */
+/** http(s) URL only; blocks javascript:, data:, vbscript:, protocol-relative
+ *  offsite jumps (//evil.com) etc. Returns null when invalid. */
 export function safeUrl(raw: string | null | undefined): string | null {
   if (!raw) return null
   const s = String(raw).trim()
   if (!s) return null
+  // Protocol-relative URLs (//host/path) inherit http(s) and would resolve
+  // OFFSITE — reject them before parsing so nothing can redirect the reader.
+  if (s.startsWith('//')) return null
   try {
     const u = new URL(s, window.location.origin)
     if (u.protocol !== 'http:' && u.protocol !== 'https:') return null
@@ -74,6 +78,7 @@ export function slugify(s: string): string {
   return s
     .toLowerCase()
     .trim()
+    .replace(/[_/]+/g, '-')   // word separators become hyphens before stripping
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '')

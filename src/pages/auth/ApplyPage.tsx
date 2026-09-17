@@ -150,6 +150,13 @@ export default function ApplyPage() {
               <button className="btn-lime" type="submit" disabled={isSubmitting} style={{ justifyContent: 'center' }}>
                 {isSubmitting ? '...' : 'SUBMIT APPLICATION \u2192'}
               </button>
+              <p className="meta" style={{ marginTop: 12, lineHeight: 1.6 }}>
+                Your application (name, links, bio) is visible only to the site admin, is used solely to evaluate
+                write access, and is deleted on request. That&apos;s spelled out in the{' '}
+                <Link className="text-link" to="/privacy">Privacy Policy</Link> and{' '}
+                <Link className="text-link" to="/data-use">What happens to your data</Link>; applying also means the{' '}
+                <Link className="text-link" to="/terms">Terms</Link> cover your future posts.
+              </p>
             </form>
           )}
         </div>

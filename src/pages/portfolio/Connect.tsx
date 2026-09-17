@@ -1,8 +1,14 @@
 import { useState, type FormEvent } from 'react'
+import emailjs from '@emailjs/browser'
 import { Link } from 'react-router-dom'
 import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
 import { useToast } from '@/hooks/useToast'
+
+// Same EmailJS service/template as the feedback form — one inbox for both.
+const EMAILJS_SERVICE = 'aditya_uniyal_portfolio'
+const EMAILJS_TEMPLATE = 'portfolio_template'
+const EMAILJS_PUBLIC_KEY = 'xPYwrcIVmeLYO2V6a'
 
 const METHODS = [
   { ico: '\uD83C\uDFAF', label: 'Fiverr', value: 'fiverr.com/uniyal_aditya', href: 'https://www.fiverr.com/uniyal_aditya' },
@@ -29,10 +35,19 @@ export default function Connect() {
       return
     }
     setSending(true)
-    // Simulated handoff to the same channel as before; wire to sendFeedback when desired.
-    await new Promise((r) => setTimeout(r, 900))
-    setSending(false)
-    setSent(true)
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE,
+        EMAILJS_TEMPLATE,
+        { name, email, rating: '—', message, project: 'Contact request (via /connect)' },
+        { publicKey: EMAILJS_PUBLIC_KEY },
+      )
+      setSending(false)
+      setSent(true)
+    } catch {
+      setSending(false)
+      toast('Failed to send. Try again or reach me on Fiverr.', true)
+    }
   }
 
   return (

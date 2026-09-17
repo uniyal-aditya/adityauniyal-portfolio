@@ -272,7 +272,7 @@ function UsersAdmin({ qc, rolesOnly }: { qc: ReturnType<typeof useQueryClient>; 
     enabled: SUPABASE_CONFIGURED,
     queryFn: async (): Promise<Profile[]> => {
       let req = supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(200)
-      if (search.trim()) req = req.or('display_name.ilike.%' + search.trim() + '%,username.ilike.%' + search.trim() + '%,email.ilike.%' + search.trim() + '%')
+      if (search.trim()) req = req.or('display_name.ilike.%' + search.trim() + '%,username.ilike.%' + search.trim() + '%')
       const { data, error } = await req
       if (error) throw error
       return (data ?? []) as Profile[]
@@ -306,7 +306,7 @@ function UsersAdmin({ qc, rolesOnly }: { qc: ReturnType<typeof useQueryClient>; 
                     <Avatar profile={u} size={26} />
                     <div>
                       <div>{u.display_name || u.username || '—'} {u.verified && <VerifiedBadge />}</div>
-                      <div className="meta">{u.username ? '@' + u.username : u.email}</div>
+                      <div className="meta">{u.username ? '@' + u.username : u.id.slice(0, 8)}</div>
                     </div>
                   </div>
                 </td>

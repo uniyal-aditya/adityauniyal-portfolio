@@ -12,6 +12,7 @@ import {
   fetchCurrentProject, saveCurrentProject, type CurrentProjectConfig,
 } from '@/lib/journal-api'
 import { EmptyState, Avatar, VerifiedBadge } from '@/components/journal/bits'
+import { BUNDLED_COVERS } from '@/data/covers'
 
 /* ── small helpers ─────────────────────────────────────────────── */
 
@@ -528,7 +529,7 @@ function MediaAdmin() {
     <div>
       <SectionHead title="Media" note="Every uploaded image across the journal." />
       {q.isLoading && <p className="meta">Loading…</p>}
-      {q.data && q.data.length === 0 && <EmptyState title="No media yet." note="Images uploaded in the editor land here." />}
+      {q.data && q.data.length === 0 && <EmptyState title="No uploads yet." note="Images uploaded in the editor land here. Bundled cover art is listed below." />}
       {q.data && q.data.length > 0 && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12 }}>
           {q.data.map((m) => (
@@ -539,6 +540,15 @@ function MediaAdmin() {
           ))}
         </div>
       )}
+      <SectionHead title="Bundled covers" note="Shipped with the site in /covers — used as post cover art." />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12 }}>
+        {BUNDLED_COVERS.map((c) => (
+          <figure key={c.file} style={{ border: '1px solid var(--line)', padding: 8, margin: 0 }}>
+            <img src={c.file} alt={c.alt} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />
+            <figcaption className="meta" style={{ marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.file} — png twin: {c.file.replace(/\.svg$/, '.png')}</figcaption>
+          </figure>
+        ))}
+      </div>
     </div>
   )
 }

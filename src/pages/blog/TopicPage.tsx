@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Seo } from '@/lib/seo'
-import { fetchTopicPage } from '@/lib/journal-api'
+import { fetchTopicPage, fetchCategories } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED } from '@/lib/supabase'
 import { PostCard, PostRow, EmptyState, Skeletons } from '@/components/journal/bits'
 import { useReveal } from '@/hooks/useReveal'
@@ -15,6 +15,8 @@ export default function TopicPage() {
     queryFn: () => fetchTopicPage(slug),
     enabled,
   })
+  // sibling topics strip — always rendered, so a young topic never feels broken
+  const { data: allCats } = useQuery({ queryKey: ['categories'], queryFn: fetchCategories, enabled })
 
   if (!enabled) {
     return <div className="container" style={{ paddingTop: 120 }}><EmptyState note="The journal backend is not connected yet." /></div>
@@ -39,7 +41,8 @@ export default function TopicPage() {
         <div className="container">
           <div className="pt-label">Topic</div>
           <h1>
-            {cat.name.replace(/ /g, '')} <em style={{ textTransform: 'none' }}></em>
+            {cat.name.replace(/ /g, '')}
+            <em style={{ textTransform: 'none' }}>.</em>
           </h1>
           <p className="topic-desc">{cat.description}</p>
           <div className="meta">{data.posts.length} articles</div>
@@ -48,7 +51,21 @@ export default function TopicPage() {
       <section style={{ paddingTop: 40 }}>
         <div className="container">
           {data.posts.length === 0 ? (
-            <EmptyState note="Nothing published under this topic yet." />
+            <>
+              <EmptyState
+                title="Nothing published here yet."
+                note="New writing lands in this topic as it ships. In the meantime, explore another:"
+              />
+              {(allCats?.filter((c) => c.slug !== cat.slug).length ?? 0) > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginTop: 20 }}>
+                  {allCats?.filter((c) => c.slug !== cat.slug).map((c) => (
+                    <Link key={c.id} to={'/blog/topic/' + c.slug} className="topic-pill">
+                      {c.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </>
           ) : (
             <>
               {first && <div className="post-grid"><PostCard post={first} /></div>}

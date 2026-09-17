@@ -13,7 +13,8 @@
     "build:functions": "echo 'Netlify functions ship as plain CommonJS — no build step'",
     "covers:png": "node scripts/covers-to-png.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prebuild": "npm run typecheck && npm test"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

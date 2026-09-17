@@ -1,4 +1,5 @@
 import { supabase, SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
+import { readingTime, docToText } from '@/lib/sanitize'
 import { CURRENT_PROJECT } from '@/data/building'
 import type {
   Post,
@@ -546,6 +547,18 @@ export async function upsertPost(
   authorId: string,
   postId?: string,
 ): Promise<{ id: string; error: string | null }> {
+  const contentString = typeof input.content === 'string' ? input.content : JSON.stringify(input.content)
+  // reading_time is always recomputed from the document itself — never trusted
+  // from the payload — so every save path recounts and stored values can't drift.
+  let parsedContent: unknown = null
+  try {
+    parsedContent = JSON.parse(contentString)
+  } catch {
+    parsedContent = null // legacy markdown content: docToText passes the string through
+  }
+  const readingTimeFromDoc = readingTime(
+    typeof parsedContent === 'object' && parsedContent !== null ? docToText(parsedContent) : contentString,
+  )
   const row = {
     author_id: authorId,
     title: input.title,
@@ -553,7 +566,7 @@ export async function upsertPost(
     slug: input.slug,
     excerpt: input.excerpt,
     // content is a `text` column: store the document as an explicit JSON string
-    content: typeof input.content === 'string' ? input.content : JSON.stringify(input.content),
+    content: contentString,
     cover_image_url: input.cover_image_url,
     cover_image_alt: input.cover_image_alt,
     post_type: input.post_type,
@@ -562,7 +575,7 @@ export async function upsertPost(
     featured: input.featured ?? false,
     seo_title: input.seo_title,
     seo_description: input.seo_description,
-    reading_time: input.reading_time,
+    reading_time: readingTimeFromDoc,
   }
   let id = postId ?? ''
   if (postId) {

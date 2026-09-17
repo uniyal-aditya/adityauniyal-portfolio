@@ -18,25 +18,28 @@
 -- 1 · Recompute reading_time from content (words/200, min 1) ────────
 with words as (
   select id,
-    array_length(
-      regexp_split_to_array(
-        trim(
-          regexp_replace(
-            regexp_replace(content, '<[^>]+>', ' ', 'g'),   -- strip html tags if any
-            '[#*`>|_~\[\]()=-]', ' ', 'g'                    -- strip markdown punctuation
-          )
-        ),
-        '\s+'
-      ),
-      1
-    ) as n
+    -- Content is stored as a Tiptap JSON string. Count only the values of
+    -- "text": fields (the words docToText()/editor.getText() would see) —
+    -- NOT raw JSON punctuation, which inflates the estimate ~60%.
+    case
+      when content like '{%' then (
+        select array_length(regexp_split_to_array(trim(string_agg(w, ' ')), '\s+'), 1)
+        from regexp_matches(content, '"text":\s*"((?:[^"\\]|\\.)*)"', 'g') as m(w)
+      )
+      else array_length(  -- legacy markdown/html content: strip syntax then count
+        regexp_split_to_array(
+          trim(regexp_replace(regexp_replace(content, '<[^>]+>', ' ', 'g'), '[#*`>|_~\[\]()=-]', ' ', 'g')),
+          '\s+'
+        ), 1)
+    end as n
   from public.posts
   where status = 'published'
 )
 update public.posts p
 set reading_time = greatest(1, coalesce(round(w.n::numeric / 200)::int, 1))
 from words w
-where p.id = w.id;
+where p.id = w.id
+  and w.n is not null;
 
 -- 2 · SEO fields — only where still empty ───────────────────────────
 update public.posts

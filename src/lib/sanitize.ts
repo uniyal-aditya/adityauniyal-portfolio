@@ -56,6 +56,19 @@ export function readingTime(text: string): number {
   return Math.max(1, Math.round(words / 200))
 }
 
+/** Flatten a Tiptap JSON document to plain text (every text node), so the
+ *  saved reading_time always comes from the document itself — matching
+ *  editor.getText() for counting purposes regardless of who calls save. */
+export function docToText(content: unknown): string {
+  if (!content) return ''
+  if (Array.isArray(content)) return content.map(docToText).filter(Boolean).join(' ')
+  if (typeof content !== 'object') return typeof content === 'string' ? content : ''
+  const node = content as { text?: unknown; content?: unknown }
+  const own = typeof node.text === 'string' ? node.text : ''
+  const kids = docToText(node.content)
+  return [own, kids].filter(Boolean).join(' ')
+}
+
 /** Title to URL slug. */
 export function slugify(s: string): string {
   return s

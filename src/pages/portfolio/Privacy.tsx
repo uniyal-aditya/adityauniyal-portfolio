@@ -163,6 +163,14 @@ export default function Privacy() {
               <p>This site is not directed at children under 13, and no accounts are knowingly created for them.</p>
             </Card>
 
+            <Card title="Companion pages">
+              <p>
+                Prefer plain language? Read <Link to="/data-use" className="text-link">What happens to your data</Link>{' '}
+                — every data item, its purpose and its lifetime in one page. The rules of using the platform live in
+                the <Link to="/terms" className="text-link">Terms of Service</Link>.
+              </p>
+            </Card>
+
             <Card title="Changes to this policy">
               <p>
                 If data practices ever change, this page changes with them and the date above moves. Material

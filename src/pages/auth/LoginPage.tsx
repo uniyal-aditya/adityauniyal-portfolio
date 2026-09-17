@@ -159,6 +159,14 @@ export default function LoginPage() {
           <button className="btn-lime" type="submit" disabled={busy} style={{ justifyContent: 'center' }}>
             {busy ? '...' : title.toUpperCase() + ' \u2192'}
           </button>
+          {mode === 'signup' && (
+            <p className="meta" style={{ marginTop: 12, lineHeight: 1.6 }}>
+              By creating an account you agree to the{' '}
+              <Link className="text-link" to="/terms">Terms</Link> and{' '}
+              <Link className="text-link" to="/privacy">Privacy Policy</Link> — the short version lives at{' '}
+              <Link className="text-link" to="/data-use">/data-use</Link>.
+            </p>
+          )}
         </form>
         {!showNewPasswordForm && mode !== 'reset' && (
           <>

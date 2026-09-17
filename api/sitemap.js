@@ -21,7 +21,10 @@ export default async function handler(req, res) {
     '  <url><loc>' + SITE + '/about</loc></url>\n' +
     '  <url><loc>' + SITE + '/blog</loc></url>\n' +
     '  <url><loc>' + SITE + '/blog/search</loc></url>\n' +
-    '  <url><loc>' + SITE + '/blog/series</loc></url>\n'
+    '  <url><loc>' + SITE + '/blog/series</loc></url>\n' +
+    '  <url><loc>' + SITE + '/privacy</loc></url>\n' +
+    '  <url><loc>' + SITE + '/terms</loc></url>\n' +
+    '  <url><loc>' + SITE + '/data-use</loc></url>\n'
 
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     try {

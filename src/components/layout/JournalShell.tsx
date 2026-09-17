@@ -124,6 +124,8 @@ export function FooterJournal() {
         <Link to="/blog/search">Search</Link>
         <Link to="/blog/apply">Write for us</Link>
         <Link to="/privacy">Privacy</Link>
+        <Link to="/data-use">Data use</Link>
+        <Link to="/terms">Terms</Link>
       </div>
     </footer>
   )

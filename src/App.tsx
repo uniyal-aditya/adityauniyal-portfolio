@@ -18,6 +18,8 @@ const Skills = lazyPage(() => import('@/pages/portfolio/Skills'))
 const Connect = lazyPage(() => import('@/pages/portfolio/Connect'))
 const Feedback = lazyPage(() => import('@/pages/portfolio/Feedback'))
 const Privacy = lazyPage(() => import('@/pages/portfolio/Privacy'))
+const Terms = lazyPage(() => import('@/pages/portfolio/Terms'))
+const DataUse = lazyPage(() => import('@/pages/portfolio/DataUse'))
 const NotFound = lazyPage(() => import('@/pages/portfolio/NotFound'))
 
 const BlogHome = lazyPage(() => import('@/pages/blog/BlogHome'))
@@ -85,6 +87,8 @@ export default function App() {
           <Route path="/connect" element={<Connect />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/data-use" element={<DataUse />} />
         </Route>
 
         <Route element={<JournalShell />}>

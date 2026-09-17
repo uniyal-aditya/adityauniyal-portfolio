@@ -105,6 +105,8 @@ export function Footer() {
       </div>
       <div className="footer-right">
         <Link to="/privacy">Privacy</Link>
+        <Link to="/terms">Terms</Link>
+        <Link to="/data-use">Data use</Link>
         <Link to="/work">Work</Link>
         <Link to="/building">Building</Link>
         <Link to="/connect">Contact</Link>

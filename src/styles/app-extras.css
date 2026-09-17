@@ -61,6 +61,7 @@
   background: none; border: none; border-left: 1px solid var(--line);
   color: var(--bone); font-family: var(--f-mono); font-size: 15px;
   padding: 0 18px; cursor: pointer; transition: color .2s, background .2s;
+  align-self: stretch; /* full-height tap target on mobile */
 }
 .blog-search .bs-go:hover { color: var(--lime); }
 

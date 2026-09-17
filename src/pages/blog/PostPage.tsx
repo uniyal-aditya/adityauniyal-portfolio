@@ -20,6 +20,7 @@ import {
   reportContent,
 } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED } from '@/lib/supabase'
+import { TagList } from '@/components/journal/bits'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
 import { Avatar, VerifiedBadge, PostCard, EmptyState } from '@/components/journal/bits'
@@ -360,6 +361,12 @@ export default function PostPage() {
           </div>
 
           <ArticleContent content={post.content} />
+
+          {post.tags && post.tags.length > 0 && (
+            <div className="post-footer-tags">
+              <TagList tags={post.tags} />
+            </div>
+          )}
 
           {post.profiles && (
             <aside className="author-card">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Seo } from '@/lib/seo'
 import { searchJournal, fetchCategories } from '@/lib/journal-api'
@@ -53,8 +53,10 @@ export default function SearchPage() {
 
   const { data: cats } = useQuery({ queryKey: ['categories'], queryFn: fetchCategories, enabled: SUPABASE_CONFIGURED })
 
-  function set(key: string, value: string) {
-    const next = new URLSearchParams(params)
+  function set(key: string, value: string, base?: URLSearchParams) {
+    // `base` lets callers change several keys in one commit without the
+    // second call clobbering the first via a stale render-scope snapshot.
+    const next = new URLSearchParams(base ?? params)
     if (value) next.set(key, value)
     else next.delete(key)
     setParams(next, { replace: true })
@@ -111,8 +113,41 @@ export default function SearchPage() {
               <EmptyState note="The journal backend is not connected yet." />
             ) : isLoading ? (
               <Skeletons n={4} />
+            ) : results.length === 0 && !dq ? (
+              <EmptyState
+                title="Search the journal."
+                note="Type above to find articles by title, author, topic or tag — or browse by topic instead:"
+              />
+            ) : results.length === 0 && (category || type) ? (
+              <>
+                <EmptyState
+                  title="No matches with these filters."
+                  note="The search found nothing under the current topic/type filters. Clear them to widen the net:"
+                />
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 16 }}>
+                  <button
+                    className="btn-ghost-line btn-small"
+                    onClick={() => {
+                      const cleared = new URLSearchParams(params)
+                      cleared.delete('category')
+                      cleared.delete('type')
+                      setParams(cleared, { replace: true })
+                    }}
+                  >
+                    Clear filters
+                  </button>
+                </div>
+              </>
             ) : results.length === 0 ? (
-              <EmptyState title="Nothing found." note="Try a different search or clear the filters." />
+              <>
+                <EmptyState
+                  title={`Nothing found for “${dq}”.`}
+                  note="Try fewer words, check the spelling, or browse everything published:"
+                />
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 16 }}>
+                  <Link to="/blog" className="btn-ghost-line btn-small">Back to the journal</Link>
+                </div>
+              </>
             ) : (
               <div className="post-list">
                 {results.map((p, i) => (

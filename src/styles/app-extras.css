@@ -106,6 +106,7 @@
 /* ── lists, builder band, writers, newsletter ───────────── */
 .post-list { display: flex; flex-direction: column; }
 .post-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.post-footer-tags { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); }
 
 .builder-band { padding: 72px 0; border-top: 1px solid var(--line); }
 .builder-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }

@@ -3,6 +3,14 @@
   "rewrites": [
     { "source": "/blog/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/blog/rss.xml", "destination": "/api/rss" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|assets/|covers/).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
   ]
 }

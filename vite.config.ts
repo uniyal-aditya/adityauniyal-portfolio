@@ -42,6 +42,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          // React must stay out of feature vendor chunks — if it lands inside
+          // one, the entry bundle develops a static import of that chunk and
+          // every visitor downloads it on every page (observed: react-dom was
+          // merged into tiptap-vendor, making all pages load the 520KB editor).
+          if (id.includes('node_modules/react') || id.includes('node_modules/scheduler')) {
+            return 'react-vendor'
+          }
           // Keep three.js + R3F in their own lazy chunk — never loaded on the
           // critical path; the 3D components are React.lazy'd.
           if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) {

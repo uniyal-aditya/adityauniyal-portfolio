@@ -28,9 +28,62 @@ function vercelApiDev(): Plugin {
   }
 }
 
+// CI budget guard: fail the build when the eager bundle — the entry chunk
+// plus everything it STATICALLY imports (dynamic imports stay lazy and are
+// not counted) — grows past 700KB. This is the exact graph that silently
+// grew ~520KB when react-dom was merged into tiptap-vendor (see the
+// manualChunks note below); the budget pins the fix instead of trusting
+// the chunking config to stay correct.
+const EAGER_BUDGET_BYTES = 700 * 1024
+
+function eagerBundleBudget(maxBytes = EAGER_BUDGET_BYTES): Plugin {
+  return {
+    name: 'eager-bundle-budget',
+    apply: 'build',
+    generateBundle(_, bundle) {
+      const entry = Object.values(bundle).find(
+        (c): c is Extract<(typeof c), { type: 'chunk' }> => c.type === 'chunk' && c.isEntry,
+      )
+      if (!entry) return
+
+      const eager = new Set<string>([entry.fileName])
+      const queue = [entry]
+      while (queue.length) {
+        const chunk = queue.pop()!
+        for (const name of chunk.imports) {
+          if (eager.has(name)) continue
+          const dep = bundle[name]
+          if (dep?.type === 'chunk') {
+            eager.add(name)
+            queue.push(dep)
+          }
+        }
+      }
+
+      const sizes = [...eager].map((name) => ({
+        name,
+        bytes: Buffer.byteLength((bundle[name] as { code: string }).code, 'utf8'),
+      }))
+      const total = sizes.reduce((sum, s) => sum + s.bytes, 0)
+      const kb = (n: number) => (n / 1024).toFixed(1) + ' KB'
+
+      console.log(`[eager-bundle-budget] eager graph (${sizes.length} chunk${sizes.length === 1 ? '' : 's'}): ${kb(total)} / ${kb(maxBytes)}`)
+      for (const s of sizes) console.log(`  · ${s.name} — ${kb(s.bytes)}`)
+
+      if (total > maxBytes) {
+        this.error(
+          `[eager-bundle-budget] Eager bundle is ${kb(total)}, over the ${kb(maxBytes)} budget ` +
+            `(${sizes.map((s) => s.name).join(', ')}). Move heavy dependencies into lazy chunks ` +
+            'or extend the manualChunks rules in vite.config.ts.',
+        )
+      }
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), vercelApiDev()],
+  plugins: [react(), tailwindcss(), vercelApiDev(), eagerBundleBudget()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

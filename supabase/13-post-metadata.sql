@@ -23,7 +23,10 @@ with words as (
     -- NOT raw JSON punctuation, which inflates the estimate ~60%.
     case
       when content like '{%' then (
-        select array_length(regexp_split_to_array(trim(string_agg(w, ' ')), '\s+'), 1)
+        -- regexp_matches yields one text[] per match: w[1] is capture group 1.
+        -- (string_agg over the raw array errors 42883 and would roll the
+        -- whole migration back — see 13b-post-metadata-finish.sql.)
+        select array_length(regexp_split_to_array(trim(string_agg(w[1], ' ')), '\s+'), 1)
         from regexp_matches(content, '"text":\s*"((?:[^"\\]|\\.)*)"', 'g') as m(w)
       )
       else array_length(  -- legacy markdown/html content: strip syntax then count

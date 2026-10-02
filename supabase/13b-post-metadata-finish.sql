@@ -6,9 +6,16 @@
 -- executed none of its write statements. Probed live 2026-10-02 via the
 -- public anon key + list_tables: posts had reading_time 1/2/6, tags /
 -- post_tags / project_links were 0 rows, and seo_title was still NULL
--- on the two earlier posts. Everything below is verbatim migration 13
--- logic — it only looked "already applied" because the snippet skipped
--- it. Safe to run whether 13 partially or fully applied.
+-- on the two earlier posts. Everything below is migration 13's logic.
+-- ───────────────────────────────────────────────────────────────────
+-- FIX 2026-10-02: the Tiptap word-count subquery used string_agg(w, ' ')
+-- but regexp_matches(…, 'g') returns a text[] per match, so w is an ARRAY
+-- and Postgres raised 42883 (function string_agg(text[], unknown) does
+-- not exist). The SQL Editor runs the file as ONE transaction, so that
+-- single error rolled back the whole script — which is exactly why
+-- migration 13 itself landed nothing. Corrected to w[1] (capture group 1)
+-- here and in supabase/13-post-metadata.sql. Safe to run whether 13
+-- partially or fully applied.
 -- ───────────────────────────────────────────────────────────────────
 -- Verified expected results (word counts computed from the stored
 -- Tiptap documents with the exact docToText() formula, pinned by
@@ -27,7 +34,10 @@ with words as (
     -- NOT raw JSON punctuation, which inflates the estimate ~60%.
     case
       when content like '{%' then (
-        select array_length(regexp_split_to_array(trim(string_agg(w, ' ')), '\s+'), 1)
+        -- regexp_matches yields one text[] per match: w[1] is capture group 1
+        -- (the string inside "text": "…"). string_agg(w, ' ') with the raw
+        -- array is a 42883 error that used to roll back this whole file.
+        select array_length(regexp_split_to_array(trim(string_agg(w[1], ' ')), '\s+'), 1)
         from regexp_matches(content, '"text":\s*"((?:[^"\\]|\\.)*)"', 'g') as m(w)
       )
       else array_length(  -- legacy markdown/html content: strip syntax then count

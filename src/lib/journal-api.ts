@@ -144,8 +144,14 @@ export async function searchJournal(args: SearchArgs): Promise<Post[]> {
   if (args.category) posts = posts.filter((p) => p.categories?.slug === args.category)
   if (args.author) posts = posts.filter((p) => (p.profiles?.username ?? '') === args.author)
   if (args.sort && args.sort !== 'relevance') {
-    const key = args.sort === 'views' ? 'view_count' : args.sort === 'likes' ? 'like_count' : 'bookmark_count'
-    posts = [...posts].sort((a, b) => (Number(b[key as keyof Post]) || 0) - (Number(a[key as keyof Post]) || 0))
+    if (args.sort === 'newest') {
+      posts = [...posts].sort(
+        (a, b) => (Date.parse(b.published_at ?? '') || 0) - (Date.parse(a.published_at ?? '') || 0),
+      )
+    } else {
+      const key = args.sort === 'views' ? 'view_count' : args.sort === 'likes' ? 'like_count' : 'bookmark_count'
+      posts = [...posts].sort((a, b) => (Number(b[key as keyof Post]) || 0) - (Number(a[key as keyof Post]) || 0))
+    }
   }
   return posts
 }
@@ -457,8 +463,9 @@ export async function setCommentPinned(commentId: string, pinned: boolean): Prom
   return error?.message ?? null
 }
 
-export async function addComment(postId: string, userId: string, body: string, parentId: string | null): Promise<void> {
-  await supabase.from('comments').insert({ post_id: postId, user_id: userId, body, parent_id: parentId })
+export async function addComment(postId: string, userId: string, body: string, parentId: string | null): Promise<string | null> {
+  const { error } = await supabase.from('comments').insert({ post_id: postId, user_id: userId, body, parent_id: parentId })
+  return error ? error.message : null
 }
 
 export async function reportContent(

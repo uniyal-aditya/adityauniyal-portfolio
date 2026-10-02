@@ -24,7 +24,7 @@ import { TagList } from '@/components/journal/bits'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
 import { Avatar, VerifiedBadge, PostCard, EmptyState } from '@/components/journal/bits'
-import { fmtDate, fmtNum, timeAgo, mdToText, readingTime } from '@/lib/sanitize'
+import { fmtDate, fmtNum, timeAgo, mdToText, readingTime, headingId } from '@/lib/sanitize'
 import type { Comment } from '@/lib/types'
 
 function useReadingProgress() {
@@ -51,7 +51,8 @@ function CommentItem({ c, postId, all }: { c: Comment; postId: string; all: Comm
   const qc = useQueryClient()
   async function sendReply() {
     if (!user || !body.trim()) return
-    await addComment(postId, user.id, body.trim(), c.id)
+    const err = await addComment(postId, user.id, body.trim(), c.id)
+    if (err) return toast(err, true)
     setBody('')
     setReplyOpen(false)
     toast('Reply posted.')
@@ -170,7 +171,7 @@ export default function PostPage() {
       const walk = (n: { type?: string; content?: { text?: string; content?: unknown }[]; attrs?: { level?: number } }) => {
         if (n.type === 'heading') {
           const text = (n.content ?? []).map((x) => x.text ?? '').join('')
-          out.push({ id: text.toLowerCase().replace(/[^a-z0-9]+/g, '-'), text })
+          out.push({ id: headingId(text), text })
         }
         if (n.content) for (const ch of n.content as never[]) walk(ch as never)
       }
@@ -187,7 +188,8 @@ export default function PostPage() {
 
   async function sendComment() {
     if (!user || !post || !commentBody.trim()) return
-    await addComment(post.id, user.id, commentBody.trim(), null)
+    const err = await addComment(post.id, user.id, commentBody.trim(), null)
+    if (err) return toast(err, true)
     setCommentBody('')
     toast('Comment posted.')
     void qc.invalidateQueries({ queryKey: ['comments', post.id] })

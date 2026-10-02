@@ -18,7 +18,12 @@ export default async function handler(req, res) {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
     '  <url><loc>' + SITE + '/</loc></url>\n' +
     '  <url><loc>' + SITE + '/work</loc></url>\n' +
+    '  <url><loc>' + SITE + '/building</loc></url>\n' +
+    '  <url><loc>' + SITE + '/projects</loc></url>\n' +
     '  <url><loc>' + SITE + '/about</loc></url>\n' +
+    '  <url><loc>' + SITE + '/skills</loc></url>\n' +
+    '  <url><loc>' + SITE + '/connect</loc></url>\n' +
+    '  <url><loc>' + SITE + '/feedback</loc></url>\n' +
     '  <url><loc>' + SITE + '/blog</loc></url>\n' +
     '  <url><loc>' + SITE + '/blog/search</loc></url>\n' +
     '  <url><loc>' + SITE + '/blog/series</loc></url>\n' +

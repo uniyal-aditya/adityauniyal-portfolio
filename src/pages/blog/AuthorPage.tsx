@@ -40,9 +40,13 @@ function OwnerBuildingBlock() {
         </div>
         <div>
           <div className="toc-label" style={{ fontSize: 10 }}>Latest build log</div>
-          <Link to={'/blog/post/' + latestBuildLog} className="meta" style={{ color: 'var(--lime)', textDecoration: 'none', display: 'inline-block', marginTop: 4 }}>
-            READ BUILD LOG &rarr;
-          </Link>
+          {latestBuildLog ? (
+            <Link to={'/blog/post/' + latestBuildLog} className="meta" style={{ color: 'var(--lime)', textDecoration: 'none', display: 'inline-block', marginTop: 4 }}>
+              READ BUILD LOG &rarr;
+            </Link>
+          ) : (
+            <div className="meta" style={{ marginTop: 4 }}>—</div>
+          )}
         </div>
         <div>
           <div className="toc-label" style={{ fontSize: 10 }}>GitHub</div>

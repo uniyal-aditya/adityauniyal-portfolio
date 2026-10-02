@@ -813,7 +813,24 @@ export default function AdminPage() {
 
   const valid = TABS.some(([k]) => k === section)
   if (!valid) {
-    return <Gate kind='denied' /> // unknown section — fall back to overview via redirect below
+    // Unknown section — don't claim ACCESS DENIED (that reads like a role
+    // problem); tell the admin the section name doesn't exist.
+    return (
+      <div className="admin-shell">
+        <div className="container" style={{ paddingTop: 'calc(var(--nav-h) + 60px)', paddingBottom: 120, textAlign: 'center' }}>
+          <div className="pt-label">~/au/journal/admin</div>
+          <h1 style={{ fontFamily: 'var(--f-display)', fontSize: 'clamp(2.6rem,7vw,4.6rem)', lineHeight: 1 }}>
+            UNKNOWN SECTION_
+          </h1>
+          <p className="meta" style={{ marginTop: 14 }}>
+            &ldquo;{section}&rdquo; is not a console section.
+          </p>
+          <Link to="/blog/admin" className="btn-lime" style={{ marginTop: 26, display: 'inline-block' }}>
+            Back to overview &rarr;
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (

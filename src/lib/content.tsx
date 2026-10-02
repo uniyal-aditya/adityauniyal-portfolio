@@ -1,5 +1,5 @@
 import { Fragment, type ReactNode } from 'react'
-import { safeUrl, youtubeId } from '@/lib/sanitize'
+import { safeUrl, youtubeId, headingId } from '@/lib/sanitize'
 
 interface TiptapNode {
   type: string
@@ -71,7 +71,8 @@ function renderNode(node: TiptapNode, key: number): ReactNode {
     case 'heading': {
       const lvl = Math.min(6, Math.max(2, Number(node.attrs?.level ?? 2)))
       const Tag = ('h' + lvl) as 'h2'
-      return <Tag key={key}>{renderChildren(node, key)}</Tag>
+      const id = headingId((node.content ?? []).map((c) => c.text ?? '').join(''))
+      return <Tag key={key} id={id || undefined}>{renderChildren(node, key)}</Tag>
     }
     case 'bulletList':
       return <ul key={key}>{renderChildren(node, key)}</ul>
@@ -182,9 +183,9 @@ function mdToSafeHtml(md: string): string {
   })
 
   src = src
-    .replace(/^### (.*)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.*)$/gm, '<h2 id="$1">$1</h2>')
-    .replace(/^# (.*)$/gm, '<h2 id="$1">$1</h2>')
+    .replace(/^### (.*)$/gm, (_m, t: string) => '<h3 id="' + headingId(t) + '">' + t + '</h3>')
+    .replace(/^## (.*)$/gm, (_m, t: string) => '<h2 id="' + headingId(t) + '">' + t + '</h2>')
+    .replace(/^# (.*)$/gm, (_m, t: string) => '<h2 id="' + headingId(t) + '">' + t + '</h2>')
     .replace(/^&gt; (.*)$/gm, '<blockquote><p>$1</p></blockquote>')
     .replace(/^---+$/gm, '<hr/>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')

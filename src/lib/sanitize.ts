@@ -73,6 +73,13 @@ export function docToText(content: unknown): string {
   return [own, kids].filter(Boolean).join(' ')
 }
 
+/** Anchor id for article headings — shared by the renderer (content.tsx)
+ *  and the post TOC, so a TOC link always lands on the heading that
+ *  generated it. Same normalization for Tiptap and legacy markdown. */
+export function headingId(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+}
+
 /** Title to URL slug. */
 export function slugify(s: string): string {
   return s

@@ -16,9 +16,18 @@ exports.handler = async () => {
   const staticUrls =
     '  <url><loc>' + SITE + '/</loc></url>\n' +
     '  <url><loc>' + SITE + '/work</loc></url>\n' +
+    '  <url><loc>' + SITE + '/building</loc></url>\n' +
+    '  <url><loc>' + SITE + '/projects</loc></url>\n' +
     '  <url><loc>' + SITE + '/about</loc></url>\n' +
+    '  <url><loc>' + SITE + '/skills</loc></url>\n' +
+    '  <url><loc>' + SITE + '/connect</loc></url>\n' +
+    '  <url><loc>' + SITE + '/feedback</loc></url>\n' +
     '  <url><loc>' + SITE + '/blog/</loc></url>\n' +
-    '  <url><loc>' + SITE + '/blog/search</loc></url>\n';
+    '  <url><loc>' + SITE + '/blog/search</loc></url>\n' +
+    '  <url><loc>' + SITE + '/blog/series</loc></url>\n' +
+    '  <url><loc>' + SITE + '/privacy</loc></url>\n' +
+    '  <url><loc>' + SITE + '/terms</loc></url>\n' +
+    '  <url><loc>' + SITE + '/data-use</loc></url>\n';
 
   let postUrls = '';
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {

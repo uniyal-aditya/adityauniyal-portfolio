@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
-import { useDebounce } from '@/hooks/useDebounce'
 import {
   fetchLatestPosts,
   fetchFeaturedPost,
@@ -294,9 +293,6 @@ function CtaBand() {
 export default function BlogHome() {
   useReveal()
   const navigate = useNavigate()
-  const [q] = useState('')
-  const dq = useDebounce(q, 350)
-  void dq
   const { data: featured, isLoading: featLoading } = useQuery({
     queryKey: ['featured'],
     queryFn: fetchFeaturedPost,
@@ -308,7 +304,7 @@ export default function BlogHome() {
   return (
     <div className="blog-home">
       <Seo title="AU_ / JOURNAL - Aditya Uniyal" description="Ideas, experiments, things worth sharing. Build logs, tutorials and notes from Aditya Uniyal." path="/blog" />
-      <Hero q={q} onSearch={(v) => (v ? navigate('/blog/search?q=' + encodeURIComponent(v)) : undefined)} />
+      <Hero q="" onSearch={(v) => (v ? navigate('/blog/search?q=' + encodeURIComponent(v)) : undefined)} />
       <TopicPills />
       {SUPABASE_CONFIGURED && featLoading && <Skeletons n={3} />}
       {feat && <FeaturedArticle post={feat} />}

@@ -3,9 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import { Seo } from '@/lib/seo'
 import { supabase, SUPABASE_CONFIGURED } from '@/lib/supabase'
 import { EmptyState, Skeletons } from '@/components/journal/bits'
+import { useReveal } from '@/hooks/useReveal'
 import type { Series } from '@/lib/types'
 
 export default function SeriesIndex() {
+  // The list items carry .reveal (opacity 0 until observed) — without this
+  // observer they would never get the .in class and stay invisible.
+  useReveal()
   const { data: series, isLoading } = useQuery({
     queryKey: ['series-index'],
     enabled: SUPABASE_CONFIGURED,

@@ -6,10 +6,12 @@ import { fetchProjectJournal } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED } from '@/lib/supabase'
 import { BuilderCell } from '@/components/journal/bits'
 
+// TODO: replace the {{REAL_NUMBER}} placeholders with real measured values —
+// the previous ∞ / 0 figures were unverifiable marketing numbers.
 const NUMEXA_METRICS = [
-  { num: '\u221E', label: 'Calculations served' },
+  { num: '{{REAL_NUMBER}}', label: 'Calculations served' },
   { num: '<1ms', label: 'Target response' },
-  { num: '0', label: 'Downtime target' },
+  { num: '{{REAL_NUMBER}}', label: 'Downtime target' },
 ]
 
 function BuildJournal({ project, title }: { project: string; title: string }) {

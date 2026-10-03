@@ -291,8 +291,9 @@ export default function Home() {
                   India <small>Remote worldwide</small>
                 </div>
               </div>
+              {/* TODO: replace {{REAL_NUMBER}} with the actual count of shipped projects. */}
               <div className="aside-block stat-row">
-                <div className="stat-big">3+</div>
+                <div className="stat-big">{'{{REAL_NUMBER}}'}</div>
                 <div className="stat-label">Production projects</div>
               </div>
               <div className="aside-block stat-row">

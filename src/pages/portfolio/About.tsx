@@ -53,9 +53,10 @@ export default function About() {
                 That curiosity hardened into a discipline: <span>design the system before touching the keyboard</span>.
                 Think about the edge cases. Model the data flow. Then build.
               </p>
+              {/* TODO: replace {{REAL_NUMBER}} with the real interaction volume from the bot's analytics. */}
               <p>
                 Today I work across Python, JavaScript, and the web stack - building everything from Discord bots
-                handling thousands of interactions to client-facing web experiences that feel fast and intentional.
+                handling {'{{REAL_NUMBER}}'} interactions to client-facing web experiences that feel fast and intentional.
               </p>
               <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <a href="/assets/Aditya_Uniyal_Resume.pdf" download className="btn-lime" style={{ fontSize: 11, padding: '12px 22px' }}>

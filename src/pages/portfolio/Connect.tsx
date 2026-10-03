@@ -39,7 +39,13 @@ export default function Connect() {
       await emailjs.send(
         EMAILJS_SERVICE,
         EMAILJS_TEMPLATE,
-        { name, email, rating: '—', message, project: 'Contact request (via /connect)' },
+        {
+          name,
+          email,
+          rating: '—',
+          message,
+          project: String(data.get('project') || '') || 'Contact request (via /connect)',
+        },
         { publicKey: EMAILJS_PUBLIC_KEY },
       )
       setSending(false)
@@ -127,7 +133,7 @@ export default function Connect() {
                       {sending ? 'SENDING...' : 'SEND MESSAGE \u2192'}
                     </button>
                     <p style={{ fontFamily: 'var(--f-mono)', fontSize: 10, color: 'var(--dim)', textAlign: 'center', letterSpacing: '0.06em', marginTop: 12 }}>
-                      Response within 24 hours guaranteed.
+                      Response within 24 hours.
                     </p>
                   </form>
                 </div>

@@ -24,12 +24,16 @@ let cache = null
 let inflight = null
 
 function gh(path) {
+  // Build headers conditionally: an `Authorization: undefined` entry reaches
+  // undici as the literal string "undefined" (Node 22), which GitHub answers
+  // with 401 — worse than sending no header at all.
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'au-portfolio-building',
+  }
+  if (TOKEN) headers.Authorization = 'Bearer ' + TOKEN
   return fetch('https://api.github.com' + path, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: TOKEN ? 'Bearer ' + TOKEN : undefined,
-      'User-Agent': 'au-portfolio-building',
-    },
+    headers,
   }).then((r) => {
     if (!r.ok) throw new Error('GitHub ' + r.status + ' on ' + path)
     return r.json()

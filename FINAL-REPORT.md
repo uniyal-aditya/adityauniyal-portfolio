@@ -18,7 +18,7 @@
 | Icons | lucide-react + one custom `GithubIcon` (lucide dropped brand icons) |
 | Serverless | Vercel functions (`api/sitemap.js`, `api/rss.js`, `api/github.js`) |
 | Email | @emailjs/browser (contact), SendGrid (legacy Netlify `sendFeedback` preserved) |
-| SEO | react-helmet-async (per-page meta/OG/JSON-LD), sitemap + RSS routes, robots.txt |
+| SEO | custom `Seo` component (`src/lib/seo.tsx`) for per-page meta/OG/JSON-LD, sitemap + RSS routes, robots.txt |
 
 ## 2 · Architecture
 

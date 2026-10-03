@@ -1,26 +1,11 @@
-<div align="center">
+# Aditya Uniyal — Developer Portfolio + AU_ / JOURNAL
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=200&section=header&text=Aditya%20Uniyal&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=Building%20the%20future%2C%20one%20commit%20at%20a%20time%20🚀&descAlignY=58&descSize=18&animation=fadeIn" width="100%"/>
+A responsive portfolio website with a full publication platform, deployed on **Vercel** ([adityauniyal.is-a.dev](https://adityauniyal.is-a.dev)).
 
-</div>
-
-<div align="center">
-
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=6C63FF&center=true&vCenter=true&random=false&width=600&lines=Hey+there!+I'm+Aditya+👋;B.Tech+CSE+%40+Graphic+Era+Hill+University;Full+Stack+%2B+AI%2FML+Explorer+🤖;Google+GEAR+Member+☁️;Building+cool+stuff+every+day+💻)](https://git.io/typing-svg)
-
-</div>
-
----
-
-# Aditya Uniyal — Developer Portfolio + AU_ Journal
-
-This repository contains a premium, responsive portfolio website for Aditya Uniyal, deployed on **Vercel** (`adityauniyal.is-a.dev`), with:
-
-- The portfolio (React + TypeScript + Vite + Tailwind, terminal-editorial aesthetic preserved)
-- **AU_ / JOURNAL** — a full publication platform backed by **Supabase** (PostgreSQL + Auth + Storage), Tiptap editor
+- **Portfolio** — React 18 + TypeScript + Vite + Tailwind v4, terminal-editorial aesthetic
+- **AU_ / JOURNAL** — publication platform backed by **Supabase** (PostgreSQL + Auth + Storage), Tiptap editor, contributor workflow, admin console
 - **AU_ / BUILDING** — live GitHub activity, contribution heatmap, streaks (server-cached via a Vercel API route)
 - Serverless routes in `api/`: GitHub proxy, sitemap.xml, rss.xml
-- Legacy feedback email via SendGrid (`netlify/functions/sendFeedback.js`)
 
 ---
 
@@ -28,23 +13,8 @@ This repository contains a premium, responsive portfolio website for Aditya Uniy
 
 - React SPA (routes: `/`, `/work`, `/projects`, `/about`, `/skills`, `/connect`, `/feedback`, `/privacy`, plus `/terms`, `/data-use`, `/building`)
 - Responsive (mobile + desktop), custom cursor, grain/scanline effects preserved from the original design
-- GitHub activity on `/building` served through `api/github.js` with server-side caching
-- Feedback form → SendGrid (legacy Netlify function)
-
-### Security & spam protection
-- Serverless function performs basic validation.
-- Consider adding reCAPTCHA or additional spam filters for production.
-
----
-
-## 🧑‍💻 About Me
-
-```yaml
-name: Aditya Uniyal
-location: Dehradun, Uttarakhand 🏔️
-university: Doon University
-degree: B.Tech Computer Science Engineering (2026–2030)
-```
+- **Contact and feedback forms send via [EmailJS](https://www.emailjs.com/)** (client-side; shared credentials module in `src/lib/emailjs.ts`, overridable with `VITE_EMAILJS_*` vars) with a hidden honeypot field for spam resistance
+- GitHub activity on `/building` served through `api/github.js` with server-side caching; the `Authorization` header is only sent when `GITHUB_TOKEN` is configured
 
 ---
 
@@ -95,6 +65,8 @@ Open **SQL Editor** in Supabase and run these files **in numeric order** (each i
 11. `supabase/11-private-emails.sql` — removes the public email column from profiles (emails live only in Supabase Auth)
 12. `supabase/12-categorize-posts.sql` — one-off data fix: categories for the early posts
 13. `supabase/13-post-metadata.sql` — one-off data fix: reading times, SEO fields, tags, related-project links
+13b. `supabase/13b-post-metadata-finish.sql` — full backfill of the migration-13 data (run if 13 was interrupted)
+13c. `supabase/13c-post-tags-project-links.sql` — finisher: `post_tags` + `project_links` rows only (idempotent, safe to re-run)
 
 #### 3. Configure the frontend keys
 Copy `.env.example` to **`.env.local`** and fill it in:
@@ -107,6 +79,8 @@ VITE_SUPABASE_ANON_KEY=eyJ...your-anon-key...
 > ⚠️ Only the **anon** key goes here. It is safe to expose because RLS (step 2) restricts what it can do.
 > Never place the service-role key, SendGrid key, or any server secret in frontend JavaScript.
 > `.env.local` is git-ignored; Vite only exposes variables prefixed with `VITE_`.
+
+The EmailJS credentials have working fallbacks in `src/lib/emailjs.ts`; set `VITE_EMAILJS_SERVICE_ID` / `VITE_EMAILJS_TEMPLATE_ID` / `VITE_EMAILJS_PUBLIC_KEY` only to switch service or template.
 
 #### 4. Claim the owner account
 1. Visit `/blog/login` → **Create account** using your admin email (or use a magic link).
@@ -125,12 +99,12 @@ The site deploys on **Vercel** (`adityauniyal.is-a.dev`). For the server-generat
 
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
-- `GITHUB_TOKEN` — a classic personal access token with **`public_repo` read** scope only (no write scopes); used by `api/github.js` to raise the GitHub API rate limit for the Building page. Private: keep it server-side only.
+- `GITHUB_TOKEN` — a classic personal access token with **`public_repo` read** scope only (no write scopes); used by `api/github.js` to raise the GitHub API rate limit for the Building page. Private: keep it server-side only. Optional — without it the endpoint works anonymously at the lower rate limit and never sends an `Authorization` header.
 - `SITE_URL` (optional — overrides the canonical origin, e.g. when you add a custom domain)
 
-Client-side vars (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) must also be set in Vercel for the journal to work in production — same values as your local `.env.local`.
+Client-side vars (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, optional `VITE_EMAILJS_*`) must also be set in Vercel for the journal to work in production — same values as your local `.env.local`.
 
-Legacy `netlify/functions/` (sendFeedback via SendGrid) still works if you also keep a Netlify mirror; Vercel ignores that folder.
+Legacy `netlify/functions/` (SendGrid `sendFeedback`, sitemap/RSS mirrors) still work if you also keep a Netlify mirror; Vercel ignores that folder.
 
 Also add your Supabase auth redirect: Supabase → Authentication → URL Configuration → add `https://adityauniyal.is-a.dev/blog/login` to **Redirect URLs** (keep `http://localhost:5173/blog/login` for local dev).
 
@@ -174,6 +148,8 @@ and the SQL backfill can never disagree.
 - Profile role changes blocked client-side; only `admin_set_user_role` RPC (server-checked) can change roles
 - Newsletter + view-log inserts are the only anon-writable tables
 - Search/trending/moderation run through SQL functions that re-check role server-side
+- Contact + feedback forms are protected by a honeypot field (see `src/lib/emailjs.ts`)
+- `vercel.json` ships global security headers (`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, empty `Permissions-Policy`) plus a `Content-Security-Policy-Report-Only` policy — check the browser console for reports before promoting it to enforcing
 
 ### Legal pages
 
@@ -201,7 +177,7 @@ Quality gates (all run automatically before every build — locally and on Verce
 ```bash
 npm run typecheck       # tsc -b
 npm test                # vitest — pins the reading-time formula, slug/URL safety,
-                        # and SQL⇄TS word-count agreement for migration 13
+                        # the SPA-404 host-config agreement, and SQL⇄TS word-count agreement
 npm run lint            # eslint
 npm run build           # production build (runs typecheck + tests first)
 ```
@@ -210,156 +186,6 @@ Serverless routes (`/api/github`, `/api/sitemap`, `/api/rss`) run on Vercel; loc
 
 ---
 
-currently_learning:
-  - Google Cloud & AI Agents (GEAR Program)
-  - Full Stack Web Development
-  - Data Structures & Algorithms
-  - AI/ML Fundamentals
-
-interests:
-  - Building AI-powered web apps
-  - Open Source Contribution
-  - Cloud Computing
-  - Problem Solving
-
-fun_fact: "Earned 2 Google Cloud badges on Day 1 of learning! ⚡"
-
----
-
-## 🏅 Certifications & Badges
-
-<div align="center">
-
-| 🏆 Badge | 🏢 Issuer | 📅 Date |
-|----------|-----------|---------|
-| ⚙️ **Gemini Enterprise Agent Ready (GEAR)** | Google | May 2026 |
-| 🤖 **Introduction to AI Agents** | Google Cloud | May 2026 |
-| 🧠 **Agent Fundamentals** | Google Cloud | May 2026 |
-| 🟦 **AI Skills Yatra Participant** | Microsoft | 2026 |
-
-</div>
-
----
-
-## 🛠️ Tech Stack
-
-<div align="center">
-
-**Languages**
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-
-**Cloud & AI**
-
-![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
-![Microsoft Azure](https://img.shields.io/badge/Microsoft_Azure-0089D6?style=for-the-badge&logo=microsoft-azure&logoColor=white)
-![Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=google-gemini&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-
-**Tools & Platforms**
-
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
-![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)
-![Kaggle](https://img.shields.io/badge/Kaggle-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)
-
-</div>
-
----
-
-## 📈 DSA Progress
-
-<div align="center">
-
-```
-🧩 DSA Journey — Just Getting Started!
-
-Arrays & Strings     ████████░░░░   Learning
-Loops & Functions    ████████████   ✅ Done
-Basic Math & Logic   ██████████░░   Strong
-Sorting Algorithms   ████░░░░░░░░   In Progress
-Recursion            ███░░░░░░░░░   Next Up
-```
-
-🎯 **Goal:** Solve 150+ problems on LeetCode by end of 2026
-
-</div>
-
----
-
-## 🌐 Active Programs & Communities
-
-<div align="center">
-
-| Program | Status |
-|---------|--------|
-| ⚙️ Google GEAR (Gemini Enterprise Agent Ready) | 🟢 Active Member |
-| ☁️ Google Cloud Arcade Season 1 2026 | 🟢 Participating |
-| 🟦 Microsoft AI Skills Yatra | 🟢 In Progress |
-| 🎓 Microsoft Student Ambassador | 🟡 Joining Soon |
-
-</div>
-
----
-
-## 📊 GitHub Stats
-
-<div align="center">
-
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=AdityaUniyal&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true&bg_color=0d1117"/>
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AdityaUniyal&layout=compact&langs_count=8&theme=tokyonight&hide_border=true&bg_color=0d1117"/>
-
-</div>
-
-<div align="center">
-
-![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=AdityaUniyal&theme=tokyonight&hide_border=true&background=0d1117)
-
-</div>
-
----
-
-## 🎯 2026 Goals
-
-- [ ] 🌐 Build and deploy my first Full Stack web app
-- [ ] 🤖 Build an AI-powered project using Gemini API
-- [ ] ☁️ Reach Trooper tier on Google Cloud Arcade (45 pts)
-- [ ] 📜 Earn Azure AI Fundamentals (AI-900) certification
-- [ ] 💼 Land my first tech internship
-- [ ] 🧩 Solve 150+ DSA problems
-- [ ] 🏅 Reach Beta milestone on Microsoft Student Ambassador
-
----
-
-## 🤝 Connect With Me
-
-<div align="center">
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/aditya-uniyal)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AdityaUniyal)
-[![Google Cloud](https://img.shields.io/badge/Skills_Boost-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloudskillsboost.google)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your@email.com)
-
-</div>
-
----
-
-<div align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:24243e,50:302b63,100:0f0c29&height=120&section=footer&animation=fadeIn" width="100%"/>
-
-**⭐ If you like my work, consider starring my repos!**
-
-![Profile Views](https://komarev.com/ghpvc/?username=AdityaUniyal&color=6C63FF&style=for-the-badge&label=Profile+Views)
-
-</div>
-
----
-
 ## License
 
-Personal portfolio use only.
+[MIT](LICENSE)

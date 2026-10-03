@@ -6,8 +6,11 @@ dist-ssr
 .env.local
 .env.*.local
 .freebuff/
-serve.log
+*.log
 *.tsbuildinfo
+
+# Agent skill dirs / scratch (not part of the site)
+.agents/
 
 # Editor
 .vscode/*

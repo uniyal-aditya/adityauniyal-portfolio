@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom'
 import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
 import { useToast } from '@/hooks/useToast'
-
-// Same EmailJS service/template as the feedback form — one inbox for both.
-const EMAILJS_SERVICE = 'aditya_uniyal_portfolio'
-const EMAILJS_TEMPLATE = 'portfolio_template'
-const EMAILJS_PUBLIC_KEY = 'xPYwrcIVmeLYO2V6a'
+import { EMAILJS, honeypotTripped } from '@/lib/emailjs'
 
 const METHODS = [
   { ico: '\uD83C\uDFAF', label: 'Fiverr', value: 'fiverr.com/uniyal_aditya', href: 'https://www.fiverr.com/uniyal_aditya' },
@@ -27,6 +23,10 @@ export default function Connect() {
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
+    if (honeypotTripped(data)) {
+      setSent(true) // pretend success; the message is dropped
+      return
+    }
     const name = String(data.get('name') || '')
     const email = String(data.get('email') || '')
     const message = String(data.get('msg') || '')
@@ -37,8 +37,8 @@ export default function Connect() {
     setSending(true)
     try {
       await emailjs.send(
-        EMAILJS_SERVICE,
-        EMAILJS_TEMPLATE,
+        EMAILJS.serviceId,
+        EMAILJS.templateId,
         {
           name,
           email,
@@ -46,7 +46,7 @@ export default function Connect() {
           message,
           project: String(data.get('project') || '') || 'Contact request (via /connect)',
         },
-        { publicKey: EMAILJS_PUBLIC_KEY },
+        { publicKey: EMAILJS.publicKey },
       )
       setSending(false)
       setSent(true)
@@ -129,6 +129,8 @@ export default function Connect() {
                       <label className="cf-label" htmlFor="msg">Details</label>
                       <textarea className="cf-textarea" id="msg" name="msg" placeholder="Describe the scope, timeline, and any technical requirements..." required />
                     </div>
+                    {/* Honeypot: hidden from humans, irresistible to bots. */}
+                    <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ display: 'none' }} />
                     <button type="submit" className="btn-lime" disabled={sending} style={{ width: '100%', justifyContent: 'center', fontSize: 13, padding: '14px 24px', letterSpacing: '0.1em' }}>
                       {sending ? 'SENDING...' : 'SEND MESSAGE \u2192'}
                     </button>

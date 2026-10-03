@@ -2,10 +2,7 @@ import { useState, type FormEvent } from 'react'
 import emailjs from '@emailjs/browser'
 import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
-
-const EMAILJS_SERVICE = 'aditya_uniyal_portfolio'
-const EMAILJS_TEMPLATE = 'portfolio_template'
-const EMAILJS_PUBLIC_KEY = 'xPYwrcIVmeLYO2V6a'
+import { EMAILJS, honeypotTripped } from '@/lib/emailjs'
 
 const RATING_STYLES = `
   .star-rating { display: flex; flex-direction: row-reverse; gap: 4px; margin-top: 6px; }
@@ -33,9 +30,13 @@ export default function Feedback() {
     }
     const form = e.currentTarget
     const data = new FormData(form)
+    if (honeypotTripped(data)) {
+      setDone(true) // pretend success; the message is dropped
+      return
+    }
     setSending(true)
     try {
-      // Same EmailJS service/template as the legacy page.
+      // Same EmailJS service/template as the /connect form.
       const params = {
         name: String(data.get('name') || 'Anonymous'),
         email: String(data.get('email') || ''),
@@ -43,7 +44,7 @@ export default function Feedback() {
         message: String(data.get('message') || ''),
         project: String(data.get('project') || ''),
       }
-      await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, params, { publicKey: EMAILJS_PUBLIC_KEY })
+      await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, params, { publicKey: EMAILJS.publicKey })
       setDone(true)
     } catch (err) {
       console.error(err)
@@ -129,6 +130,8 @@ export default function Feedback() {
                 <option value="aichat">AI Chatbot</option>
               </select>
             </div>
+            {/* Honeypot: hidden from humans, irresistible to bots. */}
+            <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ display: 'none' }} />
             {error && <p style={{ color: 'var(--rust)', fontFamily: 'var(--f-mono)', fontSize: 12 }}>{error}</p>}
             <button type="submit" className="btn-lime" disabled={sending} style={{ justifyContent: 'center' }}>
               {sending ? 'SENDING...' : 'SEND FEEDBACK \u2192'}

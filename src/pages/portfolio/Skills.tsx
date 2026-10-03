@@ -1,24 +1,25 @@
 import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
-import { motion } from 'framer-motion'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
 
-const SKILL_BARS = [
-  ['Python', 90],
-  ['HTML / CSS', 90],
-  ['JavaScript', 82],
-  ['Backend (SQL / Firebase)', 80],
-  ['Flutter / Dart', 75],
-] as const
+/**
+ * Grouped capability lists — honest and bar-free. Everything here is real:
+ * React/TypeScript/Supabase power this site, FastAPI/Supabase power Enroute,
+ * Python/discord.py power the bots. Former percentage bars implied precision
+ * that self-assessed numbers can't have.
+ */
+const SKILL_GROUPS: [string, string[]][] = [
+  ['Languages', ['Python', 'JavaScript', 'TypeScript', 'HTML / CSS', 'SQL']],
+  ['Frameworks & Libraries', ['React', 'FastAPI', 'Tailwind CSS', 'Flutter / Dart', 'discord.py']],
+  ['Data & Platforms', ['Supabase', 'Firebase']],
+]
 
-const TOOLS = ['GitHub', 'VS Code', 'Figma', 'Firebase', 'Sololearn', 'Replit', 'Netlify', 'Postman']
+const TOOLS = ['GitHub', 'VS Code', 'Figma', 'Postman', 'Vercel']
 
 export default function Skills() {
   useReveal()
-  const reduced = useReducedMotion()
   return (
     <main>
-      <Seo title="Skills - Aditya Uniyal" description="Technical skills and tools used by Aditya Uniyal - Python, JavaScript, Flutter, and more." path="/skills" />
+      <Seo title="Skills - Aditya Uniyal" description="Technical skills and tools used by Aditya Uniyal - React, TypeScript, Python, Supabase, and more." path="/skills" />
       <div className="page-top">
         <div className="container">
           <div className="pt-label">Capabilities</div>
@@ -30,20 +31,17 @@ export default function Skills() {
 
       <section style={{ paddingTop: 60 }}>
         <div className="container" style={{ maxWidth: 860 }}>
-          {SKILL_BARS.map(([name, pct], i) => (
-            <div key={name} className="skill" style={{ marginBottom: 28 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-                <span style={{ fontFamily: 'var(--f-mono)', fontSize: 13, color: 'var(--bone)' }}>{name}</span>
-                <span style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--lime)' }}>{pct}%</span>
+          {SKILL_GROUPS.map(([group, items]) => (
+            <div key={group} className="reveal" style={{ marginBottom: 32 }}>
+              <div className="skills-eyebrow" style={{ padding: 0, marginBottom: 14 }}>
+                {group}
               </div>
-              <div style={{ height: 3, background: 'var(--line)', borderRadius: 2, overflow: 'hidden' }}>
-                <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: pct + '%' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: reduced ? 0 : 0.9, delay: reduced ? 0 : i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ height: '100%', background: 'var(--lime)' }}
-                />
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {items.map((s) => (
+                  <span className="skill-pill" key={s}>
+                    {s}
+                  </span>
+                ))}
               </div>
             </div>
           ))}

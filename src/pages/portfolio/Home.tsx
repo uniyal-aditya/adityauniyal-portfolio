@@ -16,7 +16,7 @@ const PROJECTS = [
   { num: '03', title: 'Delight Restaurant', desc: 'Interactive restaurant site - menu, reservations, responsive design', tags: ['HTML', 'CSS', 'JS'] },
 ]
 
-const SKILLS = ['Python', 'JavaScript', 'discord.py', 'Node.js', 'FFmpeg', 'REST APIs', 'Git & GitHub', 'asyncio', 'Netlify', 'Responsive Design', 'System Architecture', 'WebSockets']
+const SKILLS = ['Python', 'JavaScript', 'TypeScript', 'React', 'Supabase', 'discord.py', 'Node.js', 'FFmpeg', 'REST APIs', 'Git & GitHub', 'asyncio', 'Vercel', 'Responsive Design', 'System Architecture', 'WebSockets']
 
 const TICKER = [
   ['Available', 'Freelance & Collab'],

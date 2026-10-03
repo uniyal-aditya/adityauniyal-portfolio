@@ -19,6 +19,13 @@ const INTERESTS = [
   ['\u2615', 'Coffee & late night commits'],
 ]
 
+// Dates match the certification table that lived in the old profile readme.
+const CERTIFICATIONS = [
+  ['Google GEAR', 'Google · May 2026'],
+  ['Introduction to AI Agents', 'Google Cloud · May 2026'],
+  ['Agent Fundamentals', 'Google Cloud · May 2026'],
+]
+
 export default function About() {
   useReveal()
   return (
@@ -116,6 +123,47 @@ export default function About() {
                 <p style={{ fontSize: 14, color: 'var(--dim)', lineHeight: 1.65 }}>{p.d}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Education & certifications */}
+      <section style={{ borderTop: '1px solid var(--line)' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+            <div className="reveal">
+              <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--lime)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
+                // Education
+              </div>
+              <h2 style={{ fontFamily: 'var(--f-display)', fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: 0.95, marginBottom: 24 }}>
+                Where I
+                <br />
+                <em style={{ fontFamily: 'var(--f-serif)', fontStyle: 'italic', color: 'var(--rust)' }}>studied</em>.
+              </h2>
+              {/* TODO: fill in {{UNIVERSITY}} and {{YEARS}} — existing sources conflict
+                  (readme yaml said "Doon University", the old profile header said
+                  "Graphic Era Hill University"); use whichever is correct. */}
+              <div className="aside-block" style={{ border: '1px solid var(--line)', padding: '24px 28px' }}>
+                <div className="label">Degree</div>
+                <div className="value">
+                  {'{{UNIVERSITY}}'}
+                  <small>B.Tech Computer Science Engineering · {'{{YEARS}}'}</small>
+                </div>
+              </div>
+            </div>
+            <div className="reveal d2">
+              <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--lime)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
+                // Certifications
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid var(--line)' }}>
+                {CERTIFICATIONS.map(([title, meta], i) => (
+                  <div key={title} style={{ padding: '20px 24px', borderBottom: i < CERTIFICATIONS.length - 1 ? '1px solid var(--line)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                    <span style={{ fontSize: 15, color: 'var(--bone)' }}>{title}</span>
+                    <span style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--dim)', whiteSpace: 'nowrap' }}>{meta}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

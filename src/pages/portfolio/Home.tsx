@@ -11,7 +11,9 @@ import { CURRENT_PROJECT } from '@/data/building'
 import { fetchBuilding } from '@/lib/github'
 
 const PROJECTS = [
-  { num: '01', title: 'Numexa', desc: 'Scientific Discord calculator bot - advanced math parsing, sub-ms response', tags: ['Python', 'discord.py', 'Bot'] },
+  // TODO: replace {{NUMEXA_STACK_AND_FEATURES}} with one agreed description,
+  // kept identical across Home, Work and Projects.
+  { num: '01', title: 'Numexa', desc: '{{NUMEXA_STACK_AND_FEATURES}}', tags: ['Python', 'discord.py', 'Bot'] },
   { num: '02', title: 'Music Bot Zero', desc: 'High-performance Discord music bot - queue, streaming, real-time playback', tags: ['Python', 'FFmpeg', 'asyncio'] },
   { num: '03', title: 'Delight Restaurant', desc: 'Interactive restaurant site - menu, reservations, responsive design', tags: ['HTML', 'CSS', 'JS'] },
 ]

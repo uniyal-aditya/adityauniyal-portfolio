@@ -70,9 +70,9 @@ export default function Work() {
               <div className="pf-eyebrow">// 01 &middot; Flagship &middot; Discord Bot</div>
               <h2 className="pf-title">Numexa</h2>
               <p className="pf-desc">
-                A production-grade scientific Discord calculator bot. Advanced math expression parsing, multi-operation
-                support, and a modular command architecture engineered for sub-millisecond response times &mdash; built
-                for real users at scale.
+                {/* TODO: replace {{NUMEXA_STACK_AND_FEATURES}} with one agreed description,
+                    kept identical across Home, Work and Projects. */}
+                {'{{NUMEXA_STACK_AND_FEATURES}}'}
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
                 {['Python', 'discord.py', 'Math Parser', 'Command Architecture', 'Performance'].map((t) => (
@@ -113,8 +113,7 @@ export default function Work() {
               <div className="project-main">
                 <div className="project-title">Numexa</div>
                 <div className="project-desc">
-                  Scientific calculator bot for Discord with advanced math parsing, expression evaluation, and a clean
-                  command architecture built for accuracy at scale.
+                  {'{{NUMEXA_STACK_AND_FEATURES}}'}
                 </div>
               </div>
               <div className="project-tags">

@@ -12,6 +12,10 @@
   publish = "dist"
   functions = "netlify/functions"
 
+# Canonicalize to no trailing slash, matching Vercel's trailingSlash: false,
+# so /work/ 308-redirects to /work instead of 404ing against the route list.
+trailingSlash = "never"
+
 # ── Legacy feedback function ──
 [[redirects]]
   from = "/sendFeedback"
@@ -29,10 +33,135 @@
   to = "/.netlify/functions/journalRss"
   status = 200
 
-# ── SPA catch-all ──
-# All routes are client-side (React Router). Must come last so the
-# function redirects above win.
+# ── SPA routes, enumerated ──
+# Every React Router route from src/App.tsx gets an explicit 200 rewrite.
+# Deliberately NO catch-all: paths matching nothing fall through to Netlify's
+# native custom-404 handling, which serves dist/404.html with a real HTTP 404
+# status. Non-force redirects never shadow real files, so /assets, /covers and
+# robots.txt are unaffected. Keep in sync with src/App.tsx —
+# src/lib/spa-404-config.test.ts fails the build when they drift.
+
 [[redirects]]
-  from = "/*"
+  from = "/blog/post/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/author/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/topic/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/series/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/admin/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/dashboard/editor"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/dashboard"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/search"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/series"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/login"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/signup"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/apply"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/admin"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/work"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/building"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/projects"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/skills"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/connect"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/feedback"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/data-use"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/"
   to = "/index.html"
   status = 200

@@ -1,9 +1,37 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/blog/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/blog/rss.xml", "destination": "/api/rss" },
-    { "source": "/((?!api/|assets/|covers/).*)", "destination": "/index.html" }
+
+    { "source": "/blog/post/:slug", "destination": "/index.html" },
+    { "source": "/blog/author/:username", "destination": "/index.html" },
+    { "source": "/blog/topic/:slug", "destination": "/index.html" },
+    { "source": "/blog/series/:slug", "destination": "/index.html" },
+    { "source": "/blog/admin/:section", "destination": "/index.html" },
+
+    { "source": "/blog/dashboard/editor", "destination": "/index.html" },
+    { "source": "/blog/dashboard", "destination": "/index.html" },
+    { "source": "/blog/search", "destination": "/index.html" },
+    { "source": "/blog/series", "destination": "/index.html" },
+    { "source": "/blog/login", "destination": "/index.html" },
+    { "source": "/blog/signup", "destination": "/index.html" },
+    { "source": "/blog/apply", "destination": "/index.html" },
+    { "source": "/blog/admin", "destination": "/index.html" },
+    { "source": "/blog", "destination": "/index.html" },
+
+    { "source": "/work", "destination": "/index.html" },
+    { "source": "/building", "destination": "/index.html" },
+    { "source": "/projects", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/skills", "destination": "/index.html" },
+    { "source": "/connect", "destination": "/index.html" },
+    { "source": "/feedback", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/terms", "destination": "/index.html" },
+    { "source": "/data-use", "destination": "/index.html" },
+    { "source": "/", "destination": "/index.html" }
   ],
   "headers": [
     {

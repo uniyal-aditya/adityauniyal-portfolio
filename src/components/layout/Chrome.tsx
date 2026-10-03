@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Magnetic } from '@/components/ui/primitives'
@@ -19,6 +19,7 @@ export const NAV_LINKS = [
 export function PortfolioNav({ onHire }: { onHire: () => void }) {
   const [stuck, setStuck] = useState(false)
   const [open, setOpen] = useState(false)
+  const mobileNavRef = useRef<HTMLElement>(null)
   const loc = useLocation()
 
   useEffect(() => {
@@ -43,6 +44,15 @@ export function PortfolioNav({ onHire }: { onHire: () => void }) {
     return () => {
       document.body.style.overflow = ''
     }
+  }, [open])
+
+  // The drawer stays in the DOM for its slide transition (it is only moved
+  // off-canvas with transform), so its links and buttons would otherwise
+  // remain keyboard-tabbable while closed. `inert` removes it from tab order
+  // and focus; aria-hidden below stays as a fallback for browsers without
+  // inert support. useLayoutEffect applies before first paint.
+  useLayoutEffect(() => {
+    if (mobileNavRef.current) mobileNavRef.current.inert = !open
   }, [open])
 
   return (
@@ -76,7 +86,7 @@ export function PortfolioNav({ onHire }: { onHire: () => void }) {
         </button>
       </nav>
 
-      <nav className={'mobile-nav' + (open ? ' open' : '')} id="mobileNav" aria-hidden={!open}>
+      <nav ref={mobileNavRef} className={'mobile-nav' + (open ? ' open' : '')} id="mobileNav" aria-hidden={!open}>
         {NAV_LINKS.map((l) => (
           <NavLink key={l.to} to={l.to} className={({ isActive }) => (isActive ? 'active' : '')} end={l.to === '/'}>
             {l.label}

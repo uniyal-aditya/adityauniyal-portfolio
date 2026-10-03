@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>404 · Page not found — Aditya Uniyal</title>
+    <meta name="description" content="This page does not exist. Head back to the portfolio or the journal." />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Standalone 404 shell — served by the host with HTTP 404 for paths that
+         match no SPA route. Self-contained on purpose: the hashed /assets CSS
+         cannot be referenced reliably from a static file. */
+      :root {
+        --ink: #0a0a08;
+        --bone: #f0ede6;
+        --dim: #b8b5ae;
+        --lime: #c8f135;
+        --line: rgba(240, 237, 230, 0.1);
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        background: var(--ink);
+        color: var(--bone);
+        font-family: 'Outfit', system-ui, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+      }
+      .code {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: clamp(6rem, 22vw, 12rem);
+        line-height: 1;
+        letter-spacing: 0.04em;
+        color: var(--bone);
+      }
+      .code em { font-style: normal; color: var(--lime); }
+      .label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--dim);
+        margin-top: 8px;
+      }
+      .note { color: var(--dim); margin-top: 18px; font-size: 15px; max-width: 40ch; }
+      .links { margin-top: 30px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+      .links a {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        text-decoration: none;
+        padding: 12px 20px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        color: var(--bone);
+        transition: border-color 0.2s, color 0.2s;
+      }
+      .links a.primary { background: var(--lime); border-color: var(--lime); color: var(--ink); font-weight: 700; }
+      .links a:hover { border-color: var(--lime); color: var(--lime); }
+      .links a.primary:hover { color: var(--ink); }
+      @media (prefers-reduced-motion: no-preference) {
+        .code { animation: pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+        @keyframes pop { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="code">4<em>0</em>4</div>
+      <div class="label">Page not found</div>
+      <p class="note">The address you followed doesn't exist on this site.</p>
+      <nav class="links" aria-label="Where to go next">
+        <a class="primary" href="/">Back home</a>
+        <a href="/blog">Read the journal</a>
+      </nav>
+    </main>
+  </body>
+</html>

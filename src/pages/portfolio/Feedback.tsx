@@ -126,8 +126,7 @@ export default function Feedback() {
                 <option value="numexa">Numexa</option>
                 <option value="music-bot-zero">Music Bot Zero</option>
                 <option value="delight-restaurant">Delight Restaurant</option>
-                <option value="raftarfun">RaftarFun</option>
-                <option value="aichat">AI Chatbot</option>
+                <option value="enroute">Enroute</option>
               </select>
             </div>
             {/* Honeypot: hidden from humans, irresistible to bots. */}

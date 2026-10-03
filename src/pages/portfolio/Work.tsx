@@ -169,8 +169,29 @@ export default function Work() {
                 <span className="status-live">Live</span>
               </div>
             </a>
-            <div className="project-row" style={{ opacity: 0.55 }}>
+            <a
+              className="project-row"
+              href="https://enroute-logistics.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="project-num">04</div>
+              <div className="project-main">
+                <div className="project-title">Enroute</div>
+                <div className="project-desc">
+                  Logistics web app built with React, FastAPI, and Supabase.
+                </div>
+              </div>
+              <div className="project-tags">
+                <span className="tag">Web</span>
+                <span className="tag">Full-stack</span>
+              </div>
+              <div className="project-status">
+                <span className="status-live">Live</span>
+              </div>
+            </a>
+            <div className="project-row" style={{ opacity: 0.55 }}>
+              <div className="project-num">05</div>
               <div className="project-main">
                 <div className="project-title">Next Project</div>
                 <div className="project-desc">

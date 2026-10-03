@@ -44,12 +44,24 @@ const PROJECTS: Proj[] = [
     stack: ['HTML', 'CSS', 'JavaScript'],
     links: [{ label: 'Live', href: 'https://delight-restro.vercel.app', primary: true }],
   },
+  {
+    id: 'enroute',
+    name: 'Enroute',
+    type: 'Web App',
+    desc: 'Logistics web app built with React, FastAPI, and Supabase.',
+    stack: ['React', 'FastAPI', 'Supabase'],
+    links: [
+      { label: 'Live', href: 'https://enroute-logistics.vercel.app/', primary: true },
+      { label: 'Source', href: 'https://github.com/uniyal-aditya/Enroute' },
+    ],
+  },
 ]
 
 const ACCENTS: Record<string, string> = {
   numexa: '#0ea5e9',
   music: '#8b5cf6',
   delight: '#10b981',
+  enroute: '#f59e0b',
 }
 
 export default function Projects() {

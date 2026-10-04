@@ -11,7 +11,6 @@
 | UI | React 18 + TypeScript (strict), Vite 6, Tailwind CSS v4 (`@tailwindcss/vite`), custom CSS design system (`tokens/portfolio/journal/app-extras`) carrying the original identity |
 | Routing | react-router-dom 6, lazy-loaded routes, `RecoveryCatch` + branded fallbacks |
 | Motion | Framer Motion (page transitions, reveals, magnetic buttons, drawer) |
-| 3D | React Three Fiber + drei + three 0.172, `three-vendor` chunk — lazy, never on critical path |
 | State/data | TanStack Query 5, React Hook Form + Zod |
 | Editor | Tiptap 2 (starter-kit, image, link, table, YouTube, placeholder, suggestion-driven slash commands) |
 | Backend | Supabase (Postgres + Auth incl. GitHub/Google/Discord OAuth + Storage `journal-media`) |

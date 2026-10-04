@@ -102,11 +102,6 @@ export default defineConfig({
           if (id.includes('node_modules/react') || id.includes('node_modules/scheduler')) {
             return 'react-vendor'
           }
-          // Keep three.js + R3F in their own lazy chunk — never loaded on the
-          // critical path; the 3D components are React.lazy'd.
-          if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) {
-            return 'three-vendor'
-          }
           if (id.includes('node_modules/@tiptap') || id.includes('node_modules/prosemirror')) {
             return 'tiptap-vendor'
           }

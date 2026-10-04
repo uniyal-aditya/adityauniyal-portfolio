@@ -62,6 +62,10 @@ describe('safeUrl', () => {
   it('blocks javascript: URLs (XSS vector)', () => {
     expect(safeUrl('javascript:alert(1)')).toBeNull()
     expect(safeUrl('JavaScript:alert(1)')).toBeNull()
+    // mixed case and control-char smuggling (the URL parser strips tabs/newlines)
+    expect(safeUrl('jAvAsCrIpT:alert(1)')).toBeNull()
+    expect(safeUrl('java\tscript:alert(1)')).toBeNull()
+    expect(safeUrl('java\nscript:alert(1)')).toBeNull()
   })
 
   it('blocks data: and vbscript: URLs', () => {

@@ -2,8 +2,22 @@ import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchFollowerCount } from '@/lib/journal-api'
 import type { Post, Profile, Tag } from '@/lib/types'
-import { fmtDate, fmtNum } from '@/lib/sanitize'
+import { fmtDate, fmtNum, safeUrl } from '@/lib/sanitize'
 import { useReveal } from '@/hooks/useReveal'
+import type { ReactNode } from 'react'
+
+/** External link that renders nothing when safeUrl rejects the href
+ *  (javascript:, data:, protocol-relative offsite). Use for every
+ *  profile/application-supplied URL — never a raw `href={userValue}`. */
+export function ExternalLink({ href, children }: { href: string | null | undefined; children: ReactNode }) {
+  const url = safeUrl(href)
+  if (!url) return null
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  )
+}
 
 /** Avatar with initials fallback. */
 export function Avatar({ profile, size = 22 }: { profile?: Profile | null; size?: number }) {

@@ -11,7 +11,7 @@ import {
   fetchAdminAnalytics, fetchPostAnalytics, setCommentPinned,
   fetchCurrentProject, saveCurrentProject, type CurrentProjectConfig,
 } from '@/lib/journal-api'
-import { EmptyState, Avatar, VerifiedBadge } from '@/components/journal/bits'
+import { EmptyState, Avatar, VerifiedBadge, ExternalLink } from '@/components/journal/bits'
 import { BUNDLED_COVERS } from '@/data/covers'
 
 /* ── small helpers ─────────────────────────────────────────────── */
@@ -645,9 +645,9 @@ function ApplicationsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
                 <td>
                   <div>{a.name} <span className="meta">@{a.username}</span></div>
                   <div className="meta" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 2 }}>
-                    {a.portfolio && <a href={a.portfolio} target="_blank" rel="noreferrer">portfolio</a>}
-                    {a.github_url && <a href={a.github_url} target="_blank" rel="noreferrer">github</a>}
-                    {a.linkedin_url && <a href={a.linkedin_url} target="_blank" rel="noreferrer">linkedin</a>}
+                    {a.portfolio && <ExternalLink href={a.portfolio}>portfolio</ExternalLink>}
+                    {a.github_url && <ExternalLink href={a.github_url}>github</ExternalLink>}
+                    {a.linkedin_url && <ExternalLink href={a.linkedin_url}>linkedin</ExternalLink>}
                   </div>
                 </td>
                 <td className="meta" style={{ maxWidth: 340 }}>{a.reason.slice(0, 110)}{a.reason.length > 110 ? '…' : ''}</td>

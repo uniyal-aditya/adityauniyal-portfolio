@@ -5,7 +5,7 @@ import { Seo } from '@/lib/seo'
 import { useAuth } from '@/hooks/useAuth'
 import { fetchAuthorPage, fetchFollowerCount, fetchFollowers, fetchFollowing, fetchFollowingCount, fetchIsFollowing, toggleFollow } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
-import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons } from '@/components/journal/bits'
+import { Avatar, VerifiedBadge, PostCard, EmptyState, Skeletons, ExternalLink } from '@/components/journal/bits'
 import { useReveal } from '@/hooks/useReveal'
 import { useQuery } from '@tanstack/react-query'
 import { GITHUB_USERNAME } from '@/data/building'
@@ -156,9 +156,9 @@ export default function AuthorPage() {
             <span>{data.posts.length} articles</span>
           </div>
           <div className="author-socials meta">
-            {p.website && <a href={p.website} target="_blank" rel="noopener noreferrer">website &#8599;</a>}
-            {p.github_url && <a href={p.github_url} target="_blank" rel="noopener noreferrer">github &#8599;</a>}
-            {p.linkedin_url && <a href={p.linkedin_url} target="_blank" rel="noopener noreferrer">linkedin &#8599;</a>}
+            {p.website && <ExternalLink href={p.website}>website &#8599;</ExternalLink>}
+            {p.github_url && <ExternalLink href={p.github_url}>github &#8599;</ExternalLink>}
+            {p.linkedin_url && <ExternalLink href={p.linkedin_url}>linkedin &#8599;</ExternalLink>}
           </div>
           {p.interests && (
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 12 }}>

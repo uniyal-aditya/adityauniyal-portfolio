@@ -18,27 +18,36 @@ export function safeUrl(raw: string | null | undefined): string | null {
   }
 }
 
-/** Extract a YouTube video id from watch/youtu.be/shorts/embed URLs. */
+/** Escape a user-typed search term before splicing it into an ilike/or
+ *  filter string (PostgREST): % and _ are LIKE wildcards, backslash is the
+ *  LIKE escape char, and , ( ) are or() filter syntax. Without this a term
+ *  like `x),username.ilike.%x%` could inject extra filter conditions. */
+export function escapeLikeTerm(term: string): string {
+  return term.replace(/[\\%_,()]/g, (ch) => '\\' + ch)
+}
+
+/** Extract a YouTube video id from watch/youtu.be/shorts/embed URLs.
+ *  Final gate: a YouTube id is [\w-]{6,} — anything else (empty, spaces,
+ *  path tricks) is rejected, since the id is spliced into embed URLs. */
 export function youtubeId(raw: string): string | null {
   try {
     const u = new URL(raw)
-    if (u.hostname === 'youtu.be') return u.pathname.slice(1) || null
-    if (u.hostname.includes('youtube.com')) {
-      if (u.pathname.startsWith('/watch')) return u.searchParams.get('v')
-      const m = u.pathname.match(/^\/(?:shorts|embed)\/([\w-]{6,})/)
-      if (m) return m[1]
+    let id: string | null = null
+    if (u.hostname === 'youtu.be') {
+      id = u.pathname.slice(1) || null
+    } else if (u.hostname.includes('youtube.com')) {
+      if (u.pathname.startsWith('/watch')) {
+        id = u.searchParams.get('v')
+      } else {
+        const m = u.pathname.match(/^\/(?:shorts|embed)\/([\w-]{6,})/)
+        if (m) id = m[1]
+      }
     }
-    return null
+    if (!id || !/^[\w-]{6,}$/.test(id)) return null
+    return id
   } catch {
     return null
   }
-}
-
-/** Very light HTML-to-text used for excerpts when none is written. */
-export function htmlToText(html: string): string {
-  const el = document.createElement('div')
-  el.innerHTML = html
-  return (el.textContent || '').replace(/\s+/g, ' ').trim()
 }
 
 /** Markdown-ish to text for excerpts/TOC sourcing of legacy content. */

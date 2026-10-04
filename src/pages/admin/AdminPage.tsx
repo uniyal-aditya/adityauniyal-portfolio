@@ -13,6 +13,7 @@ import {
 } from '@/lib/journal-api'
 import { EmptyState, Avatar, VerifiedBadge, ExternalLink } from '@/components/journal/bits'
 import { BUNDLED_COVERS } from '@/data/covers'
+import { escapeLikeTerm } from '@/lib/sanitize'
 
 /* ── small helpers ─────────────────────────────────────────────── */
 
@@ -209,7 +210,7 @@ function PostsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
         .select('id, title, slug, status, featured, post_type, updated_at, published_at, author:profiles!posts_author_id_fkey(username, display_name)')
         .order('updated_at', { ascending: false })
         .limit(100)
-      if (search.trim()) req = req.ilike('title', '%' + search.trim() + '%')
+      if (search.trim()) req = req.ilike('title', '%' + escapeLikeTerm(search.trim()) + '%')
       if (statusF) req = req.eq('status', statusF)
       const { data, error } = await req
       if (error) throw error
@@ -273,7 +274,8 @@ function UsersAdmin({ qc, rolesOnly }: { qc: ReturnType<typeof useQueryClient>; 
     enabled: SUPABASE_CONFIGURED,
     queryFn: async (): Promise<Profile[]> => {
       let req = supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(200)
-      if (search.trim()) req = req.or('display_name.ilike.%' + search.trim() + '%,username.ilike.%' + search.trim() + '%')
+      const term = escapeLikeTerm(search.trim())
+      if (term) req = req.or('display_name.ilike.%' + term + '%,username.ilike.%' + term + '%')
       const { data, error } = await req
       if (error) throw error
       return (data ?? []) as Profile[]

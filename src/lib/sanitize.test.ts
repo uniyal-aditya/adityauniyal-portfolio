@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readingTime, docToText } from './sanitize'
+import { readingTime, docToText, youtubeId, escapeLikeTerm } from './sanitize'
 
 /**
  * The formula is a public contract: cards, article headers, the editor
@@ -84,5 +84,47 @@ describe('docToText', () => {
     }))
     const text = docToText({ type: 'doc', content: paragraphs })
     expect(readingTime(text)).toBe(Math.max(1, Math.round(700 / 200)))
+  })
+})
+
+describe('youtubeId', () => {
+  it('extracts ids from watch, youtu.be, shorts and embed URLs', () => {
+    expect(youtubeId('https://www.youtube.com/watch?v=dQw4w9WgXcQ')).toBe('dQw4w9WgXcQ')
+    expect(youtubeId('https://youtu.be/dQw4w9WgXcQ')).toBe('dQw4w9WgXcQ')
+    expect(youtubeId('https://www.youtube.com/shorts/dQw4w9WgXcQ')).toBe('dQw4w9WgXcQ')
+    expect(youtubeId('https://www.youtube.com/embed/dQw4w9WgXcQ')).toBe('dQw4w9WgXcQ')
+  })
+
+  it('rejects ids outside [\\w-]{6,} (the id is spliced into embed URLs)', () => {
+    expect(youtubeId('https://www.youtube.com/watch?v=abc')).toBeNull() // too short
+    expect(youtubeId('https://youtu.be/ab;cd')).toBeNull() // junk characters
+    expect(youtubeId('https://www.youtube.com/watch?v=x/y/z')).toBeNull()
+    expect(youtubeId('https://www.youtube.com/watch?v=')).toBeNull()
+    expect(youtubeId('https://www.youtube.com/shorts/ab')).toBeNull()
+  })
+
+  it('rejects non-YouTube and unparseable input', () => {
+    expect(youtubeId('https://vimeo.com/12345678')).toBeNull()
+    expect(youtubeId('https://evil.com/watch?v=dQw4w9WgXcQ')).toBeNull()
+    expect(youtubeId('not a url')).toBeNull()
+  })
+})
+
+describe('escapeLikeTerm', () => {
+  it('escapes LIKE wildcards, the escape char, and or() filter syntax', () => {
+    expect(escapeLikeTerm('100%')).toBe('100\\%')
+    expect(escapeLikeTerm('under_score')).toBe('under\\_score')
+    expect(escapeLikeTerm('a,b')).toBe('a\\,b')
+    expect(escapeLikeTerm('group(1)')).toBe('group\\(1\\)')
+    expect(escapeLikeTerm('back\\\\slash')).toBe('back\\\\\\\\slash')
+  })
+
+  it('neutralizes a filter-injection term', () => {
+    // Without escaping, `x),username.ilike.%x%` could add conditions to the
+    // or() filter and `%x%` would match everything.
+    const t = escapeLikeTerm('x),username.ilike.%x%')
+    expect(t).toBe('x\\)\\,username.ilike.\\%x\\%')
+    // no unescaped filter-syntax characters remain
+    expect(t).not.toMatch(/(?<!\\)[,()%_]/)
   })
 })

@@ -32,12 +32,12 @@ src/
 ├── lib/  supabase.ts · journal-api.ts · github.ts · seo.tsx · sanitize.ts
 ├── data/ building.ts (manual Currently-Building config)  hooks/ types/ styles/
 api/ (sitemap.js rss.js github.js)   netlify/functions/ (sendFeedback preserved)
-supabase/ 01–09 migrations
+supabase/ 01–17 migrations (see readme.md for the run order)
 ```
 
 ## 3 · Supabase setup
 
-Project `qnuegizjakzwgxfvihbd` — **live in production**. Apply migrations 01→09 in order in SQL Editor; all are idempotent (08 must be the corrected version). Auth: Email+password, magic link, reset (templates must use `{{ .ConfirmationURL }}`), OAuth GitHub/Google/Discord with `https://adityauniyal.is-a.dev` + localhost origins allow-listed. RLS on every table; admin RPCs enforce `is_admin()` server-side; a `BEFORE UPDATE` trigger blocks non-admin writes to comment pin columns (self-pin escalation hole closed by test). Storage: `journal-media` bucket, MIME/size validation client-side.
+Project `qnuegizjakzwgxfvihbd` — **live in production**. Apply migrations 01→17 in order (see readme.md; 12/13/13b/13c are one-off data fixes) in SQL Editor; all are idempotent (08 must be the corrected version). Auth: Email+password, magic link, reset (templates must use `{{ .ConfirmationURL }}`), OAuth GitHub/Google/Discord with `https://adityauniyal.is-a.dev` + localhost origins allow-listed. RLS on every table; admin RPCs enforce `is_admin()` server-side; a `BEFORE UPDATE` trigger blocks non-admin writes to comment pin columns (self-pin escalation hole closed by test). Storage: `journal-media` bucket, MIME/size validation client-side.
 
 ## 4 · GitHub integration setup (AU_ / BUILDING)
 

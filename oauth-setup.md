@@ -21,7 +21,10 @@ Supabase rejects OAuth callbacks from unlisted URLs.
 4. **Save**
 
 While you're here: **Authentication → Sign In / Providers → Email** →
-turn **OFF "Confirm email"** (your owner account is currently locked by it).
+keep **"Confirm email" ON** for production. The Journal has public comments and
+contributor accounts, so unverified sign-ups would let anyone register with an
+email address they don't own. If a specific account ever gets stuck on a pending
+confirmation, resolve it for that user rather than disabling the setting for everyone.
 
 ---
 

@@ -132,19 +132,20 @@ paths plus one static file:
 - ✅ Static fallback tags in the served HTML are correct (canonical/`og:url` on `/`)
 - ✅ Per-route canonical/OG/JSON-LD emitted at runtime by `<Seo>`
 - ✅ `noindex` on private routes (`/blog/login`, `/blog/dashboard`, `/blog/dashboard/editor`,
-  `/blog/admin`) both at runtime and in the prebuilt static shells under `blog/*/index.html`;
-  `robots.txt` also disallows them
+  `/blog/admin`) at runtime via `<Seo>` (the build emits one shared `index.html`; there are no
+  per-route static shells); `robots.txt` also disallows them
 
 **Worth knowing (not blockers):**
-- ⚠️ **Soft 404s** — the SPA rewrite in `vercel.json` returns `200` + `index.html` for every
-  non-API path, so `/blog/post/does-not-exist` is a 200 that renders `NotFound` client-side.
-  Googlebot executes JS and handles this, but a true 404 status is better. Optional hardening:
-  emit a static `404.html` and serve it via a Vercel catch route, or generate the rewrite list
-  from published slugs at build time.
+- ⚠️ **Soft 404s on dynamic routes** — `vercel.json` has no catch-all rewrite, so unknown
+  top-level paths already get a real 404 (`public/404.html`). Only the dynamic routes
+  (`/blog/post/:slug`, `/blog/author/:username`, `/blog/topic/:slug`, `/blog/series/:slug`)
+  return `200` + `index.html` for a slug that does not exist, and the page then renders
+  `NotFound` client-side. Googlebot executes JS and copes, but a true 404 status is better.
+  Optional hardening: generate the rewrite list from published slugs at build time.
 - ⚠️ **Meta is client-rendered** — link-preview crawlers that don't run JS (some Discord, Slack,
-  WhatsApp clients) see the static `index.html` fallback tags, not per-route ones. Posts already
-  ship prebuilt shells under `blog/`; if a specific page's share preview ever looks wrong,
-  prerender that route.
+  WhatsApp clients) see the static `index.html` fallback tags, not per-route ones. Posts do not
+  ship per-route prebuilt shells (the build emits a single `index.html`); if a specific page's
+  share preview ever looks wrong, prerender that route.
 
 Post-deploy smoke (every `canonical`/`og:url` line must show the exact origin):
 

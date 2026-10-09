@@ -6,12 +6,13 @@ import { fetchProjectJournal } from '@/lib/journal-api'
 import { SUPABASE_CONFIGURED } from '@/lib/supabase'
 import { BuilderCell } from '@/components/journal/bits'
 
-// TODO: replace the {{REAL_NUMBER}} placeholders with real measured values —
-// the previous ∞ / 0 figures were unverifiable marketing numbers.
+// Descriptive facts only. The earlier ∞ / 0 / <1ms figures were unmeasured
+// marketing numbers. When real counts exist (servers, commands run), add them
+// here as tiles, e.g. { num: '1,250', label: 'Commands run' }.
 const NUMEXA_METRICS = [
-  { num: '{{REAL_NUMBER}}', label: 'Calculations served' },
-  { num: '<1ms', label: 'Target response' },
-  { num: '{{REAL_NUMBER}}', label: 'Downtime target' },
+  { num: 'Python', label: 'discord.py bot' },
+  { num: 'Custom', label: 'Math parser' },
+  { num: 'Live', label: 'Status' },
 ]
 
 function BuildJournal({ project, title }: { project: string; title: string }) {
@@ -70,9 +71,8 @@ export default function Work() {
               <div className="pf-eyebrow">// 01 &middot; Flagship &middot; Discord Bot</div>
               <h2 className="pf-title">Numexa</h2>
               <p className="pf-desc">
-                {/* TODO: replace {{NUMEXA_STACK_AND_FEATURES}} with one agreed description,
-                    kept identical across Home, Work and Projects. */}
-                {'{{NUMEXA_STACK_AND_FEATURES}}'}
+                Python + discord.py bot with a custom math parser that evaluates complex
+                expressions and functions, tuned for fast responses.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
                 {['Python', 'discord.py', 'Math Parser', 'Command Architecture', 'Performance'].map((t) => (
@@ -113,7 +113,8 @@ export default function Work() {
               <div className="project-main">
                 <div className="project-title">Numexa</div>
                 <div className="project-desc">
-                  {'{{NUMEXA_STACK_AND_FEATURES}}'}
+                  Python + discord.py bot with a custom math parser that evaluates complex
+                  expressions and functions, tuned for fast responses.
                 </div>
               </div>
               <div className="project-tags">

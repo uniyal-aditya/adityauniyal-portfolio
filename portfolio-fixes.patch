@@ -1,0 +1,262 @@
+diff -ruN a/CUSTOM-DOMAIN-CHECKLIST.md b/CUSTOM-DOMAIN-CHECKLIST.md
+--- a/CUSTOM-DOMAIN-CHECKLIST.md	2026-10-02 08:23:16.000000000 +0000
++++ b/CUSTOM-DOMAIN-CHECKLIST.md	2026-10-09 05:04:32.000000000 +0000
+@@ -132,19 +132,20 @@
+ - ✅ Static fallback tags in the served HTML are correct (canonical/`og:url` on `/`)
+ - ✅ Per-route canonical/OG/JSON-LD emitted at runtime by `<Seo>`
+ - ✅ `noindex` on private routes (`/blog/login`, `/blog/dashboard`, `/blog/dashboard/editor`,
+-  `/blog/admin`) both at runtime and in the prebuilt static shells under `blog/*/index.html`;
+-  `robots.txt` also disallows them
++  `/blog/admin`) at runtime via `<Seo>` (the build emits one shared `index.html`; there are no
++  per-route static shells); `robots.txt` also disallows them
+ 
+ **Worth knowing (not blockers):**
+-- ⚠️ **Soft 404s** — the SPA rewrite in `vercel.json` returns `200` + `index.html` for every
+-  non-API path, so `/blog/post/does-not-exist` is a 200 that renders `NotFound` client-side.
+-  Googlebot executes JS and handles this, but a true 404 status is better. Optional hardening:
+-  emit a static `404.html` and serve it via a Vercel catch route, or generate the rewrite list
+-  from published slugs at build time.
++- ⚠️ **Soft 404s on dynamic routes** — `vercel.json` has no catch-all rewrite, so unknown
++  top-level paths already get a real 404 (`public/404.html`). Only the dynamic routes
++  (`/blog/post/:slug`, `/blog/author/:username`, `/blog/topic/:slug`, `/blog/series/:slug`)
++  return `200` + `index.html` for a slug that does not exist, and the page then renders
++  `NotFound` client-side. Googlebot executes JS and copes, but a true 404 status is better.
++  Optional hardening: generate the rewrite list from published slugs at build time.
+ - ⚠️ **Meta is client-rendered** — link-preview crawlers that don't run JS (some Discord, Slack,
+-  WhatsApp clients) see the static `index.html` fallback tags, not per-route ones. Posts already
+-  ship prebuilt shells under `blog/`; if a specific page's share preview ever looks wrong,
+-  prerender that route.
++  WhatsApp clients) see the static `index.html` fallback tags, not per-route ones. Posts do not
++  ship per-route prebuilt shells (the build emits a single `index.html`); if a specific page's
++  share preview ever looks wrong, prerender that route.
+ 
+ Post-deploy smoke (every `canonical`/`og:url` line must show the exact origin):
+ 
+diff -ruN a/FINAL-REPORT.md b/FINAL-REPORT.md
+--- a/FINAL-REPORT.md	2026-10-04 09:09:21.000000000 +0000
++++ b/FINAL-REPORT.md	2026-10-09 05:04:32.000000000 +0000
+@@ -32,12 +32,12 @@
+ ├── lib/  supabase.ts · journal-api.ts · github.ts · seo.tsx · sanitize.ts
+ ├── data/ building.ts (manual Currently-Building config)  hooks/ types/ styles/
+ api/ (sitemap.js rss.js github.js)   netlify/functions/ (sendFeedback preserved)
+-supabase/ 01–09 migrations
++supabase/ 01–17 migrations (see readme.md for the run order)
+ ```
+ 
+ ## 3 · Supabase setup
+ 
+-Project `qnuegizjakzwgxfvihbd` — **live in production**. Apply migrations 01→09 in order in SQL Editor; all are idempotent (08 must be the corrected version). Auth: Email+password, magic link, reset (templates must use `{{ .ConfirmationURL }}`), OAuth GitHub/Google/Discord with `https://adityauniyal.is-a.dev` + localhost origins allow-listed. RLS on every table; admin RPCs enforce `is_admin()` server-side; a `BEFORE UPDATE` trigger blocks non-admin writes to comment pin columns (self-pin escalation hole closed by test). Storage: `journal-media` bucket, MIME/size validation client-side.
++Project `qnuegizjakzwgxfvihbd` — **live in production**. Apply migrations 01→17 in order (see readme.md; 12/13/13b/13c are one-off data fixes) in SQL Editor; all are idempotent (08 must be the corrected version). Auth: Email+password, magic link, reset (templates must use `{{ .ConfirmationURL }}`), OAuth GitHub/Google/Discord with `https://adityauniyal.is-a.dev` + localhost origins allow-listed. RLS on every table; admin RPCs enforce `is_admin()` server-side; a `BEFORE UPDATE` trigger blocks non-admin writes to comment pin columns (self-pin escalation hole closed by test). Storage: `journal-media` bucket, MIME/size validation client-side.
+ 
+ ## 4 · GitHub integration setup (AU_ / BUILDING)
+ 
+diff -ruN a/index.html b/index.html
+--- a/index.html	2026-09-16 14:18:02.000000000 +0000
++++ b/index.html	2026-10-09 05:04:32.000000000 +0000
+@@ -49,6 +49,17 @@
+   </head>
+   <body>
+     <div id="root"></div>
++    <noscript>
++      <div style="font-family: system-ui, sans-serif; color: #e8e4d8; max-width: 640px; margin: 0 auto; padding: 48px 24px; line-height: 1.6">
++        <h1 style="font-size: 2rem; margin: 0 0 12px">Aditya Uniyal</h1>
++        <p>Developer building Discord bots, web platforms, and full-stack systems. This site needs JavaScript to run.</p>
++        <p>
++          <a href="https://github.com/uniyal-aditya" style="color: #c8f560">GitHub</a> ·
++          <a href="https://www.linkedin.com/in/uniyaladitya" style="color: #c8f560">LinkedIn</a> ·
++          <a href="/assets/Aditya_Uniyal_Resume.pdf" style="color: #c8f560">Resume (PDF)</a>
++        </p>
++      </div>
++    </noscript>
+     <script type="module" src="/src/main.tsx"></script>
+   </body>
+ </html>
+diff -ruN a/netlify.toml b/netlify.toml
+--- a/netlify.toml	2026-10-03 15:40:02.000000000 +0000
++++ b/netlify.toml	2026-10-09 05:04:32.000000000 +0000
+@@ -12,10 +12,6 @@
+   publish = "dist"
+   functions = "netlify/functions"
+ 
+-# Canonicalize to no trailing slash, matching Vercel's trailingSlash: false,
+-# so /work/ 308-redirects to /work instead of 404ing against the route list.
+-trailingSlash = "never"
+-
+ # ── Legacy feedback function ──
+ [[redirects]]
+   from = "/sendFeedback"
+diff -ruN a/oauth-setup.md b/oauth-setup.md
+--- a/oauth-setup.md	2026-09-13 13:52:19.000000000 +0000
++++ b/oauth-setup.md	2026-10-09 05:04:32.000000000 +0000
+@@ -21,7 +21,10 @@
+ 4. **Save**
+ 
+ While you're here: **Authentication → Sign In / Providers → Email** →
+-turn **OFF "Confirm email"** (your owner account is currently locked by it).
++keep **"Confirm email" ON** for production. The Journal has public comments and
++contributor accounts, so unverified sign-ups would let anyone register with an
++email address they don't own. If a specific account ever gets stuck on a pending
++confirmation, resolve it for that user rather than disabling the setting for everyone.
+ 
+ ---
+ 
+diff -ruN a/package-lock.json b/package-lock.json
+--- a/package-lock.json	2026-10-04 09:11:10.000000000 +0000
++++ b/package-lock.json	2026-10-09 05:04:32.000000000 +0000
+@@ -15,10 +15,12 @@
+         "@tiptap/extension-image": "^2.11.5",
+         "@tiptap/extension-link": "^2.11.5",
+         "@tiptap/extension-placeholder": "^2.11.5",
++        "@tiptap/extension-strike": "^2.27.3",
+         "@tiptap/extension-table": "^2.11.5",
+         "@tiptap/extension-table-cell": "^2.11.5",
+         "@tiptap/extension-table-header": "^2.11.5",
+         "@tiptap/extension-table-row": "^2.11.5",
++        "@tiptap/extension-text-style": "^2.27.3",
+         "@tiptap/extension-youtube": "^2.11.5",
+         "@tiptap/react": "^2.11.5",
+         "@tiptap/starter-kit": "^2.11.5",
+@@ -33,14 +35,16 @@
+         "zod": "^3.24.2"
+       },
+       "devDependencies": {
++        "@eslint/js": "^9.39.5",
+         "@tailwindcss/vite": "^4.0.6",
+         "@types/node": "^22.20.2",
+         "@types/react": "^18.3.18",
+         "@types/react-dom": "^18.3.5",
+         "@vitejs/plugin-react": "^4.3.4",
+-        "eslint": "^9.20.1",
++        "eslint": "^9.22.0",
+         "eslint-plugin-react-hooks": "^5.2.0",
+         "eslint-plugin-react-refresh": "^0.4.18",
++        "globals": "^14.0.0",
+         "jsdom": "^29.1.1",
+         "sharp": "^0.35.4",
+         "tailwindcss": "^4.0.6",
+diff -ruN a/package.json b/package.json
+--- a/package.json	2026-10-04 09:09:20.000000000 +0000
++++ b/package.json	2026-10-09 05:04:32.000000000 +0000
+@@ -24,10 +24,12 @@
+     "@tiptap/extension-image": "^2.11.5",
+     "@tiptap/extension-link": "^2.11.5",
+     "@tiptap/extension-placeholder": "^2.11.5",
++    "@tiptap/extension-strike": "^2.27.3",
+     "@tiptap/extension-table": "^2.11.5",
+     "@tiptap/extension-table-cell": "^2.11.5",
+     "@tiptap/extension-table-header": "^2.11.5",
+     "@tiptap/extension-table-row": "^2.11.5",
++    "@tiptap/extension-text-style": "^2.27.3",
+     "@tiptap/extension-youtube": "^2.11.5",
+     "@tiptap/react": "^2.11.5",
+     "@tiptap/starter-kit": "^2.11.5",
+@@ -42,14 +44,16 @@
+     "zod": "^3.24.2"
+   },
+   "devDependencies": {
++    "@eslint/js": "^9.39.5",
+     "@tailwindcss/vite": "^4.0.6",
+     "@types/node": "^22.20.2",
+     "@types/react": "^18.3.18",
+     "@types/react-dom": "^18.3.5",
+     "@vitejs/plugin-react": "^4.3.4",
+-    "eslint": "^9.20.1",
++    "eslint": "^9.22.0",
+     "eslint-plugin-react-hooks": "^5.2.0",
+     "eslint-plugin-react-refresh": "^0.4.18",
++    "globals": "^14.0.0",
+     "jsdom": "^29.1.1",
+     "sharp": "^0.35.4",
+     "tailwindcss": "^4.0.6",
+diff -ruN a/readme.md b/readme.md
+--- a/readme.md	2026-10-03 16:51:43.000000000 +0000
++++ b/readme.md	2026-10-09 05:04:32.000000000 +0000
+@@ -67,6 +67,10 @@
+ 13. `supabase/13-post-metadata.sql` — one-off data fix: reading times, SEO fields, tags, related-project links
+ 13b. `supabase/13b-post-metadata-finish.sql` — full backfill of the migration-13 data (run if 13 was interrupted)
+ 13c. `supabase/13c-post-tags-project-links.sql` — finisher: `post_tags` + `project_links` rows only (idempotent, safe to re-run)
++14. `supabase/14-guard-verified.sql` — only admins can change `verified`; DB-level guard on `posts.content` (blocks quote-bearing markdown image alt text)
++15. `supabase/15-fix-search-path.sql` — pins `search_path` on functions and locks admin RPCs away from `anon` (Supabase security-advisor findings)
++16. `supabase/16-invoker-trending-view.sql` — makes `trending_posts` a `security_invoker` view
++17. `supabase/17-narrow-content-trigger.sql` — fires the `posts.content` guard only when `content` changes
+ 
+ #### 3. Configure the frontend keys
+ Copy `.env.example` to **`.env.local`** and fill it in:
+@@ -172,13 +176,13 @@
+ npm run dev             # Vite dev server on http://localhost:5173
+ ```
+ 
+-Quality gates (all run automatically before every build — locally and on Vercel — via the `prebuild` hook; a failure blocks the deploy):
++Quality gates — `typecheck` and `test` run automatically before every build (locally and on Vercel, via the `prebuild` hook; a failure blocks the deploy). `lint` is run on demand and is not a deploy gate:
+ 
+ ```bash
+ npm run typecheck       # tsc -b
+ npm test                # vitest — pins the reading-time formula, slug/URL safety,
+                         # the SPA-404 host-config agreement, and SQL⇄TS word-count agreement
+-npm run lint            # eslint
++npm run lint            # eslint (run manually; not part of prebuild)
+ npm run build           # production build (runs typecheck + tests first)
+ ```
+ 
+diff -ruN a/src/pages/portfolio/Work.tsx b/src/pages/portfolio/Work.tsx
+--- a/src/pages/portfolio/Work.tsx	2026-10-08 15:16:18.000000000 +0000
++++ b/src/pages/portfolio/Work.tsx	2026-10-09 05:04:32.000000000 +0000
+@@ -6,12 +6,13 @@
+ import { SUPABASE_CONFIGURED } from '@/lib/supabase'
+ import { BuilderCell } from '@/components/journal/bits'
+ 
+-// TODO: replace the {{REAL_NUMBER}} placeholders with real measured values —
+-// the previous ∞ / 0 figures were unverifiable marketing numbers.
++// Descriptive facts only. The earlier ∞ / 0 / <1ms figures were unmeasured
++// marketing numbers. When real counts exist (servers, commands run), add them
++// here as tiles, e.g. { num: '1,250', label: 'Commands run' }.
+ const NUMEXA_METRICS = [
+-  { num: '{{REAL_NUMBER}}', label: 'Calculations served' },
+-  { num: '<1ms', label: 'Target response' },
+-  { num: '{{REAL_NUMBER}}', label: 'Downtime target' },
++  { num: 'Python', label: 'discord.py bot' },
++  { num: 'Custom', label: 'Math parser' },
++  { num: 'Live', label: 'Status' },
+ ]
+ 
+ function BuildJournal({ project, title }: { project: string; title: string }) {
+diff -ruN a/supabase/17-narrow-content-trigger.sql b/supabase/17-narrow-content-trigger.sql
+--- a/supabase/17-narrow-content-trigger.sql	1970-01-01 00:00:00.000000000 +0000
++++ b/supabase/17-narrow-content-trigger.sql	2026-10-09 05:04:47.000000000 +0000
+@@ -0,0 +1,24 @@
++-- 17: fire the posts content guard only when `content` changes
++-- (run in the Supabase SQL editor). Idempotent: safe to re-run.
++--
++-- 14-guard-verified.sql created posts_content_guard as BEFORE INSERT OR UPDATE
++-- (any column). The view-count trigger (08-analytics-fixes.sql) runs
++-- `update public.posts set view_count = view_count + 1` on every view, so the
++-- guard re-parsed the whole article each time — and any legacy post whose
++-- markdown alt text happens to contain a quote would have made those counter
++-- updates raise, breaking view counting for that post.
++--
++-- Narrowing to UPDATE OF content keeps the protection on every write that can
++-- change the article body (insert, or an update that sets content) and leaves
++-- counter / metadata / status updates alone.
++--
++-- guard_posts_content() itself is unchanged (defined in 14, re-created with a
++-- pinned search_path in 15).
++
++drop trigger if exists posts_content_guard on public.posts;
++create trigger posts_content_guard
++  before insert or update of content on public.posts
++  for each row execute function public.guard_posts_content();
++
++-- Confirm after running (tgtype / definition should say "UPDATE OF content"):
++--   select pg_get_triggerdef(oid) from pg_trigger where tgname = 'posts_content_guard';
+diff -ruN a/vercel.json b/vercel.json
+--- a/vercel.json	2026-10-03 16:48:26.000000000 +0000
++++ b/vercel.json	2026-10-09 05:04:32.000000000 +0000
+@@ -40,7 +40,7 @@
+         { "key": "X-Content-Type-Options", "value": "nosniff" },
+         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+         { "key": "X-Frame-Options", "value": "DENY" },
+-        { "key": "Permissions-Policy", "value": "" },
++        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+         {
+           "key": "Content-Security-Policy-Report-Only",
+           "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; media-src 'self' https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.emailjs.com https://api.github.com; frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

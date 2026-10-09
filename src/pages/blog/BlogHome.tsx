@@ -166,8 +166,8 @@ function WritersSection() {
       <div className="container">
         <div className="section-label reveal">Featured writers</div>
         <div className="writers-grid reveal d1">
-          {data.map((w) => (
-            <WriterCard key={w.id} profile={w} />
+          {data.map(({ profile, postCount }) => (
+            <WriterCard key={profile.id} profile={profile} postCount={postCount} />
           ))}
         </div>
       </div>

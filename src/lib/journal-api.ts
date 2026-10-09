@@ -307,22 +307,38 @@ export async function fetchSeriesPage(slug: string): Promise<{ series: Series | 
   return { series: series as Series, chapters }
 }
 
-/** Featured writers: distinct authors with at least one published post. */
-export async function fetchFeaturedWriters(limit = 6): Promise<Profile[]> {
+/**
+ * Featured writers: distinct authors with at least one published post,
+ * each with their published-post count (the number shown on the card).
+ * The count is derived from the same published-posts scan that builds the
+ * author list, so it can never disagree with who is featured.
+ */
+export async function fetchFeaturedWriters(
+  limit = 6,
+): Promise<Array<{ profile: Profile; postCount: number }>> {
   if (!SUPABASE_CONFIGURED) return []
   const { data, error } = await supabase
     .from('posts')
-    .select('profiles!posts_author_id_fkey!inner(id, username, display_name, avatar_url, bio, website, github_url, linkedin_url, role, verified)')
+    .select('author_id, profiles!posts_author_id_fkey!inner(id, username, display_name, avatar_url, bio, website, github_url, linkedin_url, role, verified)')
     .eq('status', 'published')
-    .limit(50)
+    // Generous ceiling so per-author counts stay exact for a personal journal;
+    // PostgREST can't GROUP BY from the client, so we tally in JS.
+    .limit(1000)
   if (error) return []
+  const counts = new Map<string, number>()
   const seen = new Map<string, Profile>()
   for (const row of data ?? []) {
-    const p = (row as unknown as { profiles: Profile }).profiles
-    if (p && !seen.has(p.id)) seen.set(p.id, p)
+    const r = row as unknown as { author_id: string; profiles: Profile }
+    const p = r.profiles
+    if (!p) continue
+    counts.set(p.id, (counts.get(p.id) ?? 0) + 1)
+    if (!seen.has(p.id)) seen.set(p.id, p)
   }
   return [...seen.values()]
-    .sort((a, b) => (a.username === OWNER_USERNAME ? -1 : b.username === OWNER_USERNAME ? 1 : 0))
+    .map((profile) => ({ profile, postCount: counts.get(profile.id) ?? 0 }))
+    .sort((a, b) =>
+      a.profile.username === OWNER_USERNAME ? -1 : b.profile.username === OWNER_USERNAME ? 1 : 0,
+    )
     .slice(0, limit)
 }
 

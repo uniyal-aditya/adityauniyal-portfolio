@@ -60,10 +60,9 @@ export default function About() {
                 That curiosity hardened into a discipline: <span>design the system before touching the keyboard</span>.
                 Think about the edge cases. Model the data flow. Then build.
               </p>
-              {/* TODO: replace {{REAL_NUMBER}} with the real interaction volume from the bot's analytics. */}
               <p>
                 Today I work across Python, JavaScript, and the web stack - building everything from Discord bots
-                handling {'{{REAL_NUMBER}}'} interactions to client-facing web experiences that feel fast and intentional.
+                handling 10,000+ interactions to client-facing web experiences that feel fast and intentional.
               </p>
               <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <a href="/assets/Aditya_Uniyal_Resume.pdf" download className="btn-lime" style={{ fontSize: 11, padding: '12px 22px' }}>
@@ -140,14 +139,11 @@ export default function About() {
                 <br />
                 <em style={{ fontFamily: 'var(--f-serif)', fontStyle: 'italic', color: 'var(--rust)' }}>studied</em>.
               </h2>
-              {/* TODO: fill in {{UNIVERSITY}} and {{YEARS}} — existing sources conflict
-                  (readme yaml said "Doon University", the old profile header said
-                  "Graphic Era Hill University"); use whichever is correct. */}
               <div className="aside-block" style={{ border: '1px solid var(--line)', padding: '24px 28px' }}>
                 <div className="label">Degree</div>
                 <div className="value">
-                  {'{{UNIVERSITY}}'}
-                  <small>B.Tech Computer Science Engineering · {'{{YEARS}}'}</small>
+                  Doon University
+                  <small>B.Tech Computer Science Engineering · 2026 – 2030</small>
                 </div>
               </div>
             </div>

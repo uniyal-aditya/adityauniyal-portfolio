@@ -67,6 +67,10 @@ Open **SQL Editor** in Supabase and run these files **in numeric order** (each i
 13. `supabase/13-post-metadata.sql` — one-off data fix: reading times, SEO fields, tags, related-project links
 13b. `supabase/13b-post-metadata-finish.sql` — full backfill of the migration-13 data (run if 13 was interrupted)
 13c. `supabase/13c-post-tags-project-links.sql` — finisher: `post_tags` + `project_links` rows only (idempotent, safe to re-run)
+14. `supabase/14-guard-verified.sql` — only admins can change `verified`; DB-level guard on `posts.content` (blocks quote-bearing markdown image alt text)
+15. `supabase/15-fix-search-path.sql` — pins `search_path` on functions and locks admin RPCs away from `anon` (Supabase security-advisor findings)
+16. `supabase/16-invoker-trending-view.sql` — makes `trending_posts` a `security_invoker` view
+17. `supabase/17-narrow-content-trigger.sql` — fires the `posts.content` guard only when `content` changes
 
 #### 3. Configure the frontend keys
 Copy `.env.example` to **`.env.local`** and fill it in:
@@ -172,13 +176,13 @@ npm install
 npm run dev             # Vite dev server on http://localhost:5173
 ```
 
-Quality gates (all run automatically before every build — locally and on Vercel — via the `prebuild` hook; a failure blocks the deploy):
+Quality gates — `typecheck` and `test` run automatically before every build (locally and on Vercel, via the `prebuild` hook; a failure blocks the deploy). `lint` is run on demand and is not a deploy gate:
 
 ```bash
 npm run typecheck       # tsc -b
 npm test                # vitest — pins the reading-time formula, slug/URL safety,
                         # the SPA-404 host-config agreement, and SQL⇄TS word-count agreement
-npm run lint            # eslint
+npm run lint            # eslint (run manually; not part of prebuild)
 npm run build           # production build (runs typecheck + tests first)
 ```
 

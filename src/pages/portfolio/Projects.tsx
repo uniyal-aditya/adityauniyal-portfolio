@@ -13,13 +13,11 @@ interface Proj {
 }
 
 const PROJECTS: Proj[] = [
-  // TODO: replace {{NUMEXA_STACK_AND_FEATURES}} with one agreed description,
-  // kept identical across Home, Work and Projects.
   {
     id: 'numexa',
     name: 'Numexa',
     type: 'Discord Bot',
-    desc: '{{NUMEXA_STACK_AND_FEATURES}}',
+    desc: 'Python + discord.py bot with a custom math parser that evaluates complex expressions and functions, tuned for fast responses.',
     stack: ['Python', 'discord.py', 'Math Parsing'],
     links: [
       { label: 'Add', href: 'https://discord.com/oauth2/authorize?client_id=1460289617264775333&permissions=5629501681765440&scope=bot+applications.commands', primary: true },

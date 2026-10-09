@@ -12,10 +12,6 @@
   publish = "dist"
   functions = "netlify/functions"
 
-# Canonicalize to no trailing slash, matching Vercel's trailingSlash: false,
-# so /work/ 308-redirects to /work instead of 404ing against the route list.
-trailingSlash = "never"
-
 # ── Legacy feedback function ──
 [[redirects]]
   from = "/sendFeedback"

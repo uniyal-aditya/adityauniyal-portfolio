@@ -5,15 +5,16 @@ import { Seo } from '@/lib/seo'
  * Grouped capability lists — honest and bar-free. Everything here is real:
  * React/TypeScript/Supabase power this site, FastAPI/Supabase power Enroute,
  * Python/discord.py power the bots. Former percentage bars implied precision
- * that self-assessed numbers can't have.
+ * that self-assessed numbers can't have. Five groups: Languages, Frontend,
+ * Backend & Data, Cloud & AI, Tools.
  */
 const SKILL_GROUPS: [string, string[]][] = [
-  ['Languages', ['Python', 'JavaScript', 'TypeScript', 'HTML / CSS', 'SQL']],
-  ['Frameworks & Libraries', ['React', 'FastAPI', 'Tailwind CSS', 'Flutter / Dart', 'discord.py']],
-  ['Data & Platforms', ['Supabase', 'Firebase']],
+  ['Languages', ['Python', 'JavaScript', 'TypeScript', 'SQL']],
+  ['Frontend', ['React', 'Tailwind CSS', 'HTML / CSS', 'Flutter / Dart']],
+  ['Backend & Data', ['FastAPI', 'discord.py', 'Firebase']],
+  ['Cloud & AI', ['Google Cloud', 'Supabase', 'Vercel']],
+  ['Tools', ['GitHub', 'VS Code', 'Figma', 'Postman']],
 ]
-
-const TOOLS = ['GitHub', 'VS Code', 'Figma', 'Postman', 'Vercel']
 
 export default function Skills() {
   useReveal()
@@ -45,19 +46,6 @@ export default function Skills() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section style={{ borderTop: '1px solid var(--line)', paddingTop: 60 }}>
-        <div className="container" style={{ maxWidth: 860 }}>
-          <div className="skills-eyebrow reveal" style={{ padding: 0, marginBottom: 24 }}>Tools</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {TOOLS.map((t) => (
-              <span className="skill-pill" key={t}>
-                {t}
-              </span>
-            ))}
-          </div>
         </div>
       </section>
     </main>

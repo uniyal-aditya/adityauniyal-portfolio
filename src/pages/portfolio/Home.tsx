@@ -11,11 +11,10 @@ import { CURRENT_PROJECT } from '@/data/building'
 import { fetchBuilding } from '@/lib/github'
 
 const PROJECTS = [
-  // TODO: replace {{NUMEXA_STACK_AND_FEATURES}} with one agreed description,
-  // kept identical across Home, Work and Projects.
-  { num: '01', title: 'Numexa', desc: '{{NUMEXA_STACK_AND_FEATURES}}', tags: ['Python', 'discord.py', 'Bot'] },
+  { num: '01', title: 'Numexa', desc: 'Python + discord.py bot with a custom math parser that evaluates complex expressions and functions, tuned for fast responses.', tags: ['Python', 'discord.py', 'Bot'] },
   { num: '02', title: 'Music Bot Zero', desc: 'High-performance Discord music bot - queue, streaming, real-time playback', tags: ['Python', 'FFmpeg', 'asyncio'] },
   { num: '03', title: 'Delight Restaurant', desc: 'Interactive restaurant site - menu, reservations, responsive design', tags: ['HTML', 'CSS', 'JS'] },
+  { num: '04', title: 'Enroute', desc: 'Logistics web app built with React, FastAPI, and Supabase', tags: ['React', 'FastAPI', 'Supabase'] },
 ]
 
 const SKILLS = ['Python', 'JavaScript', 'TypeScript', 'React', 'Supabase', 'discord.py', 'Node.js', 'FFmpeg', 'REST APIs', 'Git & GitHub', 'asyncio', 'Vercel', 'Responsive Design', 'System Architecture', 'WebSockets']
@@ -293,9 +292,8 @@ export default function Home() {
                   India <small>Remote worldwide</small>
                 </div>
               </div>
-              {/* TODO: replace {{REAL_NUMBER}} with the actual count of shipped projects. */}
               <div className="aside-block stat-row">
-                <div className="stat-big">{'{{REAL_NUMBER}}'}</div>
+                <div className="stat-big">4</div>
                 <div className="stat-label">Production projects</div>
               </div>
               <div className="aside-block stat-row">
@@ -317,7 +315,7 @@ export default function Home() {
               <em>work</em>.
             </h2>
             <div className="work-header-meta">
-              <span>03</span>
+              <span>04</span>
               Projects shipped
             </div>
           </div>

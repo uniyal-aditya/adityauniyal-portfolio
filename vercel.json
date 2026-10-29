@@ -1,19 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "adityauniyal.vercel.app"
-        }
-      ],
-      "destination": "https://adityauniyal.is-a.dev/$1",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/blog/sitemap.xml",

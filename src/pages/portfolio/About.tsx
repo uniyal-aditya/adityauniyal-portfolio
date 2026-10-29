@@ -90,10 +90,47 @@ export default function About() {
               <div className="aside-block">
                 <div className="label">Platforms</div>
                 <div className="value">
-                  <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--lime)', fontFamily: 'var(--f-mono)', fontSize: 13, display: 'block', marginBottom: 6 }}>
-                    Fiverr &#8599;
+                  <a
+                    href="https://github.com/uniyal-aditya"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: 'var(--lime)',
+                      fontFamily: 'var(--f-mono)',
+                      fontSize: 13,
+                      display: 'block',
+                      marginBottom: 6,
+                    }}
+                  >
+                    GitHub &#8599;
                   </a>
-                  <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--lime)', fontFamily: 'var(--f-mono)', fontSize: 13, display: 'block' }}>
+
+                  <a
+                    href="https://x.com/RaftarCreates"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: 'var(--lime)',
+                      fontFamily: 'var(--f-mono)',
+                      fontSize: 13,
+                      display: 'block',
+                      marginBottom: 6,
+                    }}
+                  >
+                    X / Updates &#8599;
+                  </a>
+
+                  <a
+                    href="https://www.linkedin.com/in/uniyaladitya"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: 'var(--lime)',
+                      fontFamily: 'var(--f-mono)',
+                      fontSize: 13,
+                      display: 'block',
+                    }}
+                  >
                     LinkedIn &#8599;
                   </a>
                 </div>

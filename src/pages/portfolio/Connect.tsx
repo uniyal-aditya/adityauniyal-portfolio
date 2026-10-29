@@ -7,10 +7,37 @@ import { useToast } from '@/hooks/useToast'
 import { EMAILJS, honeypotTripped } from '@/lib/emailjs'
 
 const METHODS = [
-  { ico: '\uD83C\uDFAF', label: 'Fiverr', value: 'fiverr.com/uniyal_aditya', href: 'https://www.fiverr.com/uniyal_aditya' },
-  { ico: '\u26A1', label: 'Featured Gig', value: 'Website Development & Design', href: 'https://www.fiverr.com/s/zWE9XVg' },
-  { ico: '\uD83D\uDCBC', label: 'LinkedIn', value: 'linkedin.com/in/uniyaladitya', href: 'https://www.linkedin.com/in/uniyaladitya' },
-  { ico: '\uD83D\uDCC4', label: 'Resume', value: 'Download PDF', href: '/assets/Aditya_Uniyal_Resume.pdf', download: true },
+  {
+    ico: '💻',
+    label: 'GitHub',
+    value: 'github.com/uniyal-aditya',
+    href: 'https://github.com/uniyal-aditya',
+  },
+  {
+    ico: '🚀',
+    label: 'Featured Project',
+    value: 'Numexa · Source code',
+    href: 'https://github.com/uniyal-aditya/Numexa',
+  },
+  {
+    ico: '𝕏',
+    label: 'X / Updates',
+    value: 'x.com/uaditya_dev',
+    href: 'https://x.com/uaditya_dev',
+  },
+  {
+    ico: '💼',
+    label: 'LinkedIn',
+    value: 'linkedin.com/in/uniyaladitya',
+    href: 'https://www.linkedin.com/in/uniyaladitya',
+  },
+  {
+    ico: '📄',
+    label: 'Resume',
+    value: 'Download PDF',
+    href: '/assets/Aditya_Uniyal_Resume.pdf',
+    download: true,
+  },
 ]
 
 export default function Connect() {
@@ -52,13 +79,17 @@ export default function Connect() {
       setSent(true)
     } catch {
       setSending(false)
-      toast('Failed to send. Try again or reach me on Fiverr.', true)
+      toast('Failed to send. Please try again or connect with me on GitHub or LinkedIn.', true)
     }
   }
 
   return (
     <main>
-      <Seo title="Contact - Aditya Uniyal" description="Get in touch with Aditya Uniyal - freelance, collaborations, and project inquiries." path="/connect" />
+      <Seo
+        title="Connect - Aditya Uniyal"
+        description="Connect with Aditya Uniyal for software projects, open-source contributions, technical discussions, and collaborations."
+        path="/connect"
+      />
       <div className="page-top">
         <div className="container">
           <div className="pt-label">Get in touch</div>
@@ -78,9 +109,20 @@ export default function Connect() {
                 <br />
                 inquiries fast.
               </div>
-              <p className="reveal d2" style={{ fontSize: 16, color: 'var(--dim)', lineHeight: 1.75, fontWeight: 300, maxWidth: '40ch', marginBottom: 40 }}>
-                Tell me what you&apos;re building, what you need, and when. The more context the better &mdash; I&apos;ll
-                respond with a scoped take within 24 hours.
+              <p
+                className="reveal d2"
+                style={{
+                  fontSize: 16,
+                  color: 'var(--dim)',
+                  lineHeight: 1.75,
+                  fontWeight: 300,
+                  maxWidth: '40ch',
+                  marginBottom: 40,
+                }}
+              >
+                Have a project idea, an open-source contribution, or an interesting
+                technical problem to discuss? Share what you&apos;re working on, and
+                let&apos;s explore how we can collaborate.
               </p>
               <div className="contact-methods reveal d3">
                 {METHODS.map((m) => (
@@ -98,7 +140,9 @@ export default function Connect() {
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--lime)', flexShrink: 0, display: 'block' }} />
                 <div>
                   <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--lime)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Currently available</div>
-                  <div style={{ fontSize: 14, color: 'var(--dim)' }}>Open to freelance, collaborations, and mentoring</div>
+                  <div style={{ fontSize: 14, color: 'var(--dim)' }}>
+                    Open to collaborations, open source, and technical discussions
+                  </div>
                 </div>
               </div>
             </div>

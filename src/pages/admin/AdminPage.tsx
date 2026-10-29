@@ -178,7 +178,7 @@ function ReviewQueue({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
             {q.data.map((p) => (
               <tr key={p.id}>
                 <td><Link to={'/blog/post/' + p.slug}>{p.title}</Link></td>
-                <td>{(p as any).author?.display_name ?? '—'}</td>
+                <td>{p.author?.display_name ?? '—'}</td>
                 <td><Pill s={p.status} /></td>
                 <td>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -245,7 +245,7 @@ function PostsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
                   <Link to={'/blog/post/' + p.slug}>{p.title}</Link>
                   {p.featured && <Star size={13} aria-label="Featured" fill="var(--lime)" color="var(--lime)" style={{ marginLeft: 8, verticalAlign: '-2px' }} />}
                 </td>
-                <td>{(p as any).author?.display_name ?? '—'}</td>
+                <td>{p.author?.display_name ?? '—'}</td>
                 <td><Pill s={p.status} /></td>
                 <td className="meta">{fmt(p.updated_at)}</td>
                 <td>
@@ -382,24 +382,24 @@ function CommentsAdmin({ qc }: { qc: ReturnType<typeof useQueryClient> }) {
               <tr key={c.id}>
                 <td style={{ maxWidth: 380 }}>
                   <div>
-                    {(c as any).user?.display_name ?? '—'}
+                    {c.user?.display_name ?? '—'}
                     <span className="meta"> · {fmt(c.created_at)}</span>
-                    {(c as any).pinned && <span className="pin-badge meta" style={{ marginLeft: 6 }}> · PINNED</span>}
+                    {c.pinned && <span className="pin-badge meta" style={{ marginLeft: 6 }}> · PINNED</span>}
                   </div>
                   <div className="meta" style={{ color: 'var(--bone)', marginTop: 2 }}>{c.body.slice(0, 120)}{c.body.length > 120 ? '…' : ''}</div>
-                  {(c as any).moderated_at && (
+                  {c.moderated_at && (
                     <div className="meta" style={{ marginTop: 4, color: 'var(--dim-3)' }}>
-                      mod. {fmt((c as any).moderated_at)}{((c as any).moderator?.display_name) ? ' by ' + (c as any).moderator.display_name : ''}
+                      mod. {fmt(c.moderated_at)}{(c.moderator?.display_name) ? ' by ' + c.moderator.display_name : ''}
                     </div>
                   )}
                 </td>
-                <td><Link to={'/blog/post/' + ((c as any).posts?.slug ?? '')}>{((c as any).posts?.title ?? '—').slice(0, 40)}</Link></td>
+                <td><Link to={'/blog/post/' + (c.posts?.slug ?? '')}>{(c.posts?.title ?? '—').slice(0, 40)}</Link></td>
                 <td><Pill s={c.status} /></td>
                 <td>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                     {c.status !== 'visible' && <button className="mini-btn" onClick={() => setSt(c.id, 'visible')}>show</button>}
                     {c.status === 'visible' && <button className="mini-btn" onClick={() => setSt(c.id, 'hidden')}>hide</button>}
-                    <button className="mini-btn" onClick={() => setPin(c.id, !(c as any).pinned)}>{(c as any).pinned ? 'unpin' : 'pin'}</button>
+                    <button className="mini-btn" onClick={() => setPin(c.id, !c.pinned)}>{c.pinned ? 'unpin' : 'pin'}</button>
                     <button className="mini-btn danger" onClick={() => setSt(c.id, 'deleted')}>delete</button>
                   </div>
                 </td>

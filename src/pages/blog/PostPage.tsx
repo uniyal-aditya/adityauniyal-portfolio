@@ -68,7 +68,7 @@ function CommentItem({ c, postId, all }: { c: Comment; postId: string; all: Comm
         <span className="meta">
           {timeAgo(c.created_at)}
           {c.pinned && <span className="pin-badge" title={c.pinned_at ? 'Pinned ' + timeAgo(c.pinned_at) : 'Pinned by moderator'}> · PINNED</span>}
-          {(c as any).moderated_at && <span className="mod-stamp" title={'Moderated ' + timeAgo((c as any).moderated_at)}> · mod. {timeAgo((c as any).moderated_at)}</span>}
+          {c.moderated_at && <span className="mod-stamp" title={'Moderated ' + timeAgo(c.moderated_at)}> · mod. {timeAgo(c.moderated_at)}</span>}
         </span>
       </div>
       <p className="comment-body">{c.body}</p>

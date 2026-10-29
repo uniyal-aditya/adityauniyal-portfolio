@@ -94,6 +94,10 @@ export interface Comment {
   moderated_at?: string | null
   moderated_by?: string | null
   profiles?: Profile | null
+  /** Joined relations used by the admin console. */
+  user?: Profile | null
+  moderator?: Profile | null
+  posts?: { slug: string; title: string } | null
 }
 
 export interface Like {

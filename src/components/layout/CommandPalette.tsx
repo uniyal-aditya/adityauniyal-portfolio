@@ -2,6 +2,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
+import { useToast } from '@/hooks/useToast'
+
+// Set VITE_CONTACT_EMAIL in your host's env to change the copied address.
+const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'aditya@adityauniyal.dev'
 
 interface Cmd {
   id: string
@@ -18,6 +22,7 @@ export function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
   const { profile, isAdmin } = useAuth()
+  const { toast } = useToast()
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -59,7 +64,12 @@ export function CommandPalette() {
       { id: 'blog-search', label: 'Search the Journal', hint: 'journal', action: go('/blog/search') },
       { id: 'blog-series', label: 'Series', hint: 'journal', action: go('/blog/search?type=series') },
       { id: 'contact-copy', label: 'Copy contact email', hint: 'action', action: () => {
-        navigator.clipboard?.writeText('aditya@adityauniyal.dev').catch(() => undefined)
+        const copy = navigator.clipboard?.writeText(CONTACT_EMAIL)
+        if (!copy) {
+          toast('Copy not supported here — ' + CONTACT_EMAIL, true)
+          return
+        }
+        copy.then(() => toast('Email copied: ' + CONTACT_EMAIL)).catch(() => toast('Could not copy — ' + CONTACT_EMAIL, true))
       } },
     ]
     if (profile) base.push({ id: 'dash', label: 'My dashboard', hint: 'you', action: go('/blog/dashboard') })
@@ -67,7 +77,7 @@ export function CommandPalette() {
     if (isAdmin) base.push({ id: 'admin', label: 'Admin console', hint: 'admin', action: go('/blog/admin') })
     base.push({ id: 'apply', label: 'Become a contributor', hint: 'journal', action: go('/blog/apply') })
     return base
-  }, [navigate, profile, isAdmin])
+  }, [navigate, profile, isAdmin, toast])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()

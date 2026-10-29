@@ -1,46 +1,149 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "adityauniyal.vercel.app"
+        }
+      ],
+      "destination": "https://adityauniyal.is-a.dev/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/blog/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/blog/rss.xml", "destination": "/api/rss" },
-
-    { "source": "/blog/post/:slug", "destination": "/index.html" },
-    { "source": "/blog/author/:username", "destination": "/index.html" },
-    { "source": "/blog/topic/:slug", "destination": "/index.html" },
-    { "source": "/blog/series/:slug", "destination": "/index.html" },
-    { "source": "/blog/admin/:section", "destination": "/index.html" },
-
-    { "source": "/blog/dashboard/editor", "destination": "/index.html" },
-    { "source": "/blog/dashboard", "destination": "/index.html" },
-    { "source": "/blog/search", "destination": "/index.html" },
-    { "source": "/blog/series", "destination": "/index.html" },
-    { "source": "/blog/login", "destination": "/index.html" },
-    { "source": "/blog/signup", "destination": "/index.html" },
-    { "source": "/blog/apply", "destination": "/index.html" },
-    { "source": "/blog/admin", "destination": "/index.html" },
-    { "source": "/blog", "destination": "/index.html" },
-
-    { "source": "/work", "destination": "/index.html" },
-    { "source": "/building", "destination": "/index.html" },
-    { "source": "/projects", "destination": "/index.html" },
-    { "source": "/about", "destination": "/index.html" },
-    { "source": "/skills", "destination": "/index.html" },
-    { "source": "/connect", "destination": "/index.html" },
-    { "source": "/feedback", "destination": "/index.html" },
-    { "source": "/privacy", "destination": "/index.html" },
-    { "source": "/terms", "destination": "/index.html" },
-    { "source": "/data-use", "destination": "/index.html" },
-    { "source": "/", "destination": "/index.html" }
+    {
+      "source": "/blog/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/blog/rss.xml",
+      "destination": "/api/rss"
+    },
+    {
+      "source": "/blog/post/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/author/:username",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/topic/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/series/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/admin/:section",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/dashboard/editor",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/dashboard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/search",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/series",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/signup",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/apply",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/admin",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/work",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/building",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/projects",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/skills",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/connect",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/feedback",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/data-use",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        },
         {
           "key": "Content-Security-Policy-Report-Only",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; media-src 'self' https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.emailjs.com https://api.github.com; frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
@@ -48,9 +151,21 @@
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/(.+-[A-Za-z0-9_-]{8}\\.(?:js|css|woff2?|png|jpg|jpeg|svg|webp|avif|map))",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(Aditya_Uniyal_Resume\\.pdf|favicon.*|apple-touch-icon\\.png|icon-.*\\.png|site\\.webmanifest)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        }
       ]
     }
   ]

@@ -1,45 +1,70 @@
 import { useEffect } from 'react'
 
 /**
- * Observes [data-reveal] elements inside the given root and adds .in when they
- * enter the viewport - the React port of the legacy .reveal IntersectionObserver.
+ * Reveals `.reveal` elements (adds `.in`) as they enter the viewport - the
+ * React port of the legacy IntersectionObserver.
+ *
+ * Elements that mount LATER (data-driven sections such as the Work page's
+ * build journal or the Home series callout) are picked up too, via a
+ * MutationObserver - otherwise they would stay at opacity 0 forever.
  * Respects prefers-reduced-motion by revealing immediately.
  */
 export function useReveal(rootSelector = 'main') {
   useEffect(() => {
-    const root = document.querySelector(rootSelector) ?? document
-    const els = Array.from(root.querySelectorAll<HTMLElement>('.reveal:not(.in)'))
-    if (!els.length) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      els.forEach((el) => el.classList.add('in'))
-      return
-    }
-    // Elements already inside the viewport reveal instantly with no transition:
-    // content must never depend on the animation clock (throttled tabs,
-    // suspended compositor). Scroll-triggered reveals keep their motion.
-    const remaining: HTMLElement[] = []
-    for (const el of els) {
+    const root: ParentNode = document.querySelector(rootSelector) ?? document.body
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const io = reduced
+      ? null
+      : new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('in')
+                io?.unobserve(e.target)
+              }
+            })
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -48px 0px' },
+        )
+
+    const handle = (el: HTMLElement) => {
+      if (el.classList.contains('in')) return
+      if (!io) {
+        el.classList.add('in')
+        return
+      }
+      // Already on screen: reveal instantly with no transition so content never
+      // depends on the animation clock (throttled tabs, suspended compositor).
       const r = el.getBoundingClientRect()
       if (r.top < window.innerHeight && r.bottom > 0) {
         el.style.transition = 'none'
         el.classList.add('in')
       } else {
-        remaining.push(el)
+        io.observe(el)
       }
     }
-    if (!remaining.length) return
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in')
-            obs.unobserve(e.target)
-          }
+
+    const scan = (node: ParentNode) => {
+      node.querySelectorAll<HTMLElement>('.reveal:not(.in)').forEach(handle)
+    }
+
+    scan(root)
+
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        m.addedNodes.forEach((n) => {
+          if (!(n instanceof HTMLElement)) return
+          if (n.matches('.reveal')) handle(n)
+          scan(n)
         })
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -48px 0px' },
-    )
-    remaining.forEach((el) => obs.observe(el))
-    return () => obs.disconnect()
-  })
+      }
+    })
+    mo.observe(root as Node, { childList: true, subtree: true })
+
+    return () => {
+      io?.disconnect()
+      mo.disconnect()
+    }
+  }, [rootSelector])
 }

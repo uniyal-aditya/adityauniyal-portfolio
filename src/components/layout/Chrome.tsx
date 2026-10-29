@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Magnetic } from '@/components/ui/primitives'
 import { Cursor, Scanline } from '@/components/system/Effects'
+import { SeasonalEffect } from '@/components/system/SeasonalEffect'
 import { CommandPalette } from '@/components/layout/CommandPalette'
 import { AccountCluster } from '@/components/layout/AccountCluster'
 
@@ -224,6 +225,7 @@ export function Chrome({ children }: { children?: ReactNode }) {
     <>
       <Cursor />
       <Scanline />
+      <SeasonalEffect />
       <PortfolioNav onHire={() => setHireOpen(true)} />
       <CommandPalette />
       <HireModal open={hireOpen} onClose={() => setHireOpen(false)} />

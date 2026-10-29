@@ -108,7 +108,7 @@ export default function About() {
           <div style={{ marginBottom: 56 }} className="reveal">
             <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--lime)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
               // How I work
-              <span style={{ flex: 1, height: 1, background: 'var(--line)', display: 'block' }} />
+              // Principles<span style={{ flex: 1, height: 1, background: 'var(--line)', display: 'block' }} />
             </div>
             <h2 style={{ fontFamily: 'var(--f-display)', fontSize: 'clamp(2.5rem,5vw,4.5rem)', lineHeight: 0.95 }}>
               My <em style={{ fontFamily: 'var(--f-serif)', fontStyle: 'italic', color: 'var(--rust)' }}>principles</em>.
@@ -129,7 +129,7 @@ export default function About() {
       {/* Education & certifications */}
       <section style={{ borderTop: '1px solid var(--line)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+          <div className="split-2">
             <div className="reveal">
               <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--lime)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
                 // Education
@@ -166,7 +166,7 @@ export default function About() {
 
       <section style={{ borderTop: '1px solid var(--line)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+          <div className="split-2">
             <div className="reveal">
               <div style={{ fontFamily: 'var(--f-mono)', fontSize: 11, color: 'var(--lime)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
                 // Beyond code

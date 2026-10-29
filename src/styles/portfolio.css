@@ -652,6 +652,10 @@ section { padding: 120px 0; }
 .cf-textarea { height: 130px; }
 .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
+/* ══ RESPONSIVE TWO-COLUMN SPLIT (About: education / certifications) ══ */
+.split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+@media (max-width: 768px) { .split-2 { grid-template-columns: 1fr; gap: 48px; } }
+
 /* ══ ANIMATIONS ══ */
 .reveal {
   opacity: 0; transform: translateY(28px);

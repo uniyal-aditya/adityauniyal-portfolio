@@ -20,11 +20,11 @@ const PROJECTS = [
 const SKILLS = ['Python', 'JavaScript', 'TypeScript', 'React', 'Supabase', 'discord.py', 'Node.js', 'FFmpeg', 'REST APIs', 'Git & GitHub', 'asyncio', 'Vercel', 'Responsive Design', 'System Architecture', 'WebSockets']
 
 const TICKER = [
-  ['Available', 'Freelance & Collab'],
+  ['Building', 'Projects & Experiments'],
   ['Python', 'JavaScript / Web'],
   ['Discord Bots', 'Scalable Systems'],
-  ['India', 'Remote Worldwide'],
-  ['24h', 'Response Time'],
+  ['Open Source', 'Community & Collab'],
+  ['India', 'Developer Portfolio'],
 ]
 
 /** ~/au/building $ — restrained live preview of the Building page (task #67). */
@@ -228,10 +228,10 @@ export default function Home() {
             </p>
             <div className="hero-actions">
               <Link to="/work" className="btn-lime">
-                View Work &rarr;
+                Explore Projects &rarr;
               </Link>
               <Link to="/connect" className="btn-ghost-line">
-                Hire Me
+                Let&apos;s Connect
               </Link>
             </div>
           </div>
@@ -414,15 +414,24 @@ export default function Home() {
           genuine craft to every project.
         </p>
         <div className="actions">
-          <Link to="/connect" className="btn-lime" style={{ fontSize: 13, padding: '14px 32px' }}>
-            Start a conversation &rarr;
+          <Link
+            to="/work"
+            className="btn-lime"
+            style={{ fontSize: 13, padding: '14px 32px' }}
+          >
+            Explore Projects &rarr;
           </Link>
-          <Link to="/connect" className="btn-ghost-line" style={{ fontSize: 13, padding: '14px 28px' }}>
-            View hire options
+
+          <Link
+            to="/connect"
+            className="btn-ghost-line"
+            style={{ fontSize: 13, padding: '14px 28px' }}
+          >
+            Let&apos;s Connect
           </Link>
         </div>
         <div className="respond-note">
-          Responds within <span>24 hours</span> &middot; Fiverr &middot; LinkedIn &middot; Direct
+          Projects <span>&middot;</span> Open Source <span>&middot;</span> LinkedIn <span>&middot;</span> Community
         </div>
       </section>
     </main>

@@ -76,7 +76,7 @@ export function PortfolioNav({ onHire }: { onHire: () => void }) {
           <AccountCluster />
           <Magnetic>
             <button className="nav-hire" onClick={onHire}>
-              Hire Me &rarr;
+              Let's Connect &rarr;
             </button>
           </Magnetic>
         </div>
@@ -95,7 +95,7 @@ export function PortfolioNav({ onHire }: { onHire: () => void }) {
         ))}
         <div className="mobile-nav-foot">
           <button className="btn-lime" onClick={onHire}>
-            Hire Me &rarr;
+            Let's Connect &rarr;
           </button>
           <a href="/assets/Aditya_Uniyal_Resume.pdf" download className="btn-ghost-line">
             Resume &darr;
@@ -121,10 +121,28 @@ export function Footer() {
         <Link to="/work">Work</Link>
         <Link to="/building">Building</Link>
         <Link to="/connect">Contact</Link>
-        <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener noreferrer">
-          Fiverr
+
+        <a
+          href="https://github.com/uniyal-aditya"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
         </a>
-        <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener noreferrer">
+
+        <a
+          href="https://x.com/RaftarCreates"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          X
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/uniyaladitya"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           LinkedIn
         </a>
       </div>
@@ -132,7 +150,7 @@ export function Footer() {
   )
 }
 
-/** Hire Me modal - identical options to the legacy markup. */
+/** Connection modal with social profiles and direct contact options. */
 export function HireModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   useEffect(() => {
     if (!open) return
@@ -168,39 +186,65 @@ export function HireModal({ open, onClose }: { open: boolean; onClose: () => voi
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-modal="true"
-            aria-label="Hire me"
+            aria-label="Let's Connect"
           >
             <button className="modal-x" onClick={onClose} aria-label="Close">
               &#10005;
             </button>
-            <h3>Hire Me.</h3>
-            <div className="sub">// pick your preferred channel &mdash; I respond fast.</div>
+            <h3>Let's Connect.</h3>
+
+            <div className="sub">
+  // explore my work, follow my updates, or get in touch.
+            </div>
+
             <div className="hire-opts">
-              <a href="https://www.fiverr.com/uniyal_aditya" target="_blank" rel="noopener noreferrer" className="hire-opt">
-                <span className="hire-opt-ico">&#127919;</span>
+              <a
+                href="https://github.com/uniyal-aditya"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hire-opt"
+              >
+                <span className="hire-opt-ico">&#128187;</span>
                 <span className="hire-opt-text">
-                  Fiverr Profile<small>Browse gigs &amp; reviews</small>
+                  GitHub
+                  <small>Repositories, projects &amp; contributions</small>
                 </span>
                 <span className="hire-opt-arr">&rarr;</span>
               </a>
-              <a href="https://www.fiverr.com/s/zWE9XVg" target="_blank" rel="noopener noreferrer" className="hire-opt">
-                <span className="hire-opt-ico">&#9889;</span>
+
+              <a
+                href="https://x.com/RaftarCreates"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hire-opt"
+              >
+                <span className="hire-opt-ico">&#120143;</span>
                 <span className="hire-opt-text">
-                  Featured Gig<small>Website Development &amp; Design</small>
+                  X / Updates
+                  <small>Development updates &amp; experiments</small>
                 </span>
                 <span className="hire-opt-arr">&rarr;</span>
               </a>
-              <a href="https://www.linkedin.com/in/uniyaladitya" target="_blank" rel="noopener noreferrer" className="hire-opt">
+
+              <a
+                href="https://www.linkedin.com/in/uniyaladitya"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hire-opt"
+              >
                 <span className="hire-opt-ico">&#128188;</span>
                 <span className="hire-opt-text">
-                  LinkedIn<small>Resume, endorsements &amp; DMs</small>
+                  LinkedIn
+                  <small>Professional profile &amp; connections</small>
                 </span>
                 <span className="hire-opt-arr">&rarr;</span>
               </a>
+
               <Link to="/connect" className="hire-opt" onClick={onClose}>
                 <span className="hire-opt-ico">&#9993;&#65039;</span>
                 <span className="hire-opt-text">
-                  Direct Contact<small>Scoped brief &amp; custom offers</small>
+                  Direct Contact
+                  <small>Projects, open source &amp; technical discussions</small>
                 </span>
                 <span className="hire-opt-arr">&rarr;</span>
               </Link>

@@ -83,8 +83,8 @@ export default function About() {
               <div className="aside-block">
                 <div className="label">Available for</div>
                 <div className="value">
-                  Freelance &middot; Collaborations
-                  <small>Mentoring &amp; open source</small>
+                  Projects &middot; Collaborations
+                  <small>Open source &amp; technical learning</small>
                 </div>
               </div>
               <div className="aside-block">

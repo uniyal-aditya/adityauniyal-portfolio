@@ -12,6 +12,13 @@
   publish = "dist"
   functions = "netlify/functions"
 
+# ── Old netlify.app address → real domain (must stay FIRST: first match wins) ──
+[[redirects]]
+  from = "https://adityauniyal.netlify.app/*"
+  to = "https://adityauniyal.is-a.dev/:splat"
+  status = 301
+  force = true
+
 # ── Legacy feedback function ──
 [[redirects]]
   from = "/sendFeedback"

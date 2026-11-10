@@ -28,7 +28,39 @@ Scope: all 90 source files (~17k lines): 15 portfolio/journal pages, layout/syst
 ## Known limitations / your decisions
 1. **Contact email**: the palette defaults to `aditya@adityauniyal.dev`, but your site is on `adityauniyal.is-a.dev`. Set `VITE_CONTACT_EMAIL` to your real inbox.
 2. **Newsletter ("AU Weekly")** collects emails (unconfirmed) but nothing confirms or sends them; the Privacy page mentions it.
-3. **CSP** is `Report-Only`; switch to enforcing after a few clean days.
+3. **CSP** is now ENFORCED (`vercel.json`). If you ever add a third-party script, embed or API, add its host to the matching directive or the browser will block it. Rollback: rename the header back to `Content-Security-Policy-Report-Only`.
 4. **Not executed here**: `vite build` and the vitest suite (the bundled node_modules are Windows binaries; no network). Run `npm run build` once locally.
 5. Resume PDF is auto-built from site content — replace with your real resume.
 6. Dashboard / Admin / Post / Editor pages: reviewed by automated checks and targeted reading, not line-by-line.
+
+## Round 2 — mobile score + security (from your PageSpeed / SecurityHeaders reports)
+- Enforced CSP (no `unsafe-inline` for scripts), added COOP + HSTS includeSubDomains.
+- Google Fonts no longer block first paint (preload→stylesheet, allowed via CSP hash).
+- 5 non-composited animations → transform/opacity (scanline, pulse rings); film-grain overlay skipped on phones.
+- framer-motion → LazyMotion + `m` (same animations, smaller eager bundle).
+- Contrast: `--dim-3` #6a6862 → #85837c (3.6:1 → 5.2:1).
+
+## Round 3 — icons, socials popup, 3D/effects
+- Replaced every emoji (Connect, Let's Connect modal, About interests) and glyph-icon (check, star, close, arrows) with Tabler / Phosphor / Heroicons / Lucide icons through `AppIcon`.
+- Removed emojis from docs and one SQL comment; email subject uses "n/5" instead of a star.
+- Socials centralised in `src/data/socials.ts`; click opens an in-site profile popup (lazy-loaded; focus trap, Esc, copy link, live GitHub stats).
+- New effects: 3D tilt + glare on project/post cards, CSS-only 3D hero cube (desktop), button shine, icon tiles, glass/glow utilities.
+- Web manifest fixed (name, theme colour, icon paths). Netlify functions renamed .cjs. Round-2 speed/security fixes re-applied.
+
+## Round 4 — richer profile popups
+- GitHub popup is a live preview: real avatar + bio, repos / followers / following / contributions / streak, 26-week heatmap, 3 recent repos (API now also returns followers/following).
+- LinkedIn popup: headline, location, Featured (CodeSprint 2026 semi-finalist + 6 lnkd.in posts), Education, Certifications. X popup: @uaditya_dev.
+- Popup body scrolls; the Open-profile button and profile switcher stay pinned. Tolerates partial API data.
+- Contact email default set to adityauniyal.dev@gmail.com.
+
+## Round 5 — LinkedIn data + Gallery
+- LinkedIn popup now uses the real headline and the six post titles from your screenshots; links held back behind `LINKEDIN_LINKS_CHECKED`.
+- New `/gallery` page: 4 hackathon milestones (Solve-a-Thon, CodeSprint 2026, Hacktoberfest Hack Day, SIH internal round), photo grid with filters, keyboard-accessible lightbox. Route added to App, vercel.json, netlify.toml, sitemap, nav, footer, Ctrl+K.
+- Nav fits 7 links (hamburger from 860px).
+- Real repo tests (43) now run offline in my checks and pass.
+
+## Round 6 — browser uploads for the gallery
+- `supabase/18-gallery.sql`: `gallery_items` table, RLS (public reads published rows only; all writes + hidden rows admin-only via `is_admin()`), CHECK limits, https-only image URLs, reuses `touch_updated_at()`.
+- Admin -> Gallery: upload with live preview + size detection, edit, hide/show, delete (also removes the stored file). Cleans up the upload if saving fails.
+- `/gallery` merges uploaded photos with the built-in ones and degrades gracefully when Supabase/the table is unavailable.
+- 17 new repo tests (SQL <-> TypeScript limit agreement, RLS shape, validation, mapping) + 31 UI behaviour checks against a simulated Supabase. The SQL itself has not been run on a real Postgres from here.

@@ -1,7 +1,7 @@
 -- ═══════════════════════════════════════════════════════════════════
 -- AU_ / JOURNAL — RPC functions (callable via supabase.rpc())
 -- ═══════════════════════════════════════════════════════════════════
--- ⚠ DO NOT RE-RUN THIS FILE WHOLESALE.
+-- WARNING: DO NOT RE-RUN THIS FILE WHOLESALE.
 -- Parts of it are SUPERSEDED by 05-follow-analytics.sql and
 -- 08-analytics-fixes.sql (post_analytics / traffic_trend / follow_trend
 -- were later redefined with richer return types). Re-running will fail

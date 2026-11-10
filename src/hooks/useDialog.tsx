@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { TriangleAlert, Info } from 'lucide-react'
 import { DIALOG_EVENT, type ActiveDialog } from './dialog-bus'
 
@@ -61,7 +61,7 @@ export function DialogHost() {
   return (
     <AnimatePresence>
       {dlg && (
-        <motion.div
+        <m.div
           className="au-dialog-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -69,7 +69,7 @@ export function DialogHost() {
           transition={{ duration: 0.15 }}
           onClick={() => { if (!info) finish(false) }}
         >
-          <motion.div
+          <m.div
             className="au-dialog"
             role="dialog"
             aria-modal="true"
@@ -126,8 +126,8 @@ export function DialogHost() {
                 </button>
               </div>
             )}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

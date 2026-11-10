@@ -5,7 +5,7 @@ The site's canonical origin is `https://adityauniyal.is-a.dev`. Vercel hosts it;
 (pull-request based), not in a registrar panel. Use this checklist whenever DNS, TLS, domain config,
 or SEO-facing URLs change.
 
-**Legend:** ✅ verified live · ☐ user action needed · ⚠️ known limitation / optional hardening
+**Legend:** [x] verified live · [ ] user action needed · WARNING: known limitation / optional hardening
 
 ---
 
@@ -13,16 +13,16 @@ or SEO-facing URLs change.
 
 | Check | Result |
 | --- | --- |
-| DNS A record | `adityauniyal.is-a.dev → 216.198.79.1` (Vercel) ✅ |
-| HTTPS homepage | `200 OK`, `Server: Vercel` ✅ |
-| TLS certificate | active and Vercel-managed (Let's Encrypt; issuance works ⇒ nothing blocking it) ✅ |
-| HSTS | `Strict-Transport-Security: max-age=63072000` ✅ |
-| HTTP → HTTPS | `308 Permanent Redirect` to the HTTPS origin ✅ |
-| `robots.txt` | `200`, `Sitemap:` line present ✅ |
-| `/blog/sitemap.xml` | `200`, `application/xml` (Vercel rewrite → `api/sitemap`) ✅ |
-| OG share image | `https://adityauniyal.is-a.dev/covers/flagship.png` → `200 image/png` ✅ |
+| DNS A record | `adityauniyal.is-a.dev → 216.198.79.1` (Vercel) [x] |
+| HTTPS homepage | `200 OK`, `Server: Vercel` [x] |
+| TLS certificate | active and Vercel-managed (Let's Encrypt; issuance works ⇒ nothing blocking it) [x] |
+| HSTS | `Strict-Transport-Security: max-age=63072000` [x] |
+| HTTP → HTTPS | `308 Permanent Redirect` to the HTTPS origin [x] |
+| `robots.txt` | `200`, `Sitemap:` line present [x] |
+| `/blog/sitemap.xml` | `200`, `application/xml` (Vercel rewrite → `api/sitemap`) [x] |
+| OG share image | `https://adityauniyal.is-a.dev/covers/flagship.png` → `200 image/png` [x] |
 | `www.` subdomain | no DNS record (does not resolve) — optional, see §1.3 |
-| Discord site verification | `public/.well-known/discord` served ✅ |
+| Discord site verification | `public/.well-known/discord` served [x] |
 
 ---
 
@@ -41,7 +41,7 @@ repo — one JSON file per record in its `domains/` folder.
 - The authoritative values are whatever Vercel shows at **Project → Settings → Domains →
   `adityauniyal.is-a.dev` → DNS records**. Older guides say `76.76.21.21`; the currently assigned
   value is `216.198.79.1`, which is what is live today.
-- ⚠️ If Vercel's domain page ever shows a different A/TXT value, open a PR updating the is-a.dev
+- WARNING: If Vercel's domain page ever shows a different A/TXT value, open a PR updating the is-a.dev
   files — mismatched records surface as "Invalid Configuration" on the domain.
 - Do **not** add CAA records at the is-a.dev apex: none exist today, and Vercel's Let's Encrypt
   issuance depends on nothing blocking it.
@@ -67,9 +67,9 @@ repo — one JSON file per record in its `domains/` folder.
 
 | Item | Value | Status |
 | --- | --- | --- |
-| Domain attached to project | `adityauniyal.is-a.dev` (apex; www-redirect toggle off) | ✅ live |
-| Production branch | `main` — every push auto-deploys | ✅ |
-| `www` redirect toggle | off (see §1.3) | ✅ |
+| Domain attached to project | `adityauniyal.is-a.dev` (apex; www-redirect toggle off) | [x] live |
+| Production branch | `main` — every push auto-deploys | [x] |
+| `www` redirect toggle | off (see §1.3) | [x] |
 
 ### Environment variables (Vercel → Settings → Environment Variables)
 
@@ -90,7 +90,7 @@ Server (used by `api/sitemap.js`, `api/rss.js`, `api/github.js`):
 | `GITHUB_USERNAME` | `uniyal-aditya` |
 | `GITHUB_TOKEN` | classic PAT, **no scopes**; enables heatmap/streaks on `/building` |
 
-☐ After adding or changing any variable: **redeploy** (Deployments → ⋯ → Redeploy). Env changes
+[ ] After adding or changing any variable: **redeploy** (Deployments → ⋯ → Redeploy). Env changes
 never apply to already-running deployments or functions.
 
 ---
@@ -98,10 +98,10 @@ never apply to already-running deployments or functions.
 ## 3 · HTTPS / TLS
 
 - Certificates are issued and renewed automatically by Vercel (Let's Encrypt). No recurring action.
-- ☐ After any DNS change, confirm the cert badge on the domain page; if it sticks at
+- [ ] After any DNS change, confirm the cert badge on the domain page; if it sticks at
   "Generating certificate", re-check the `_vercel` TXT record (§1.1) before anything else.
 - HTTP→HTTPS redirect and HSTS are Vercel defaults, verified live (§0).
-- ⚠️ HSTS is `max-age=63072000` without `includeSubDomains`/`preload` — appropriate here, since
+- WARNING: HSTS is `max-age=63072000` without `includeSubDomains`/`preload` — appropriate here, since
   `is-a.dev` is a Public Suffix List entry and subdomains of it are not all yours.
 
 Quick certificate check:
@@ -127,22 +127,22 @@ paths plus one static file:
 | Crawler entry | `public/robots.txt` | literal `Sitemap:` line |
 
 **Already correct (verified live 2026-10-02):**
-- ✅ `robots.txt` served with the sitemap line
-- ✅ `/blog/sitemap.xml` → 200 XML (`vercel.json` rewrite to `api/sitemap`)
-- ✅ Static fallback tags in the served HTML are correct (canonical/`og:url` on `/`)
-- ✅ Per-route canonical/OG/JSON-LD emitted at runtime by `<Seo>`
-- ✅ `noindex` on private routes (`/blog/login`, `/blog/dashboard`, `/blog/dashboard/editor`,
+- [x] `robots.txt` served with the sitemap line
+- [x] `/blog/sitemap.xml` → 200 XML (`vercel.json` rewrite to `api/sitemap`)
+- [x] Static fallback tags in the served HTML are correct (canonical/`og:url` on `/`)
+- [x] Per-route canonical/OG/JSON-LD emitted at runtime by `<Seo>`
+- [x] `noindex` on private routes (`/blog/login`, `/blog/dashboard`, `/blog/dashboard/editor`,
   `/blog/admin`) at runtime via `<Seo>` (the build emits one shared `index.html`; there are no
   per-route static shells); `robots.txt` also disallows them
 
 **Worth knowing (not blockers):**
-- ⚠️ **Soft 404s on dynamic routes** — `vercel.json` has no catch-all rewrite, so unknown
+- WARNING: **Soft 404s on dynamic routes** — `vercel.json` has no catch-all rewrite, so unknown
   top-level paths already get a real 404 (`public/404.html`). Only the dynamic routes
   (`/blog/post/:slug`, `/blog/author/:username`, `/blog/topic/:slug`, `/blog/series/:slug`)
   return `200` + `index.html` for a slug that does not exist, and the page then renders
   `NotFound` client-side. Googlebot executes JS and copes, but a true 404 status is better.
   Optional hardening: generate the rewrite list from published slugs at build time.
-- ⚠️ **Meta is client-rendered** — link-preview crawlers that don't run JS (some Discord, Slack,
+- WARNING: **Meta is client-rendered** — link-preview crawlers that don't run JS (some Discord, Slack,
   WhatsApp clients) see the static `index.html` fallback tags, not per-route ones. Posts do not
   ship per-route prebuilt shells (the build emits a single `index.html`); if a specific page's
   share preview ever looks wrong, prerender that route.
@@ -162,16 +162,16 @@ curl -s https://adityauniyal.is-a.dev/blog/rss.xml | grep -c '<item>'
 Project `qnuegizjakzwgxfvihbd`. The domain only matters in **Authentication → URL Configuration**
 — all OAuth flows go through Supabase's own callback, which is domain-independent.
 
-☐ 1. **Site URL** → `https://adityauniyal.is-a.dev` (no path, no trailing slash)
-☐ 2. **Redirect URLs** must include, exactly:
+[ ] 1. **Site URL** → `https://adityauniyal.is-a.dev` (no path, no trailing slash)
+[ ] 2. **Redirect URLs** must include, exactly:
    - `https://adityauniyal.is-a.dev/blog/login`
    - `http://localhost:5173/blog/login` (local dev)
-☐ 3. Auth email templates (magic link, reset, invite) use `{{ .ConfirmationURL }}` so links inherit
+[ ] 3. Auth email templates (magic link, reset, invite) use `{{ .ConfirmationURL }}` so links inherit
    the Site URL — never hardcode the domain inside a template.
-☐ 4. OAuth providers (GitHub / Google / Discord) need **no domain change**: their callback is
+[ ] 4. OAuth providers (GitHub / Google / Discord) need **no domain change**: their callback is
    `https://qnuegizjakzwgxfvihbd.supabase.co/auth/v1/callback`. Revisit only when adding a
    provider — walkthrough in `oauth-setup.md`.
-- ℹ️ Because `is-a.dev` is on the Public Suffix List, cookies scope to your exact subdomain — good
+- ℹ Because `is-a.dev` is on the Public Suffix List, cookies scope to your exact subdomain — good
   isolation, nothing to configure.
 
 ---

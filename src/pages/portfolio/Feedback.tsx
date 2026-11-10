@@ -3,6 +3,7 @@ import emailjs from '@emailjs/browser'
 import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
 import { EMAILJS, honeypotTripped } from '@/lib/emailjs'
+import { AppIcon } from '@/components/icons/AppIcon'
 
 const RATING_STYLES = `
   .star-rating { display: flex; flex-direction: row-reverse; gap: 4px; margin-top: 6px; }
@@ -60,7 +61,9 @@ export default function Feedback() {
         <Seo title="Feedback - Aditya Uniyal" path="/feedback" />
         <div style={{ minHeight: '70dvh', display: 'grid', placeItems: 'center' }}>
           <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
-            <div style={{ fontSize: '3rem', color: 'var(--lime)' }}>&#10003;</div>
+            <div className="success-mark">
+              <AppIcon name="success" size={56} />
+            </div>
             <div style={{ fontFamily: 'var(--f-display)', fontSize: '2.2rem' }}>Feedback sent.</div>
             <div style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--dim)' }}>Thank you - it lands straight in my inbox.</div>
           </div>
@@ -110,7 +113,7 @@ export default function Feedback() {
                     role="radio"
                     aria-label={n + ' stars'}
                   >
-                    &#9733;
+                    <AppIcon name="star" size="1em" />
                   </button>
                 ))}
               </div>

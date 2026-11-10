@@ -9,6 +9,7 @@ import type { Post } from '@/lib/types'
 import { supabase, SUPABASE_CONFIGURED, OWNER_USERNAME } from '@/lib/supabase'
 import { CURRENT_PROJECT } from '@/data/building'
 import { fetchBuilding } from '@/lib/github'
+import { HeroScene } from '@/components/system/HeroScene'
 
 const PROJECTS = [
   { num: '01', title: 'Numexa', desc: 'Python + discord.py bot with a custom math parser that evaluates complex expressions and functions, tuned for fast responses.', tags: ['Python', 'discord.py', 'Bot'] },
@@ -207,6 +208,7 @@ export default function Home() {
 
       {/* HERO */}
       <section className="hero">
+        <HeroScene />
         <div className="hero-content">
           <div className="hero-left">
             <div className="hero-tag">Aditya Uniyal &middot; Developer &middot; India</div>

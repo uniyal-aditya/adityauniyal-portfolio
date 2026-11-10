@@ -14,6 +14,7 @@ import {
 import { EmptyState, Avatar, VerifiedBadge, ExternalLink } from '@/components/journal/bits'
 import { BUNDLED_COVERS } from '@/data/covers'
 import { escapeLikeTerm } from '@/lib/sanitize'
+import { GalleryAdmin } from '@/pages/admin/GalleryAdmin'
 
 /* ── small helpers ─────────────────────────────────────────────── */
 
@@ -800,7 +801,7 @@ const TABS: [string, string][] = [
   ['overview', 'Overview'], ['posts', 'Posts'], ['review', 'Review'],
   ['users', 'Users'], ['authors', 'Authors'], ['comments', 'Comments'],
   ['reports', 'Reports'], ['categories', 'Categories'], ['tags', 'Tags'],
-  ['media', 'Media'], ['applications', 'Applications'], ['analytics', 'Analytics'],
+  ['media', 'Media'], ['gallery', 'Gallery'], ['applications', 'Applications'], ['analytics', 'Analytics'],
   ['newsletter', 'Newsletter'], ['settings', 'Settings'],
 ]
 
@@ -872,6 +873,7 @@ export default function AdminPage() {
           {section === 'categories' && <TaxonomyAdmin kind="categories" qc={qc} />}
           {section === 'tags' && <TaxonomyAdmin kind="tags" qc={qc} />}
           {section === 'media' && <MediaAdmin />}
+          {section === 'gallery' && <GalleryAdmin qc={qc} userId={profile.id} />}
           {section === 'applications' && <ApplicationsAdmin qc={qc} />}
           {section === 'analytics' && <AnalyticsAdmin />}
           {section === 'newsletter' && <NewsletterAdmin />}

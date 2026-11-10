@@ -26,6 +26,7 @@ import { useToast } from '@/hooks/useToast'
 import { Avatar, VerifiedBadge, PostCard, EmptyState } from '@/components/journal/bits'
 import { fmtDate, fmtNum, timeAgo, mdToText, readingTime, headingId } from '@/lib/sanitize'
 import type { Comment } from '@/lib/types'
+import { AppIcon } from '@/components/icons/AppIcon'
 
 function useReadingProgress() {
   const [pct, setPct] = useState(0)
@@ -295,7 +296,13 @@ export default function PostPage() {
                       }
                     }}
                   >
-                    {following ? 'FOLLOWING \u2713' : '+ FOLLOW'}
+                    {following ? (
+                <>
+                  FOLLOWING <AppIcon name="check" size={12} className="ico-inline" />
+                </>
+              ) : (
+                '+ FOLLOW'
+              )}
                   </button>
                 ) : (
                   <Link className="pb-follow-btn" to="/blog/login" title="Sign in to follow">

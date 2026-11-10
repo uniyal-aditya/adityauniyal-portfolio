@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
 import {
   fetchUnreadCount,
@@ -12,6 +12,7 @@ import {
 } from '@/lib/journal-api'
 import { timeAgo } from '@/lib/sanitize'
 import { SUPABASE_CONFIGURED } from '@/lib/supabase'
+import { AppIcon } from '@/components/icons/AppIcon'
 
 const POLL_MS = 60_000
 
@@ -91,7 +92,7 @@ export function NotificationBell() {
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             className="nb-panel"
             role="menu"
             aria-label="Notifications"
@@ -134,7 +135,7 @@ export function NotificationBell() {
                 }} />
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
@@ -150,7 +151,9 @@ function NotifRow({ n, onRead }: { n: NotificationItem; onRead: () => void }) {
       <span className="nb-body">
         <span className="nb-text">
           <strong>{n.actor_name || n.actor_username || 'Someone'}</strong>
-          {n.actor_verified ? <span className="badge-verified" title="Verified author">&#10003;</span> : null}
+          {n.actor_verified ? <span className="badge-verified" title="Verified author">
+              <AppIcon name="check" size={9} />
+            </span> : null}
           {' '}published{' '}
           {n.post_slug ? <em className="nb-post-title">{n.post_title}</em> : <em>a new article</em>}
         </span>

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/hooks/useToast'
 
 // Set VITE_CONTACT_EMAIL in your host's env to change the copied address.
-const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'aditya@adityauniyal.dev'
+const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'adityauniyal.dev@gmail.com'
 
 interface Cmd {
   id: string
@@ -55,6 +55,7 @@ export function CommandPalette() {
       { id: 'home', label: 'Home', hint: 'page', action: go('/') },
       { id: 'work', label: 'Work', hint: 'page', action: go('/work') },
       { id: 'building', label: 'AU_ / Building', hint: 'page', action: go('/building') },
+      { id: 'gallery', label: 'Gallery & Milestones', hint: 'page', action: go('/gallery') },
       { id: 'projects', label: 'Projects', hint: 'page', action: go('/projects') },
       { id: 'about', label: 'About', hint: 'page', action: go('/about') },
       { id: 'skills', label: 'Skills', hint: 'page', action: go('/skills') },
@@ -97,7 +98,7 @@ export function CommandPalette() {
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <m.div
           className="palette-bg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -107,7 +108,7 @@ export function CommandPalette() {
             if (e.target === e.currentTarget) setOpen(false)
           }}
         >
-          <motion.div
+          <m.div
             className="palette"
             initial={{ y: -8, scale: 0.98 }}
             animate={{ y: 0, scale: 1 }}
@@ -160,8 +161,8 @@ export function CommandPalette() {
               <span>&crarr; select</span>
               <span>esc close</span>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

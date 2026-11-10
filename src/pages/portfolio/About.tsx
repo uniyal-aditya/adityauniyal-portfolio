@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
+import { AppIcon, type IconName } from '@/components/icons/AppIcon'
+import { SocialLink } from '@/components/system/SocialLink'
 
 const PRINCIPLES = [
   { n: '01', t: 'System before syntax', d: 'Design the architecture. Map the data flows. Think through edge cases. Then open the editor.' },
@@ -11,12 +13,12 @@ const PRINCIPLES = [
   { n: '06', t: 'Always learning', d: 'Technology evolves. Intellectual curiosity and depth of study are not optional - they are the job.' },
 ]
 
-const INTERESTS = [
-  ['\uD83C\uDFAE', 'Competitive gaming'],
-  ['\uD83E\uDD16', 'Exploring AI systems'],
-  ['\u2699\uFE0F', 'Building automation tools'],
-  ['\uD83D\uDCDA', 'Deep-diving backend architecture'],
-  ['\u2615', 'Coffee & late night commits'],
+const INTERESTS: [IconName, string][] = [
+  ['gaming', 'Competitive gaming'],
+  ['ai', 'Exploring AI systems'],
+  ['automation', 'Building automation tools'],
+  ['backend', 'Deep-diving backend architecture'],
+  ['coffee', 'Coffee & late night commits'],
 ]
 
 // Dates match the certification table that lived in the old profile readme.
@@ -90,49 +92,23 @@ export default function About() {
               <div className="aside-block">
                 <div className="label">Platforms</div>
                 <div className="value">
-                  <a
-                    href="https://github.com/uniyal-aditya"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      color: 'var(--lime)',
-                      fontFamily: 'var(--f-mono)',
-                      fontSize: 13,
-                      display: 'block',
-                      marginBottom: 6,
-                    }}
-                  >
-                    GitHub &#8599;
-                  </a>
+                  <SocialLink id="github" style={{ color: 'var(--lime)', fontFamily: 'var(--f-mono)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                    <AppIcon name="github" size={16} />
+                    GitHub
+                    <AppIcon name="arrowUpRight" size={13} />
+                  </SocialLink>
 
-                  <a
-                    href="https://x.com/RaftarCreates"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      color: 'var(--lime)',
-                      fontFamily: 'var(--f-mono)',
-                      fontSize: 13,
-                      display: 'block',
-                      marginBottom: 6,
-                    }}
-                  >
-                    X / Updates &#8599;
-                  </a>
+                  <SocialLink id="x" style={{ color: 'var(--lime)', fontFamily: 'var(--f-mono)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                    <AppIcon name="x" size={16} />
+                    X / Updates
+                    <AppIcon name="arrowUpRight" size={13} />
+                  </SocialLink>
 
-                  <a
-                    href="https://www.linkedin.com/in/uniyaladitya"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      color: 'var(--lime)',
-                      fontFamily: 'var(--f-mono)',
-                      fontSize: 13,
-                      display: 'block',
-                    }}
-                  >
-                    LinkedIn &#8599;
-                  </a>
+                  <SocialLink id="linkedin" style={{ color: 'var(--lime)', fontFamily: 'var(--f-mono)', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, marginBottom: 0 }}>
+                    <AppIcon name="linkedin" size={16} />
+                    LinkedIn
+                    <AppIcon name="arrowUpRight" size={13} />
+                  </SocialLink>
                 </div>
               </div>
             </div>
@@ -222,7 +198,9 @@ export default function About() {
             <div className="reveal d2" style={{ display: 'flex', flexDirection: 'column', border: '1px solid var(--line)' }}>
               {INTERESTS.map(([ico, label], i) => (
                 <div key={label} style={{ padding: '20px 24px', borderBottom: i < INTERESTS.length - 1 ? '1px solid var(--line)' : 'none', display: 'flex', alignItems: 'center', gap: 16, transition: 'background .2s' }}>
-                  <span style={{ fontSize: 20 }}>{ico}</span>
+                  <span style={{ color: 'var(--lime)', display: 'inline-flex' }}>
+                    <AppIcon name={ico} size={22} />
+                  </span>
                   <span style={{ fontSize: 15, color: 'var(--bone)' }}>{label}</span>
                 </div>
               ))}

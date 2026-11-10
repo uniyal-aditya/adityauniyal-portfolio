@@ -6,7 +6,7 @@
 // Response shape:
 // {
 //   cachedAt: ISO string,          // when this data was fetched from GitHub
-//   user:    { login, name, avatar_url, bio, html_url, public_repos },
+//   user:    { login, name, avatar_url, bio, html_url, public_repos, followers, following },
 //   events:  [ { id, type, repo, createdAt, commits?, title?, action?, url? } ],
 //   repos:   [ { name, description, language, stars, forks, updated_at, url } ],
 //   calendar: { total, days: { [date]: count }, streak, longest },
@@ -111,6 +111,8 @@ async function fetchAll() {
       bio: user.bio,
       html_url: user.html_url,
       public_repos: user.public_repos,
+      followers: user.followers,
+      following: user.following,
     },
     events: evs,
     repos: repos.map((r) => ({

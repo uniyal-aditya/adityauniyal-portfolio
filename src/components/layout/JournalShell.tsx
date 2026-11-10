@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { Cursor, Scanline } from '@/components/system/Effects'
 import { useAuth } from '@/hooks/useAuth'
 import { CommandPalette } from '@/components/layout/CommandPalette'
@@ -48,7 +48,7 @@ export function JournalNav() {
       </div>
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             className="mobile-nav open jn-mobile"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -87,7 +87,7 @@ export function JournalNav() {
                 </Link>
               )}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </nav>

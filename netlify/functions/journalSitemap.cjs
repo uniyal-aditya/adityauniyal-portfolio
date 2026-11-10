@@ -17,6 +17,7 @@ exports.handler = async () => {
     '  <url><loc>' + SITE + '/</loc></url>\n' +
     '  <url><loc>' + SITE + '/work</loc></url>\n' +
     '  <url><loc>' + SITE + '/building</loc></url>\n' +
+    '  <url><loc>' + SITE + '/gallery</loc></url>\n' +
     '  <url><loc>' + SITE + '/projects</loc></url>\n' +
     '  <url><loc>' + SITE + '/about</loc></url>\n' +
     '  <url><loc>' + SITE + '/skills</loc></url>\n' +

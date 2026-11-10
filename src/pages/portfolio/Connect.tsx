@@ -5,39 +5,33 @@ import { useReveal } from '@/hooks/useReveal'
 import { Seo } from '@/lib/seo'
 import { useToast } from '@/hooks/useToast'
 import { EMAILJS, honeypotTripped } from '@/lib/emailjs'
+import { AppIcon, type IconName } from '@/components/icons/AppIcon'
+import { SocialLink } from '@/components/system/SocialLink'
+import { getSocial, type Social } from '@/data/socials'
 
-const METHODS = [
-  {
-    ico: '💻',
-    label: 'GitHub',
-    value: 'github.com/uniyal-aditya',
-    href: 'https://github.com/uniyal-aditya',
-  },
-  {
-    ico: '🚀',
-    label: 'Featured Project',
-    value: 'Numexa · Source code',
-    href: 'https://github.com/uniyal-aditya/Numexa',
-  },
-  {
-    ico: '𝕏',
-    label: 'X / Updates',
-    value: 'x.com/uaditya_dev',
-    href: 'https://x.com/uaditya_dev',
-  },
-  {
-    ico: '💼',
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/uniyaladitya',
-    href: 'https://www.linkedin.com/in/uniyaladitya',
-  },
-  {
-    ico: '📄',
-    label: 'Resume',
-    value: 'Download PDF',
-    href: '/assets/Aditya_Uniyal_Resume.pdf',
-    download: true,
-  },
+interface Method {
+  icon: IconName
+  label: string
+  value: string
+  href: string
+  /** Opens the in-site profile popup instead of leaving the page. */
+  social?: Social['id']
+  download?: boolean
+}
+
+const bare = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+const fromSocial = (id: Social['id']): Method => {
+  const s = getSocial(id)
+  return { icon: s.icon, label: id === 'x' ? 'X / Updates' : s.label, value: bare(s.url), href: s.url, social: id }
+}
+
+// Social rows read from src/data/socials.ts so every link on the site stays in sync.
+const METHODS: Method[] = [
+  fromSocial('github'),
+  { icon: 'project', label: 'Featured Project', value: 'Numexa \u00b7 Source code', href: 'https://github.com/uniyal-aditya/Numexa' },
+  fromSocial('x'),
+  fromSocial('linkedin'),
+  { icon: 'resume', label: 'Resume', value: 'Download PDF', href: '/assets/Aditya_Uniyal_Resume.pdf', download: true },
 ]
 
 export default function Connect() {
@@ -125,16 +119,36 @@ export default function Connect() {
                 let&apos;s explore how we can collaborate.
               </p>
               <div className="contact-methods reveal d3">
-                {METHODS.map((m) => (
-                  <a key={m.label} href={m.href} className="contact-method" {...(m.download ? { download: true } : { target: '_blank', rel: 'noopener noreferrer' })}>
-                    <span className="ico">{m.ico}</span>
-                    <span className="info">
-                      <strong>{m.label}</strong>
-                      <span>{m.value}</span>
-                    </span>
-                    <span className="arrow">{m.download ? '\u2193' : '\u2192'}</span>
-                  </a>
-                ))}
+                {METHODS.map((m) => {
+                  const inner = (
+                    <>
+                      <span className="ico">
+                        <AppIcon name={m.icon} size={20} />
+                      </span>
+                      <span className="info">
+                        <strong>{m.label}</strong>
+                        <span>{m.value}</span>
+                      </span>
+                      <span className="arrow">
+                        <AppIcon name={m.download ? 'arrowDown' : m.social ? 'arrowRight' : 'arrowUpRight'} size={18} />
+                      </span>
+                    </>
+                  )
+                  return m.social ? (
+                    <SocialLink key={m.label} id={m.social} className="contact-method">
+                      {inner}
+                    </SocialLink>
+                  ) : (
+                    <a
+                      key={m.label}
+                      href={m.href}
+                      className="contact-method"
+                      {...(m.download ? { download: true } : { target: '_blank', rel: 'noopener noreferrer' })}
+                    >
+                      {inner}
+                    </a>
+                  )
+                })}
               </div>
               <div className="reveal d4" style={{ marginTop: 40, padding: 24, border: '1px solid var(--line)', borderRadius: 3, display: 'flex', alignItems: 'center', gap: 16, background: 'var(--sand)' }}>
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--lime)', flexShrink: 0, display: 'block' }} />
@@ -185,7 +199,9 @@ export default function Connect() {
                 </div>
               ) : (
                 <div id="formOk" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '60px 32px', border: '1px solid var(--line)', gap: 20, background: 'var(--sand)' }}>
-                  <div style={{ fontSize: '3rem' }}>&#10003;</div>
+                  <div className="success-mark" style={{ color: 'var(--lime)' }}>
+                    <AppIcon name="success" size={56} />
+                  </div>
                   <div style={{ fontFamily: 'var(--f-display)', fontSize: '2rem' }}>Message sent.</div>
                   <div style={{ fontFamily: 'var(--f-mono)', fontSize: 12, color: 'var(--dim)', letterSpacing: '0.06em' }}>I&apos;ll respond within 24 hours.</div>
                   <Link to="/work" className="btn-ghost-line" style={{ marginTop: 8 }}>

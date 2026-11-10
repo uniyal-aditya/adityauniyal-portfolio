@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 
 interface ToastItem {
   id: number
@@ -33,7 +33,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       >
         <AnimatePresence>
           {items.map((t) => (
-            <motion.div
+            <m.div
               key={t.id}
               initial={{ opacity: 0, y: 14, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -41,7 +41,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               className={'toast' + (t.error ? ' error' : '')}
             >
               {t.msg}
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>

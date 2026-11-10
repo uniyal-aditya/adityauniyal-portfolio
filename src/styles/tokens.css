@@ -14,7 +14,7 @@
   --sand: #1a1a17;
   --line: rgba(240, 237, 230, 0.1);
   --dim-2: #8a8880;
-  --dim-3: #6a6862;
+  --dim-3: #85837c; /* was #6a6862 (3.6:1) — now 5.2:1 on --ink, 4.6:1 on --sand (WCAG AA) */
   --dim-4: #55534d;
 
   --f-display: 'Bebas Neue', sans-serif;

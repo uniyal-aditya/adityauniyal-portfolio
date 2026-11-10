@@ -43,6 +43,8 @@ export interface BuildingData {
     bio: string | null
     html_url: string
     public_repos: number
+    followers?: number
+    following?: number
   }
   events: BuildingEvent[]
   repos: BuildingRepo[]

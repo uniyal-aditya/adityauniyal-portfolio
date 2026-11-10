@@ -59,7 +59,7 @@ Open **SQL Editor** in Supabase and run these files **in numeric order** (each i
 
 1. `supabase/01-schema.sql` — tables, enums, indexes, triggers, seed categories
 2. `supabase/02-rls.sql` — Row Level Security policies + the `journal-media` storage bucket + storage policies
-3. `supabase/03-rpc.sql` — RPC functions: search, trending, moderation actions ⚠️ *partially superseded by 05/08 — see the warning header in the file; never re-run it wholesale*
+3. `supabase/03-rpc.sql` — RPC functions: search, trending, moderation actions WARNING: *partially superseded by 05/08 — see the warning header in the file; never re-run it wholesale*
 4. `supabase/04-applications.sql` — contributor applications table + RLS + review RPC
 5. `supabase/05-follow-analytics.sql` … `10-site-settings.sql` — follow analytics, notifications, comment pinning, analytics fixes, profile fields, site settings
 11. `supabase/11-private-emails.sql` — removes the public email column from profiles (emails live only in Supabase Auth)
@@ -71,6 +71,7 @@ Open **SQL Editor** in Supabase and run these files **in numeric order** (each i
 15. `supabase/15-fix-search-path.sql` — pins `search_path` on functions and locks admin RPCs away from `anon` (Supabase security-advisor findings)
 16. `supabase/16-invoker-trending-view.sql` — makes `trending_posts` a `security_invoker` view
 17. `supabase/17-narrow-content-trigger.sql` — fires the `posts.content` guard only when `content` changes
+18. `supabase/18-gallery.sql` — gallery photos table + row-level security (powers Admin → Gallery uploads and the /gallery page)
 
 #### 3. Configure the frontend keys
 Copy `.env.example` to **`.env.local`** and fill it in:
@@ -80,7 +81,7 @@ VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJ...your-anon-key...
 ```
 
-> ⚠️ Only the **anon** key goes here. It is safe to expose because RLS (step 2) restricts what it can do.
+> WARNING: Only the **anon** key goes here. It is safe to expose because RLS (step 2) restricts what it can do.
 > Never place the service-role key, SendGrid key, or any server secret in frontend JavaScript.
 > `.env.local` is git-ignored; Vite only exposes variables prefixed with `VITE_`.
 

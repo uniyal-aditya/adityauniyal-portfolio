@@ -1,16 +1,19 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { Magnetic } from '@/components/ui/primitives'
 import { Cursor, Scanline } from '@/components/system/Effects'
 import { SeasonalEffect } from '@/components/system/SeasonalEffect'
 import { CommandPalette } from '@/components/layout/CommandPalette'
 import { AccountCluster } from '@/components/layout/AccountCluster'
+import { AppIcon } from '@/components/icons/AppIcon'
+import { SocialLink } from '@/components/system/SocialLink'
 
 export const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/work', label: 'Work' },
   { to: '/building', label: 'Building' },
+  { to: '/gallery', label: 'Gallery' },
   { to: '/about', label: 'About' },
   { to: '/connect', label: 'Contact' },
   { to: '/blog', label: 'Journal' },
@@ -120,31 +123,12 @@ export function Footer() {
         <Link to="/data-use">Data use</Link>
         <Link to="/work">Work</Link>
         <Link to="/building">Building</Link>
+        <Link to="/gallery">Gallery</Link>
         <Link to="/connect">Contact</Link>
 
-        <a
-          href="https://github.com/uniyal-aditya"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub
-        </a>
-
-        <a
-          href="https://x.com/RaftarCreates"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          X
-        </a>
-
-        <a
-          href="https://www.linkedin.com/in/uniyaladitya"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          LinkedIn
-        </a>
+        <SocialLink id="github">GitHub</SocialLink>
+        <SocialLink id="x">X</SocialLink>
+        <SocialLink id="linkedin">LinkedIn</SocialLink>
       </div>
     </footer>
   )
@@ -168,7 +152,7 @@ export function HireModal({ open, onClose }: { open: boolean; onClose: () => voi
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <m.div
           className="modal-bg open"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -178,7 +162,7 @@ export function HireModal({ open, onClose }: { open: boolean; onClose: () => voi
             if (e.target === e.currentTarget) onClose()
           }}
         >
-          <motion.div
+          <m.div
             className="modal-box"
             initial={{ y: 20, scale: 0.97 }}
             animate={{ y: 0, scale: 1 }}
@@ -189,7 +173,7 @@ export function HireModal({ open, onClose }: { open: boolean; onClose: () => voi
             aria-label="Let's Connect"
           >
             <button className="modal-x" onClick={onClose} aria-label="Close">
-              &#10005;
+              <AppIcon name="close" size={16} />
             </button>
             <h3>Let's Connect.</h3>
 
@@ -198,59 +182,60 @@ export function HireModal({ open, onClose }: { open: boolean; onClose: () => voi
             </div>
 
             <div className="hire-opts">
-              <a
-                href="https://github.com/uniyal-aditya"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hire-opt"
-              >
-                <span className="hire-opt-ico">&#128187;</span>
+              <SocialLink id="github" className="hire-opt" onOpen={onClose}>
+                <span className="hire-opt-ico">
+                  <AppIcon name="github" size={20} />
+                </span>
                 <span className="hire-opt-text">
                   GitHub
                   <small>Repositories, projects &amp; contributions</small>
                 </span>
-                <span className="hire-opt-arr">&rarr;</span>
-              </a>
+                <span className="hire-opt-arr">
+                  <AppIcon name="arrowRight" size={18} />
+                </span>
+              </SocialLink>
 
-              <a
-                href="https://x.com/RaftarCreates"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hire-opt"
-              >
-                <span className="hire-opt-ico">&#120143;</span>
+              <SocialLink id="x" className="hire-opt" onOpen={onClose}>
+                <span className="hire-opt-ico">
+                  <AppIcon name="x" size={20} />
+                </span>
                 <span className="hire-opt-text">
                   X / Updates
                   <small>Development updates &amp; experiments</small>
                 </span>
-                <span className="hire-opt-arr">&rarr;</span>
-              </a>
+                <span className="hire-opt-arr">
+                  <AppIcon name="arrowRight" size={18} />
+                </span>
+              </SocialLink>
 
-              <a
-                href="https://www.linkedin.com/in/uniyaladitya"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hire-opt"
-              >
-                <span className="hire-opt-ico">&#128188;</span>
+              <SocialLink id="linkedin" className="hire-opt" onOpen={onClose}>
+                <span className="hire-opt-ico">
+                  <AppIcon name="linkedin" size={20} />
+                </span>
                 <span className="hire-opt-text">
                   LinkedIn
                   <small>Professional profile &amp; connections</small>
                 </span>
-                <span className="hire-opt-arr">&rarr;</span>
-              </a>
+                <span className="hire-opt-arr">
+                  <AppIcon name="arrowRight" size={18} />
+                </span>
+              </SocialLink>
 
               <Link to="/connect" className="hire-opt" onClick={onClose}>
-                <span className="hire-opt-ico">&#9993;&#65039;</span>
+                <span className="hire-opt-ico">
+                  <AppIcon name="mail" size={20} />
+                </span>
                 <span className="hire-opt-text">
                   Direct Contact
                   <small>Projects, open source &amp; technical discussions</small>
                 </span>
-                <span className="hire-opt-arr">&rarr;</span>
+                <span className="hire-opt-arr">
+                  <AppIcon name="arrowRight" size={18} />
+                </span>
               </Link>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

@@ -125,6 +125,11 @@
   status = 200
 
 [[redirects]]
+  from = "/gallery"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
   from = "/projects"
   to = "/index.html"
   status = 200

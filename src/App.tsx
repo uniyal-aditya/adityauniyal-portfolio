@@ -12,6 +12,7 @@ import Work from '@/pages/portfolio/Work'
 const Building = lazyPage(() => import('@/pages/portfolio/Building'))
 
 // Everything below is code-split (lazyPage = deploy-safe auto-recovery)
+const Gallery = lazyPage(() => import('@/pages/portfolio/Gallery'))
 const Projects = lazyPage(() => import('@/pages/portfolio/Projects'))
 const About = lazyPage(() => import('@/pages/portfolio/About'))
 const Skills = lazyPage(() => import('@/pages/portfolio/Skills'))
@@ -81,6 +82,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/work" element={<Work />} />
           <Route path="/building" element={<Building />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/skills" element={<Skills />} />

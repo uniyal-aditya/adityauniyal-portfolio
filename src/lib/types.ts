@@ -185,3 +185,21 @@ export interface ContributorApplication {
   status: 'pending' | 'approved' | 'rejected'
   created_at: string
 }
+
+/** A photo / certificate on the /gallery page (table: gallery_items, migration 18). */
+export interface GalleryRow {
+  id: string
+  title: string
+  caption: string | null
+  alt_text: string | null
+  tag: string
+  image_url: string
+  storage_path: string | null
+  width: number
+  height: number
+  taken_on: string | null
+  is_published: boolean
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}

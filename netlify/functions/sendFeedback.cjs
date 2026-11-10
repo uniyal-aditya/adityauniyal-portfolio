@@ -35,7 +35,7 @@ exports.handler = async function (event, context) {
         return { statusCode: 400, body: JSON.stringify({ error: 'Missing rating or message' }) };
     }
 
-    const subject = `New website feedback — ${rating}★ — ${project || 'general'}`;
+    const subject = `New website feedback — ${rating}/5 — ${project || 'general'}`;
     const html = `
     <h3>New feedback received</h3>
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>

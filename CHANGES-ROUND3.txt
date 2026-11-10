@@ -1,0 +1,45 @@
+Overlay: copy these files over your project folder (same paths).
+
+DELETE these old files:
+  /portfolio-fixes.patch
+  netlify/functions/journalRss.js
+  netlify/functions/journalSitemap.js
+  netlify/functions/sendFeedback.js
+
+ADDED/CHANGED:
+  src/components/icons/AppIcon.tsx
+  src/components/system/FxRoot.tsx
+  src/components/system/HeroScene.tsx
+  src/components/system/SocialLink.tsx
+  src/components/system/SocialModal.tsx
+  src/components/system/SocialModalProvider.tsx
+  src/data/socials.ts
+  src/hooks/useSocialModal.ts
+  src/hooks/useTiltEffect.ts
+  src/styles/fx.css
+  AUDIT-REPORT.md
+  CUSTOM-DOMAIN-CHECKLIST.md
+  DEPLOY.md
+  FINAL-REPORT.md
+  netlify/functions/sendFeedback.cjs
+  public/assets/site.webmanifest
+  readme.md
+  src/components/journal/NotificationBell.tsx
+  src/components/journal/bits.tsx
+  src/components/layout/AccountCluster.tsx
+  src/components/layout/Chrome.tsx
+  src/components/layout/CommandPalette.tsx
+  src/components/layout/JournalShell.tsx
+  src/hooks/useDialog.tsx
+  src/hooks/useToast.tsx
+  src/main.tsx
+  src/pages/blog/AuthorPage.tsx
+  src/pages/blog/PostPage.tsx
+  src/pages/portfolio/About.tsx
+  src/pages/portfolio/Connect.tsx
+  src/pages/portfolio/Feedback.tsx
+  src/pages/portfolio/Home.tsx
+  src/styles/index.css
+  src/styles/portfolio.css
+  src/styles/tokens.css
+  supabase/03-rpc.sql

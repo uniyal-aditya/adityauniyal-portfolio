@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { NotificationBell } from '@/components/journal/NotificationBell'
+import { AppIcon } from '@/components/icons/AppIcon'
 
 /**
  * Signed-in account cluster (bell + avatar menu) or Sign in link.
@@ -19,7 +20,9 @@ export function AccountCluster() {
               {(profile?.display_name || profile?.username || user.email || '?').charAt(0).toUpperCase()}
             </span>
             <span className="jn-name">{profile?.display_name || profile?.username || 'you'}</span>
-            {profile?.verified && <span className="badge-verified" title="Verified author">&#10003;</span>}
+            {profile?.verified && <span className="badge-verified" title="Verified author">
+          <AppIcon name="check" size={9} />
+        </span>}
           </Link>
           <div className="jn-user-menu" role="menu" aria-label="Account menu">
             <div className="jn-menu-role">{profile ? profile.role.replace('_', ' ').toUpperCase() : 'MEMBER'}</div>

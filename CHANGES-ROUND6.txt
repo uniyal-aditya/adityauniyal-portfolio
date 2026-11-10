@@ -1,0 +1,69 @@
+Overlay: copy these files over your project folder (same paths).
+
+DELETE these old files:
+  /portfolio-fixes.patch
+  netlify/functions/journalRss.js
+  netlify/functions/journalSitemap.js
+  netlify/functions/sendFeedback.js
+
+ADDED/CHANGED:
+  public/gallery
+  src/components/icons/AppIcon.tsx
+  src/components/system/FxRoot.tsx
+  src/components/system/HeroScene.tsx
+  src/components/system/Lightbox.tsx
+  src/components/system/SocialLink.tsx
+  src/components/system/SocialModal.tsx
+  src/components/system/SocialModalProvider.tsx
+  src/components/system/SocialPreviews.tsx
+  src/data/gallery.ts
+  src/data/milestones.ts
+  src/data/socials.ts
+  src/hooks/useSocialModal.ts
+  src/hooks/useTiltEffect.ts
+  src/lib/gallery-api.ts
+  src/lib/gallery-rules.test.ts
+  src/lib/gallery-rules.ts
+  src/pages/admin/GalleryAdmin.tsx
+  src/pages/portfolio/Gallery.tsx
+  src/styles/fx.css
+  src/styles/gallery.css
+  supabase/18-gallery.sql
+  .env.example
+  AUDIT-REPORT.md
+  CUSTOM-DOMAIN-CHECKLIST.md
+  DEPLOY.md
+  FINAL-REPORT.md
+  api/github.js
+  api/sitemap.js
+  netlify.toml
+  netlify/functions/journalSitemap.cjs
+  netlify/functions/sendFeedback.cjs
+  public/assets/site.webmanifest
+  readme.md
+  src/App.tsx
+  src/components/journal/NotificationBell.tsx
+  src/components/journal/bits.tsx
+  src/components/layout/AccountCluster.tsx
+  src/components/layout/Chrome.tsx
+  src/components/layout/CommandPalette.tsx
+  src/components/layout/JournalShell.tsx
+  src/hooks/useDialog.tsx
+  src/hooks/useToast.tsx
+  src/lib/types.ts
+  src/main.tsx
+  src/pages/admin/AdminPage.tsx
+  src/pages/blog/AuthorPage.tsx
+  src/pages/blog/PostPage.tsx
+  src/pages/portfolio/About.tsx
+  src/pages/portfolio/Connect.tsx
+  src/pages/portfolio/Feedback.tsx
+  src/pages/portfolio/Home.tsx
+  src/styles/index.css
+  src/styles/portfolio.css
+  src/styles/tokens.css
+  src/types/building.ts
+  supabase/03-rpc.sql
+  vercel.json
+
+ALSO: run supabase/18-gallery.sql once in the Supabase SQL Editor.

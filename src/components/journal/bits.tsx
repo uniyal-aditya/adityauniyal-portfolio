@@ -5,6 +5,7 @@ import type { Post, Profile, Tag } from '@/lib/types'
 import { fmtDate, fmtNum, safeUrl } from '@/lib/sanitize'
 import { useReveal } from '@/hooks/useReveal'
 import type { ReactNode } from 'react'
+import { AppIcon } from '@/components/icons/AppIcon'
 
 /** External link that renders nothing when safeUrl rejects the href
  *  (javascript:, data:, protocol-relative offsite). Use for every
@@ -52,7 +53,7 @@ export function Avatar({ profile, size = 22 }: { profile?: Profile | null; size?
 export function VerifiedBadge() {
   return (
     <span className="badge-verified" title="Verified author" aria-label="Verified author">
-      &#10003;
+      <AppIcon name="check" size={9} />
     </span>
   )
 }

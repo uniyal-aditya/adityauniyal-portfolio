@@ -65,7 +65,7 @@ Accounts: email+magic+OAuth, avatar cluster on **every** page (was journal-only)
 
 ## 8 · Testing performed
 
-- `tsc -b` ✅ `eslint` ✅ `vite build` ✅ on every change; bundle-hash-matched deploys verified against live site.
+- `tsc -b` [x] `eslint` [x] `vite build` [x] on every change; bundle-hash-matched deploys verified against live site.
 - Live end-to-end through preview browser: owner pin/unpin cycle with DB receipts; comment 300→200 embed fix; signup/login/reset (found + fixed reset stranding); self-pin attack reproduced then blocked; analytics audit traced every number to DB rows (found + fixed 4 bugs incl. an unguarded-RPC leak); mobile audits (2 passes, 31 routes, zero overflow); signed-in navigation on portfolio pages (found + fixed RecoveryCatch hijack).
 - Negative tests: anon RPC calls rejected; reader self-pin silently reverted; wrong-password shows branded error.
 

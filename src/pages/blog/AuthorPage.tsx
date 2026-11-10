@@ -12,6 +12,7 @@ import { GITHUB_USERNAME } from '@/data/building'
 import { useCurrentProject } from '@/hooks/useCurrentProject'
 import { fetchBuilding } from '@/lib/github'
 import { GithubIcon } from '@/components/icons/GithubIcon'
+import { AppIcon } from '@/components/icons/AppIcon'
 
 /** Owner-only: CURRENTLY BUILDING + live GitHub snapshot (tasks #42/#72). */
 function OwnerBuildingBlock() {
@@ -181,7 +182,13 @@ export default function AuthorPage() {
                   onClick={() => void onFollowClick()}
                   aria-pressed={Boolean(followingThis)}
                 >
-                  {followingThis ? 'FOLLOWING \u2713 - CLICK TO UNFOLLOW' : 'FOLLOW AUTHOR +'}
+                  {followingThis ? (
+                    <>
+                      FOLLOWING <AppIcon name="check" size={12} className="ico-inline" /> - CLICK TO UNFOLLOW
+                    </>
+                  ) : (
+                    'FOLLOW AUTHOR +'
+                  )}
                 </button>
               ) : (
                 <Link to="/blog/login" className="btn-ghost-line btn-small" title="Sign in to follow">

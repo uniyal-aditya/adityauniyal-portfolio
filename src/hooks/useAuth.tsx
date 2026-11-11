@@ -97,7 +97,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signUp(email: string, password: string) {
     if (!SUPABASE_CONFIGURED) return 'Auth is not configured yet.'
-    const { data, error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/blog/login`,
+      },
+    })
     if (error) return friendly(error.message)
     // Projects without auto-confirm return no session; ask the user to verify.
     return data.session ? null : 'Check your inbox to confirm your email.'

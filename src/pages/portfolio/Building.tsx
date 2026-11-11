@@ -127,13 +127,11 @@ export default function Building() {
 
       {/* ── HERO ── */}
       <header className="container" style={{ paddingTop: 40 }}>
-        <div className="work-header reveal">
-          <div>
-            <p className="terminal-line" style={{ color: 'var(--dim-3)', fontFamily: 'var(--f-mono)', fontSize: 13 }} aria-hidden="true">
-              ~/au/building $
-            </p>
-            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 6.5rem)', lineHeight: 0.95, margin: '10px 0 18px' }}>
-              CURRENTLY<br />BUILDING<span style={{ color: 'var(--lime)' }}>.</span>
+        <div className="building-header reveal">
+          <div className="building-header-copy">
+            <div className="building-eyebrow">Live development</div>
+            <h1 className="building-header-title">
+              CURRENTLY<br /><em>Building</em><span className="building-title-period">.</span>
             </h1>
           </div>
           <div className="work-header-meta">

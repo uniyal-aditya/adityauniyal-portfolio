@@ -356,6 +356,46 @@ section { padding: 120px 0; }
 }
 .work-header-meta span { display: block; margin-bottom: 6px; color: var(--bone); font-size: 18px; font-family: var(--f-display); }
 
+/* ══ BUILDING — Editorial hero aligned with the portfolio page-top system ══ */
+.building-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  margin-bottom: 60px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 32px;
+}
+.building-header-copy { min-width: 0; }
+.building-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: var(--lime);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.building-eyebrow::before { content: '→'; color: var(--dim); }
+.building-header-title {
+  margin: 0;
+  color: var(--bone);
+  font-family: var(--f-display);
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+.building-header-title em {
+  color: var(--rust);
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+.building-title-period { color: var(--lime); font-family: var(--f-display); }
+
 /* Project rows */
 .project-list { display: flex; flex-direction: column; }
 .project-row {
@@ -705,8 +745,9 @@ section { padding: 120px 0; }
   .jn-name { display: none; }
   .nav-hire { padding: 10px 14px; }
   /* Editorial headers stack on mobile: title above, meta below, full width. */
-  .work-header { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .work-header, .building-header { flex-direction: column; align-items: flex-start; gap: 18px; }
   .work-header-meta { text-align: left; }
+  .building-header-title { font-size: clamp(3.5rem, 15vw, 6.5rem); }
 }
 @media (max-width: 480px) {
   .pf-side { flex-direction: column; }

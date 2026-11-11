@@ -165,8 +165,8 @@ function getEmailContent(action) {
     reauthentication: {
       subject: 'Confirm your identity',
       title: 'Confirm your identity',
-      message: 'Use this secure link to confirm your recent authentication request.',
-      actionText: 'CONFIRM IDENTITY',
+      message: 'Use the one-time verification code included in this email to confirm your identity.',
+      actionText: 'OPEN JOURNAL',
     },
   }
 
@@ -202,13 +202,18 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-async function sendEmailJS({ recipient, action, tokenHash, redirectTo, projectUrl, env, timeoutMs }) {
+async function sendEmailJS({ recipient, action, tokenHash, token, redirectTo, projectUrl, env, timeoutMs }) {
   if (!recipient || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(recipient)) {
     throw new Error('Authentication email recipient is invalid')
   }
 
   const content = getEmailContent(action)
-  const actionUrl = buildVerificationUrl(tokenHash, action, redirectTo, projectUrl)
+  const actionUrl = action === 'reauthentication'
+    ? SITE_URL
+    : buildVerificationUrl(tokenHash, action, redirectTo, projectUrl)
+  const message = action === 'reauthentication' && token
+    ? `${content.message} Your verification code is: ${token}`
+    : content.message
 
   const response = await fetch(EMAILJS_SEND_URL, {
     method: 'POST',
@@ -223,7 +228,7 @@ async function sendEmailJS({ recipient, action, tokenHash, redirectTo, projectUr
         to_email: recipient,
         subject: content.subject,
         title: content.title,
-        message: content.message,
+        message,
         action_url: actionUrl,
         action_text: content.actionText,
         expiry_note: 'This is a secure, single-use link. Its validity depends on your authentication settings. Ignore this email if you did not request this action.',
@@ -361,6 +366,7 @@ export default async function handler(req, res) {
         redirectTo,
         projectUrl,
         env,
+        token: emailData.token,
         timeoutMs: SINGLE_EMAIL_TIMEOUT_MS,
       })
     }

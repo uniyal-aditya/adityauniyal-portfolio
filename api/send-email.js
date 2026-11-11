@@ -371,8 +371,9 @@ export default async function handler(req, res) {
       })
     }
 
-    // Supabase treats an empty HTTP 200 response as successful delivery.
-    return res.status(200).end()
+    // Supabase requires application/json on every HTTP Hook response.
+    // An empty JSON object is the documented successful Send Email Hook response.
+    return sendJson(res, 200, {})
   } catch (error) {
     console.error('[auth-email] Delivery failed:', {
       action,

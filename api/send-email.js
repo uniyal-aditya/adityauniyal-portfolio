@@ -78,7 +78,7 @@ export function verifySupabaseWebhook(rawBody, headers, secretValue, nowSeconds 
     throw new Error('Missing Standard Webhooks headers')
   }
 
-  if (!/^\\d+$/.test(String(timestamp))) {
+  if (!/^\d+$/.test(String(timestamp))) {
     throw new Error('Invalid webhook timestamp')
   }
 
@@ -91,7 +91,7 @@ export function verifySupabaseWebhook(rawBody, headers, secretValue, nowSeconds 
   const signedContent = `${webhookId}.${timestamp}.${rawBody}`
   const signatures = String(signatureHeader)
     .trim()
-    .split(/\\s+/)
+    .split(/\s+/)
     .map((part) => {
       const comma = part.indexOf(',')
       return comma >= 0 ? { version: part.slice(0, comma), value: part.slice(comma + 1) } : null
@@ -203,7 +203,7 @@ function delay(ms) {
 }
 
 async function sendEmailJS({ recipient, action, tokenHash, token, redirectTo, projectUrl, env, timeoutMs }) {
-  if (!recipient || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(recipient)) {
+  if (!recipient || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
     throw new Error('Authentication email recipient is invalid')
   }
 

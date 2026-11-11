@@ -167,5 +167,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "adityauniyal.vercel.app"
+        }
+      ],
+      "destination": "https://adityauniyal.is-a.dev/:path*",
+      "permanent": true
+    }
   ]
 }
